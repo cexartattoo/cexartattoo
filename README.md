@@ -1,16 +1,21 @@
-## Hi there 👋
+## Hi there 👋 I'm César Ramirez
 
-<!--
-**cexartattoo/cexartattoo** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+**Mechatronics Engineer** specializing in robotics, industrial automation, and computer vision.
 
-Here are some ideas to get you started:
+### 🔭 What I do
+- Develop robotic solutions with **ROS**, **Python**, and **microcontrollers**
+- Industrial automation with **PLCs** and embedded systems
+- Computer vision applications using **YOLO** and **OpenCV**
+- Hardware integration: **Raspberry Pi**, **Orange Pi**
+- Exploring **LLMs** for intelligent automation
 
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+### 🚀 Featured Projects
+- 🦾 **Delta Robot** with computer vision
+- 🌱 **Greenhouse Control System**
+- 🎨 **Tattoo Robot**
+
+### 🛠️ Tech Stack
+`ROS` `Python` `PLCs` `OpenCV` `YOLO` `SolidWorks` `3D Printing` `Raspberry Pi`
+
+### 📚 Teaching
+Instructor in mechatronic design, SolidWorks, and 3D printing
