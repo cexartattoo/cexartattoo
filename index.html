@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Portafolio de César Javier Ramírez Hormaza - Ingeniero Mecatrónico especializado en Robótica, Automatización Industrial y Visión Artificial.">
+    <meta name="keywords" content="Ingeniero Mecatrónico, Robótica, Automatización, Python, OpenCV, PLC, Bogotá, Colombia">
+    <meta name="author" content="César Javier Ramírez Hormaza">
+    <title>César Ramírez | Ingeniero Mecatrónico</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#hero" class="nav-logo">
+                <span class="logo-text">CR</span>
+                <span class="logo-dot"></span>
+            </a>
+            <ul class="nav-menu" id="nav-menu">
+                <li><a href="#hero" class="nav-link">Inicio</a></li>
+                <li><a href="#about" class="nav-link">Sobre Mí</a></li>
+                <li><a href="#experience" class="nav-link">Experiencia</a></li>
+                <li><a href="#projects" class="nav-link">Proyectos</a></li>
+                <li><a href="#skills" class="nav-link">Habilidades</a></li>
+                <li><a href="#education" class="nav-link">Educación</a></li>
+                <li><a href="#contact" class="nav-link nav-cta">Contacto</a></li>
+            </ul>
+            <div class="hamburger" id="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero-bg">
+            <div class="grid-overlay"></div>
+            <div class="particles" id="particles"></div>
+        </div>
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span class="badge-icon">⚡</span>
+                <span>Disponible para proyectos</span>
+            </div>
+            <h1 class="hero-title">
+                <span class="title-line">César Javier</span>
+                <span class="title-line accent">Ramírez Hormaza</span>
+            </h1>
+            <p class="hero-tagline">Ingeniero Mecatrónico | Robótica & Automatización</p>
+            <p class="hero-description">
+                Apasionado por la integración de robótica, programación y automatización industrial. 
+                Desarrollo soluciones innovadoras que combinan diseño mecánico, visión artificial 
+                y control de sistemas complejos.
+            </p>
+            <div class="hero-cta">
+                <a href="#projects" class="btn btn-primary">
+                    <span>Ver Proyectos</span>
+                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+                <a href="#contact" class="btn btn-secondary">
+                    <span>Contactar</span>
+                </a>
+            </div>
+            <div class="hero-stats">
+                <div class="stat">
+                    <span class="stat-number" data-count="3">0</span>
+                    <span class="stat-label">Años Experiencia</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number" data-count="20">0</span><span class="stat-plus">+</span>
+                    <span class="stat-label">Proyectos</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number" data-count="80">0</span><span class="stat-unit">nm</span>
+                    <span class="stat-label">Precisión Lograda</span>
+                </div>
+            </div>
+        </div>
+        <a href="#about" class="scroll-indicator">
+            <span>Scroll</span>
+            <div class="scroll-arrow"></div>
+        </a>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">01</span>
+                <h2 class="section-title">Sobre Mí</h2>
+                <div class="section-line"></div>
+            </div>
+            <div class="about-content">
+                <div class="about-image">
+                    <div class="image-frame">
+                        <div class="image-placeholder">
+                            <span class="placeholder-icon">👨‍💻</span>
+                        </div>
+                        <div class="frame-corner frame-tl"></div>
+                        <div class="frame-corner frame-tr"></div>
+                        <div class="frame-corner frame-bl"></div>
+                        <div class="frame-corner frame-br"></div>
+                    </div>
+                </div>
+                <div class="about-text">
+                    <h3 class="about-subtitle">Ingeniero Mecatrónico con visión de futuro</h3>
+                    <p>
+                        Soy un Ingeniero Mecatrónico egresado de la Universidad de Pamplona, con una pasión 
+                        profunda por la robótica y la automatización. Mi enfoque combina la creatividad 
+                        con la precisión técnica para desarrollar soluciones que transforman procesos industriales.
+                    </p>
+                    <p>
+                        Mi experiencia abarca desde el diseño de robots industriales hasta la implementación 
+                        de sistemas de visión artificial con machine learning. He tenido el privilegio de 
+                        trabajar en proyectos únicos como el <strong>Robot Tatuador 360</strong>, logrando 
+                        precisiones de ±80 nanómetros.
+                    </p>
+                    <div class="about-highlights">
+                        <div class="highlight">
+                            <span class="highlight-icon">🤖</span>
+                            <span>Robótica Avanzada</span>
+                        </div>
+                        <div class="highlight">
+                            <span class="highlight-icon">👁️</span>
+                            <span>Visión Artificial</span>
+                        </div>
+                        <div class="highlight">
+                            <span class="highlight-icon">⚙️</span>
+                            <span>PLCs Siemens</span>
+                        </div>
+                        <div class="highlight">
+                            <span class="highlight-icon">🐍</span>
+                            <span>Python & C++</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section class="experience" id="experience">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">02</span>
+                <h2 class="section-title">Experiencia Profesional</h2>
+                <div class="section-line"></div>
+            </div>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-marker">
+                        <div class="marker-dot"></div>
+                        <div class="marker-line"></div>
+                    </div>
+                    <div class="timeline-content">
+                        <div class="timeline-header">
+                            <h3 class="timeline-title">Asesor Técnico Online</h3>
+                            <span class="timeline-company">TusClases</span>
+                        </div>
+                        <span class="timeline-date">2022 - Presente</span>
+                        <span class="timeline-location">🌍 Internacional / Remoto</span>
+                        <ul class="timeline-list">
+                            <li>Diseño e implementación de robot delta para clasificación y empaque</li>
+                            <li>Implementación de visión artificial con OpenCV y YOLO</li>
+                            <li>Programación de cinemática inversa y control de trayectorias</li>
+                            <li>Desarrollo de interfaces web para monitoreo de sensores</li>
+                            <li>Integración de LLM en procesos industriales</li>
+                            <li>Asesoría en comunicaciones WiFi, Bluetooth y LORA</li>
+                        </ul>
+                        <div class="timeline-tags">
+                            <span class="tag">Python</span>
+                            <span class="tag">OpenCV</span>
+                            <span class="tag">Arduino</span>
+                            <span class="tag">YOLO</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker">
+                        <div class="marker-dot"></div>
+                    </div>
+                    <div class="timeline-content">
+                        <div class="timeline-header">
+                            <h3 class="timeline-title">Ingeniero de Desarrollo (Tesista)</h3>
+                            <span class="timeline-company">Pasteles donde Don Pedro</span>
+                        </div>
+                        <span class="timeline-date">2024</span>
+                        <span class="timeline-location">📍 Cúcuta, Colombia</span>
+                        <ul class="timeline-list">
+                            <li>Diseño de soluciones de automatización para procesos de manufactura</li>
+                            <li>Programación de PLC Siemens S7-1200 para control de procesos</li>
+                            <li>Reducción del 25% en tiempos de ciclo mediante optimización</li>
+                            <li>Reducción de riesgo de túnel carpiano en operarios</li>
+                            <li>Mantenimiento preventivo y correctivo de sistemas robóticos</li>
+                        </ul>
+                        <div class="timeline-tags">
+                            <span class="tag">PLC Siemens</span>
+                            <span class="tag">Automatización</span>
+                            <span class="tag">Manufactura</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section class="projects" id="projects">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">03</span>
+                <h2 class="section-title">Proyectos Destacados</h2>
+                <div class="section-line"></div>
+            </div>
+            <div class="projects-grid">
+                <!-- Project 1: Robot Tatuador -->
+                <article class="project-card featured">
+                    <div class="project-media">
+                        <div class="project-image">
+                            <div class="image-placeholder-project">
+                                <span>🤖</span>
+                                <p>Robot Tatuador 360</p>
+                            </div>
+                        </div>
+                        <div class="project-overlay">
+                            <span class="project-year">2022</span>
+                        </div>
+                    </div>
+                    <div class="project-content">
+                        <div class="project-badge">🏆 Primer Puesto - Competencia de Robótica</div>
+                        <h3 class="project-title">Robot Tatuador 360</h3>
+                        <p class="project-description">
+                            Robot tatuador único en el mundo con capacidad de controlar la profundidad 
+                            y cubrir volúmenes cilíndricos del tamaño de extremidades humanas. 
+                            Control de profundidad con error de <strong>±80 nanómetros</strong>, 
+                            escaneo con fotogrametría y software para previsualizar el resultado final.
+                        </p>
+                        <div class="project-features">
+                            <div class="feature">
+                                <span class="feature-icon">🎯</span>
+                                <span>Precisión ±80nm</span>
+                            </div>
+                            <div class="feature">
+                                <span class="feature-icon">📸</span>
+                                <span>Fotogrametría 3D</span>
+                            </div>
+                            <div class="feature">
+                                <span class="feature-icon">🔄</span>
+                                <span>Giro Infinito</span>
+                            </div>
+                        </div>
+                        <div class="project-tech">
+                            <span class="tech-tag">Python</span>
+                            <span class="tech-tag">C++</span>
+                            <span class="tech-tag">OpenCV</span>
+                            <span class="tech-tag">Raspberry Pi 4</span>
+                            <span class="tech-tag">ESP32</span>
+                            <span class="tech-tag">SolidWorks</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://github.com/cexartattoo" target="_blank" class="project-link">
+                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                                <span>GitHub</span>
+                            </a>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Project 2: Robot Delta -->
+                <article class="project-card">
+                    <div class="project-media">
+                        <div class="project-image">
+                            <div class="image-placeholder-project">
+                                <span>🦾</span>
+                                <p>Robot Delta</p>
+                            </div>
+                        </div>
+                        <div class="project-overlay">
+                            <span class="project-year">2025</span>
+                        </div>
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">Robot Delta - Sistema de Clasificación</h3>
+                        <p class="project-description">
+                            Robot delta con capacidad de clasificar productos en banda transportadora. 
+                            Sistema de visión artificial para detección y clasificación, 
+                            con auto-calibración y comunicación Modbus con PLC.
+                        </p>
+                        <div class="project-tech">
+                            <span class="tech-tag">Python</span>
+                            <span class="tech-tag">PLC Siemens S7-1200</span>
+                            <span class="tech-tag">OpenCV</span>
+                            <span class="tech-tag">Modbus</span>
+                            <span class="tech-tag">Arduino</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Project 3: Router CNC -->
+                <article class="project-card">
+                    <div class="project-media">
+                        <div class="project-image">
+                            <div class="image-placeholder-project">
+                                <span>🔧</span>
+                                <p>Router CNC</p>
+                            </div>
+                        </div>
+                        <div class="project-overlay">
+                            <span class="project-year">En Desarrollo</span>
+                        </div>
+                    </div>
+                    <div class="project-content">
+                        <div class="project-badge wip">🚧 En Desarrollo</div>
+                        <h3 class="project-title">Router CNC Match3 500W</h3>
+                        <p class="project-description">
+                            Router CNC de alta precisión con tecnología Match3 y motor spindle de 500W. 
+                            Diseñado para mecanizado de múltiples materiales con control numérico avanzado.
+                        </p>
+                        <div class="project-tech">
+                            <span class="tech-tag">Match3</span>
+                            <span class="tech-tag">CNC</span>
+                            <span class="tech-tag">500W Spindle</span>
+                            <span class="tech-tag">G-Code</span>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section class="skills" id="skills">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">04</span>
+                <h2 class="section-title">Habilidades Técnicas</h2>
+                <div class="section-line"></div>
+            </div>
+            <div class="skills-grid">
+                <!-- Programming Languages -->
+                <div class="skill-category">
+                    <div class="category-header">
+                        <span class="category-icon">💻</span>
+                        <h3>Lenguajes de Programación</h3>
+                    </div>
+                    <div class="skill-items">
+                        <div class="skill-item">
+                            <span class="skill-name">Python</span>
+                            <div class="skill-bar"><div class="skill-progress" data-level="90"></div></div>
+                            <span class="skill-level">Avanzado</span>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">MATLAB</span>
+                            <div class="skill-bar"><div class="skill-progress" data-level="90"></div></div>
+                            <span class="skill-level">Avanzado</span>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">C/C++</span>
+                            <div class="skill-bar"><div class="skill-progress" data-level="65"></div></div>
+                            <span class="skill-level">Intermedio</span>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">JavaScript</span>
+                            <div class="skill-bar"><div class="skill-progress" data-level="40"></div></div>
+                            <span class="skill-level">Básico</span>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">Ladder Logic / Modbus</span>
+                            <div class="skill-bar"><div class="skill-progress" data-level="40"></div></div>
+                            <span class="skill-level">Básico</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CAD Design -->
+                <div class="skill-category">
+                    <div class="category-header">
+                        <span class="category-icon">📐</span>
+                        <h3>Diseño CAD</h3>
+                    </div>
+                    <div class="skill-items">
+                        <div class="skill-item">
+                            <span class="skill-name">SolidWorks</span>
+                            <div class="skill-bar"><div class="skill-progress" data-level="90"></div></div>
+                            <span class="skill-level">Avanzado</span>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">Fusion 360</span>
+                            <div class="skill-bar"><div class="skill-progress" data-level="65"></div></div>
+                            <span class="skill-level">Intermedio</span>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">AutoCAD</span>
+                            <div class="skill-bar"><div class="skill-progress" data-level="65"></div></div>
+                            <span class="skill-level">Intermedio</span>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">OnShape</span>
+                            <div class="skill-bar"><div class="skill-progress" data-level="65"></div></div>
+                            <span class="skill-level">Intermedio</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Robotics -->
+                <div class="skill-category">
+                    <div class="category-header">
+                        <span class="category-icon">🤖</span>
+                        <h3>Robótica y Automatización</h3>
+                    </div>
+                    <div class="skill-items">
+                        <div class="skill-item">
+                            <span class="skill-name">Cinemática y Dinámica</span>
+                            <div class="skill-bar"><div class="skill-progress" data-level="90"></div></div>
+                            <span class="skill-level">Avanzado</span>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">ROS</span>
+                            <div class="skill-bar"><div class="skill-progress" data-level="65"></div></div>
+                            <span class="skill-level">Intermedio</span>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">PLC Siemens</span>
+                            <div class="skill-bar"><div class="skill-progress" data-level="65"></div></div>
+                            <span class="skill-level">Intermedio</span>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">SCADA / HMI</span>
+                            <div class="skill-bar"><div class="skill-progress" data-level="65"></div></div>
+                            <span class="skill-level">Intermedio</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Computer Vision -->
+                <div class="skill-category">
+                    <div class="category-header">
+                        <span class="category-icon">👁️</span>
+                        <h3>Visión Artificial</h3>
+                    </div>
+                    <div class="skill-items">
+                        <div class="skill-item">
+                            <span class="skill-name">OpenCV</span>
+                            <div class="skill-bar"><div class="skill-progress" data-level="90"></div></div>
+                            <span class="skill-level">Avanzado</span>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">Fotogrametría</span>
+                            <div class="skill-bar"><div class="skill-progress" data-level="90"></div></div>
+                            <span class="skill-level">Avanzado</span>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">Machine Learning Visión</span>
+                            <div class="skill-bar"><div class="skill-progress" data-level="90"></div></div>
+                            <span class="skill-level">Avanzado</span>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">YOLO</span>
+                            <div class="skill-bar"><div class="skill-progress" data-level="65"></div></div>
+                            <span class="skill-level">Intermedio</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hardware -->
+                <div class="skill-category">
+                    <div class="category-header">
+                        <span class="category-icon">🔌</span>
+                        <h3>Hardware y Electrónica</h3>
+                    </div>
+                    <div class="skill-items">
+                        <div class="skill-item">
+                            <span class="skill-name">Arduino</span>
+                            <div class="skill-bar"><div class="skill-progress" data-level="95"></div></div>
+                            <span class="skill-level">Experto</span>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">Raspberry Pi</span>
+                            <div class="skill-bar"><div class="skill-progress" data-level="90"></div></div>
+                            <span class="skill-level">Avanzado</span>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">ESP32</span>
+                            <div class="skill-bar"><div class="skill-progress" data-level="90"></div></div>
+                            <span class="skill-level">Avanzado</span>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">WiFi / Bluetooth / LORA</span>
+                            <div class="skill-bar"><div class="skill-progress" data-level="85"></div></div>
+                            <span class="skill-level">Avanzado</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tools -->
+                <div class="skill-category">
+                    <div class="category-header">
+                        <span class="category-icon">🛠️</span>
+                        <h3>Herramientas y Manufactura</h3>
+                    </div>
+                    <div class="skill-items">
+                        <div class="skill-item">
+                            <span class="skill-name">Git / GitHub</span>
+                            <div class="skill-bar"><div class="skill-progress" data-level="95"></div></div>
+                            <span class="skill-level">Experto</span>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">Linux</span>
+                            <div class="skill-bar"><div class="skill-progress" data-level="90"></div></div>
+                            <span class="skill-level">Avanzado</span>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">Impresión 3D / CNC</span>
+                            <div class="skill-bar"><div class="skill-progress" data-level="65"></div></div>
+                            <span class="skill-level">Intermedio</span>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">Docker</span>
+                            <div class="skill-bar"><div class="skill-progress" data-level="65"></div></div>
+                            <span class="skill-level">Intermedio</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Education Section -->
+    <section class="education" id="education">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">05</span>
+                <h2 class="section-title">Educación</h2>
+                <div class="section-line"></div>
+            </div>
+            <div class="education-grid">
+                <div class="education-card">
+                    <div class="edu-icon">🎓</div>
+                    <div class="edu-content">
+                        <h3>Ingeniería Mecatrónica</h3>
+                        <p class="edu-institution">Universidad de Pamplona</p>
+                        <p class="edu-location">📍 Pamplona, Colombia</p>
+                        <p class="edu-date">2019 - 2024</p>
+                        <div class="edu-highlights">
+                            <span class="edu-badge">GPA: 4.06</span>
+                            <span class="edu-badge gold">Tesis: 5.0 ⭐</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="education-card">
+                    <div class="edu-icon">🔧</div>
+                    <div class="edu-content">
+                        <h3>Mantenimiento de Motores 2 y 4 Tiempos</h3>
+                        <p class="edu-institution">SENA</p>
+                        <p class="edu-location">📍 Chinacota, Colombia</p>
+                        <p class="edu-date">Mayo 2016</p>
+                        <div class="edu-highlights">
+                            <span class="edu-badge">Calificación: 5.0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">06</span>
+                <h2 class="section-title">Contacto</h2>
+                <div class="section-line"></div>
+            </div>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <h3>¿Tienes un proyecto en mente?</h3>
+                    <p>
+                        Estoy disponible para proyectos de robótica, automatización industrial, 
+                        visión artificial y desarrollo de software. ¡Hablemos!
+                    </p>
+                    <div class="contact-methods">
+                        <a href="https://wa.me/573219121216" target="_blank" class="contact-card whatsapp">
+                            <div class="contact-icon">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                                </svg>
+                            </div>
+                            <div class="contact-text">
+                                <span class="contact-label">WhatsApp</span>
+                                <span class="contact-value">+57 321 9121216</span>
+                            </div>
+                        </a>
+                        <a href="mailto:Ramirezcesarj46@gmail.com" class="contact-card email">
+                            <div class="contact-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                                    <polyline points="22,6 12,13 2,6"/>
+                                </svg>
+                            </div>
+                            <div class="contact-text">
+                                <span class="contact-label">Email</span>
+                                <span class="contact-value">Ramirezcesarj46@gmail.com</span>
+                            </div>
+                        </a>
+                        <a href="https://github.com/cexartattoo" target="_blank" class="contact-card github">
+                            <div class="contact-icon">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                                </svg>
+                            </div>
+                            <div class="contact-text">
+                                <span class="contact-label">GitHub</span>
+                                <span class="contact-value">github.com/cexartattoo</span>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="contact-location">
+                        <span class="location-icon">📍</span>
+                        <span>Bogotá, Colombia</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p class="footer-text">
+                    © 2025 César Javier Ramírez Hormaza. Todos los derechos reservados.
+                </p>
+                <p class="footer-tagline">
+                    Diseñado con <span class="heart">❤️</span> y mucha ingeniería
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
