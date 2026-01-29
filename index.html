@@ -16,6 +16,7 @@
         href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="projects-styles.css">
 </head>
 
 <body>
@@ -85,7 +86,8 @@
                     <span class="stat-label">Proyectos</span>
                 </div>
                 <div class="stat">
-                    <span class="stat-number" data-count="80">0</span><span class="stat-unit">nm</span>
+                    <span class="stat-plus">±</span><span class="stat-number" data-count="80">0</span><span
+                        class="stat-unit">nm</span>
                     <span class="stat-label">Precisión Lograda</span>
                 </div>
             </div>
@@ -123,10 +125,11 @@
                         con la precisión técnica para desarrollar soluciones que transforman procesos industriales.
                     </p>
                     <p>
-                        Mi experiencia abarca desde el diseño de robots industriales hasta la implementación
-                        de sistemas de visión artificial con machine learning. He tenido el privilegio de
-                        trabajar en proyectos únicos como el <strong>Robot Tatuador 360</strong>, logrando
-                        precisiones de ±80 nanómetros.
+                        Soy el creador del <strong>Robot Tatuador 360</strong>, logrando precisiones de ±80 nanómetros,
+                        primer sistema robótico de tatuaje con precisión nanométrica en Latinoamérica. Especializado en
+                        visión artificial (OpenCV, YOLO), PLCs Siemens y programación de cinemática robótica. Más de 3
+                        años asesorando más de 20 proyectos internacionales de automatización con enfoque en manufactura
+                        inteligente.
                     </p>
                     <div class="about-highlights">
                         <div class="highlight">
@@ -229,11 +232,13 @@
                 <!-- Project 1: Robot Tatuador -->
                 <article class="project-card featured">
                     <div class="project-media">
-                        <div class="project-image">
-                            <div class="image-placeholder-project">
-                                <span>🤖</span>
-                                <p>Robot Tatuador 360</p>
-                            </div>
+                        <!-- Canvas para el video vertical de YouTube -->
+                        <div class="project-canvas">
+                            <iframe width="560" height="315"
+                                src="https://www.youtube-nocookie.com/embed/SfXVfhMWj6g?si=frC46lgStebBda4s"
+                                title="YouTube video player" frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                         </div>
                         <div class="project-overlay">
                             <span class="project-year">2022</span>
@@ -282,13 +287,42 @@
                     </div>
                 </article>
 
-                <!-- Project 2: Robot Delta -->
+                <!-- Project 2: Robot Delta - Con galería de canvas -->
                 <article class="project-card">
                     <div class="project-media">
-                        <div class="project-image">
-                            <div class="image-placeholder-project">
-                                <span>🦾</span>
-                                <p>Robot Delta</p>
+                        <div class="project-canvas-gallery">
+                            <!-- Canvas 1: Imagen -->
+                            <div class="canvas-item active" data-type="image">
+                                <img src="ruta/a/tu/imagen1.jpg" alt="Robot Delta - Vista 1">
+                            </div>
+                            <!-- Canvas 2: Otra imagen -->
+                            <div class="canvas-item" data-type="image">
+                                <img src="ruta/a/tu/imagen2.jpg" alt="Robot Delta - Vista 2">
+                            </div>
+                            <!-- Canvas 3: Video de YouTube -->
+                            <div class="canvas-item" data-type="youtube">
+                                <iframe data-src="https://www.youtube.com/embed/TU_VIDEO_ID_2?rel=0&modestbranding=1"
+                                    title="Robot Delta en acción" frameborder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowfullscreen>
+                                </iframe>
+                            </div>
+                            <!-- Botones de navegación -->
+                            <button class="canvas-nav prev" aria-label="Anterior">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="15 18 9 12 15 6"></polyline>
+                                </svg>
+                            </button>
+                            <button class="canvas-nav next" aria-label="Siguiente">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="9 18 15 12 9 6"></polyline>
+                                </svg>
+                            </button>
+                            <!-- Indicadores -->
+                            <div class="canvas-indicators">
+                                <span class="indicator active"></span>
+                                <span class="indicator"></span>
+                                <span class="indicator"></span>
                             </div>
                         </div>
                         <div class="project-overlay">
@@ -312,10 +346,10 @@
                     </div>
                 </article>
 
-                <!-- Project 3: Router CNC -->
+                <!-- Project 3: Router CNC - Con placeholder -->
                 <article class="project-card">
                     <div class="project-media">
-                        <div class="project-image">
+                        <div class="project-canvas">
                             <div class="image-placeholder-project">
                                 <span>🔧</span>
                                 <p>Router CNC</p>
@@ -707,6 +741,7 @@
     </footer>
 
     <script src="script.js"></script>
+    <script src="projects-gallery.js"></script>
 </body>
 
 </html>

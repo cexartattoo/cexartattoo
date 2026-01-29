@@ -1,0 +1,371 @@
+/* ============ PROJECTS SECTION ============ */
+.projects {
+    background: var(--bg-secondary);
+}
+
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 30px;
+}
+
+.project-card {
+    background: var(--gradient-card);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: var(--transition-normal);
+}
+
+.project-card:hover {
+    transform: translateY(-10px);
+    border-color: var(--accent-primary);
+    box-shadow: var(--shadow-glow);
+}
+
+.project-card.featured {
+    grid-column: span 2;
+}
+
+/* ============ PROJECT MEDIA CONTAINER ============ */
+.project-media {
+    position: relative;
+    height: 250px;
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--bg-tertiary), var(--bg-primary));
+}
+
+/* ============ CANVAS SYSTEM ============ */
+.project-canvas {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--bg-tertiary), var(--bg-primary));
+}
+
+/* Video vertical específico para el proyecto destacado */
+.project-canvas.vertical-video {
+    background: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.project-canvas.vertical-video iframe {
+    width: auto;
+    height: 100%;
+    max-width: 100%;
+    aspect-ratio: 608 / 1080;
+}
+
+/* Canvas con iframe de YouTube (horizontal) */
+.project-canvas iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+/* ============ CANVAS GALLERY SYSTEM ============ */
+.project-canvas-gallery {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.canvas-item {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    pointer-events: none;
+}
+
+.canvas-item.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.canvas-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.canvas-item iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+/* ============ NAVIGATION BUTTONS ============ */
+.canvas-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.3s ease;
+    color: white;
+}
+
+.canvas-nav:hover {
+    background: rgba(0, 240, 255, 0.3);
+    border-color: var(--accent-primary);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.canvas-nav svg {
+    width: 20px;
+    height: 20px;
+}
+
+.canvas-nav.prev {
+    left: 10px;
+}
+
+.canvas-nav.next {
+    right: 10px;
+}
+
+/* ============ INDICATORS ============ */
+.canvas-indicators {
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 10;
+}
+
+.indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.4);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.indicator.active {
+    background: var(--accent-primary);
+    width: 24px;
+    border-radius: 4px;
+}
+
+.indicator:hover {
+    background: rgba(255, 255, 255, 0.8);
+}
+
+/* ============ PLACEHOLDER ============ */
+.image-placeholder-project {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--bg-tertiary), var(--bg-primary));
+    font-size: 4rem;
+    gap: 10px;
+}
+
+.image-placeholder-project p {
+    font-size: 1rem;
+    color: var(--text-muted);
+}
+
+/* ============ PROJECT OVERLAY ============ */
+.project-overlay {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    z-index: 5;
+}
+
+.project-year {
+    padding: 5px 15px;
+    background: rgba(0, 0, 0, 0.7);
+    border: 1px solid var(--accent-primary);
+    border-radius: 50px;
+    font-size: 0.8rem;
+    color: var(--accent-primary);
+    backdrop-filter: blur(10px);
+}
+
+/* ============ PROJECT CONTENT ============ */
+.project-content {
+    padding: 25px;
+}
+
+.project-badge {
+    display: inline-block;
+    padding: 5px 15px;
+    background: linear-gradient(135deg, rgba(0, 240, 255, 0.2), rgba(123, 45, 255, 0.2));
+    border-radius: 50px;
+    font-size: 0.8rem;
+    color: var(--accent-primary);
+    margin-bottom: 15px;
+}
+
+.project-badge.wip {
+    background: linear-gradient(135deg, rgba(255, 0, 128, 0.2), rgba(255, 150, 0, 0.2));
+    color: var(--accent-tertiary);
+}
+
+.project-title {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    margin-bottom: 15px;
+    color: var(--text-primary);
+}
+
+.project-description {
+    color: var(--text-secondary);
+    margin-bottom: 20px;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+/* ============ PROJECT FEATURES ============ */
+.project-features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.feature {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 15px;
+    background: rgba(0, 240, 255, 0.1);
+    border-radius: var(--radius-sm);
+    font-size: 0.85rem;
+    border: 1px solid rgba(0, 240, 255, 0.2);
+}
+
+.feature-icon {
+    font-size: 1.1rem;
+}
+
+/* ============ TECH TAGS ============ */
+.project-tech {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.tech-tag {
+    padding: 5px 12px;
+    background: var(--bg-tertiary);
+    border-radius: 50px;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.3s ease;
+}
+
+.tech-tag:hover {
+    border-color: var(--accent-primary);
+    color: var(--accent-primary);
+}
+
+/* ============ PROJECT LINKS ============ */
+.project-links {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.project-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: transparent;
+    border: 1px solid var(--text-muted);
+    border-radius: var(--radius-sm);
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.project-link:hover {
+    border-color: var(--accent-primary);
+    color: var(--accent-primary);
+    background: rgba(0, 240, 255, 0.05);
+}
+
+.project-link svg {
+    width: 18px;
+    height: 18px;
+}
+
+/* ============ RESPONSIVE DESIGN ============ */
+@media (max-width: 1024px) {
+    .project-card.featured {
+        grid-column: span 1;
+    }
+}
+
+@media (max-width: 768px) {
+    .projects-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .project-media {
+        height: 200px;
+    }
+    
+    .project-canvas.vertical-video iframe {
+        height: 100%;
+        width: auto;
+    }
+    
+    .canvas-nav {
+        width: 35px;
+        height: 35px;
+    }
+    
+    .canvas-nav svg {
+        width: 16px;
+        height: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .project-content {
+        padding: 20px;
+    }
+    
+    .project-title {
+        font-size: 1.2rem;
+    }
+    
+    .project-description {
+        font-size: 0.9rem;
+    }
+    
+    .image-placeholder-project {
+        font-size: 3rem;
+    }
+}
