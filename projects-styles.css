@@ -30,7 +30,7 @@
 /* ============ PROJECT MEDIA CONTAINER ============ */
 .project-media {
     position: relative;
-    height: 250px;
+    height: 350px;
     overflow: hidden;
     background: linear-gradient(135deg, var(--bg-tertiary), var(--bg-primary));
 }
@@ -157,7 +157,7 @@
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.4);
+    background: rgba(0, 0, 0, 0.521);
     cursor: pointer;
     transition: all 0.3s ease;
 }
@@ -169,7 +169,7 @@
 }
 
 .indicator:hover {
-    background: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.2);
 }
 
 /* ============ PLACEHOLDER ============ */
@@ -331,21 +331,21 @@
     .projects-grid {
         grid-template-columns: 1fr;
     }
-    
+
     .project-media {
         height: 200px;
     }
-    
+
     .project-canvas.vertical-video iframe {
         height: 100%;
         width: auto;
     }
-    
+
     .canvas-nav {
         width: 35px;
         height: 35px;
     }
-    
+
     .canvas-nav svg {
         width: 16px;
         height: 16px;
@@ -356,15 +356,15 @@
     .project-content {
         padding: 20px;
     }
-    
+
     .project-title {
         font-size: 1.2rem;
     }
-    
+
     .project-description {
         font-size: 0.9rem;
     }
-    
+
     .image-placeholder-project {
         font-size: 3rem;
     }
