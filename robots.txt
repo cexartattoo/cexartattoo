@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://cexartattoo.github.io/cexartattoo/sitemap.xml
