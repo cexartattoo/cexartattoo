@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>KUKA Arm Prototype</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: #eaedf2;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        canvas {
+            display: block;
+        }
+
+        #info {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: #333;
+            font-size: 14px;
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="info">Mueve el ratón para controlar el brazo KUKA Prototype.<br>El diseño simula un robot industrial KUKA
+        KR Quantec real sobre un séptimo eje (riel lineal).</div>
+    <canvas id="cv"></canvas>
+
+    <script>
+        const cv = document.getElementById('cv');
+        const ctx = cv.getContext('2d');
+        let W, H;
+        const mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+
+        window.addEventListener('resize', () => { W = cv.width = innerWidth; H = cv.height = innerHeight; });
+        window.dispatchEvent(new Event('resize'));
+
+        document.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+
+        // Utils
+        const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
+        const rrect = (c, x, y, w, h, r) => {
+            c.beginPath(); c.moveTo(x + w - r, y); c.arcTo(x + w, y, x + w, y + h, r); c.arcTo(x + w, y + h, x, y + h, r);
+            c.arcTo(x, y + h, x, y, r); c.arcTo(x, y, x + w, y, r); c.closePath();
+        };
+
+        // KUKA Colors
+        const KUKA_ORANGE = '#f56300';
+        const KUKA_ORANGE_DARK = '#cc5200';
+        const KUKA_ORANGE_LIGHT = '#ff822a';
+        const KUKA_BLACK = '#1a1a1a';
+        const KUKA_GREY = '#444444';
+        const SILVER = '#d0d4d8';
+
+        class RealisticKukaArm {
+            constructor() {
+                this.L1 = Math.min(window.innerWidth, window.innerHeight) * 0.22;
+                this.L2 = Math.min(window.innerWidth, window.innerHeight) * 0.18;
+                this.by = window.innerHeight * 0.8;
+                this.bx = window.innerWidth / 2;
+                this.th1 = -Math.PI / 2;
+                this.th2 = 0;
+                this.linkLen = 18;
+                this.chainN = Math.ceil((window.innerWidth * 0.72) / this.linkLen);
+            }
+
+            ik(tx, ty) {
+                this.L1 = Math.min(window.innerWidth, window.innerHeight) * 0.22;
+                this.L2 = Math.min(window.innerWidth, window.innerHeight) * 0.18;
+                this.by = window.innerHeight * 0.8;
+                this.chainN = Math.ceil((window.innerWidth * 0.72) / this.linkLen);
+
+                const idealBx = clamp(tx, window.innerWidth * 0.1, window.innerWidth * 0.9);
+                this.bx += (idealBx - this.bx) * 0.08;
+
+                const TOOL_LENGTH = 90;
+                const effective_L2 = this.L2 + TOOL_LENGTH;
+
+                const dx = tx - (this.bx + 55);
+                const dy = ty - (this.by - 110);
+                const d = Math.hypot(dx, dy);
+
+                const mx = this.L1 + effective_L2 - 2;
+                const mn = Math.abs(this.L1 - effective_L2) + 2;
+                const r = clamp(d, mn, mx);
+
+                const sx = d > 0 ? (dx / d) * r : 0;
+                const sy = d > 0 ? (dy / d) * r : -r;
+
+                const c2 = (r * r - this.L1 * this.L1 - effective_L2 * effective_L2) / (2 * this.L1 * effective_L2);
+                const th2Target = -Math.acos(clamp(c2, -1, 1));
+
+                const k1 = this.L1 + effective_L2 * Math.cos(th2Target);
+                const k2 = effective_L2 * Math.sin(th2Target);
+                const th1Target = Math.atan2(sy, sx) - Math.atan2(k2, k1);
+
+                this.th1 += (th1Target - this.th1) * 0.12;
+                this.th2 += (th2Target - this.th2) * 0.12;
+            }
+
+            drawDragChain(c) {
+                c.save();
+                const anchorX = window.innerWidth * 0.05; 
+                const carX = this.bx - 80;
+                const topY = this.by - 25;
+                const botY = this.by + 65;
+                const radius = (botY - topY) / 2;
+                const cy = topY + radius;
+
+                const L_geo = this.chainN * this.linkLen;
+                let loopCenterX = (carX + anchorX + Math.PI * radius - L_geo) / 2;
+
+                if (loopCenterX > carX - radius * 1.5) {
+                    loopCenterX = carX - radius * 1.5;
+                }
+
+                const L1 = carX - loopCenterX;
+                const L2 = Math.PI * radius;
+
+                for (let i = 0; i < this.chainN; i++) {
+                    const d = i * this.linkLen;
+                    let x, y, ang;
+
+                    if (d <= L1) {
+                        x = carX - d;
+                        y = topY;
+                        ang = Math.PI;
+                    } else if (d > L1 && d <= L1 + L2) {
+                        const u = (d - L1) / L2;
+                        const a = -Math.PI / 2 - u * Math.PI;
+                        x = loopCenterX + Math.cos(a) * radius;
+                        y = cy + Math.sin(a) * radius;
+                        ang = a - Math.PI / 2;
+                    } else {
+                        const d3 = d - (L1 + L2);
+                        x = loopCenterX + d3;
+                        y = botY;
+                        ang = 0;
+                    }
+
+                    c.save();
+                    c.translate(x, y);
+                    c.rotate(ang);
+                    // Single cable chain link profile
+                    c.fillStyle = '#1c1c1c';
+                    rrect(c, -this.linkLen / 2, -12, this.linkLen, 24, 3);
+                    c.fill();
+                    c.fillStyle = '#666'; // edge highlight
+                    c.fillRect(-this.linkLen / 2 + 1, -11, this.linkLen - 2, 2);
+                    c.fillStyle = '#0a0a0a'; // side details
+                    c.fillRect(-2, -6, 4, 12);
+                    c.restore();
+                }
+                c.restore();
+            }
+
+            drawLinearRail(c) {
+                const railW = window.innerWidth * 0.9;
+                const railH = 70;
+                const rx = window.innerWidth * 0.05;
+                const ry = this.by;
+
+                c.fillStyle = '#2d2f33'; 
+                c.fillRect(rx, ry, railW, railH);
+
+                c.fillStyle = '#a0a5ad';
+                c.fillRect(rx, ry + 15, railW, 8);
+                c.fillRect(rx, ry + 40, railW, 20);
+
+                c.fillStyle = '#444';
+                for (let i = rx + 20; i < rx + railW - 20; i += 40) {
+                    c.beginPath(); c.arc(i, ry + 50, 4, 0, Math.PI * 2); c.fill();
+                }
+            }
+
+            drawCarriageAndBase(c) {
+                const ry = this.by;
+
+                c.fillStyle = '#151515';
+                rrect(c, this.bx - 90, ry - 30, 60, 45, 4);
+                c.fill();
+
+                c.fillStyle = KUKA_ORANGE;
+                rrect(c, this.bx - 80, ry - 10, 160, 30, 4);
+                c.fill();
+
+                c.fillStyle = '#222';
+                c.fillRect(this.bx - 90, ry - 5, 25, 20); 
+                c.fillRect(this.bx + 65, ry - 5, 25, 20); 
+
+                c.fillStyle = KUKA_BLACK;
+                c.beginPath(); c.moveTo(this.bx - 65, ry - 10);
+                c.lineTo(this.bx + 65, ry - 10);
+                c.lineTo(this.bx + 55, ry - 100);
+                c.lineTo(this.bx - 55, ry - 100);
+                c.fill();
+
+                const grd = c.createLinearGradient(this.bx - 65, 0, this.bx + 65, 0);
+                grd.addColorStop(0, 'rgba(255,255,255,0.05)');
+                grd.addColorStop(0.3, 'rgba(255,255,255,0.15)');
+                grd.addColorStop(0.7, 'rgba(0,0,0,0.4)');
+                grd.addColorStop(1, 'rgba(0,0,0,0.8)');
+                c.fillStyle = grd;
+                c.fill();
+
+                c.fillStyle = KUKA_ORANGE_DARK;
+                rrect(c, this.bx - 50, ry - 120, 130, 25, 6);
+                c.fill();
+            }
+
+            drawElbowMotors(c, x, y, ang) {
+                c.save();
+                c.translate(x, y);
+                c.rotate(ang + Math.PI); 
+
+                c.fillStyle = KUKA_ORANGE_DARK;
+                c.fillRect(-15, -60, 40, 120);
+
+                c.fillStyle = '#151515';
+                for (let m = 0; m < 3; m++) {
+                    rrect(c, 25, -55 + m * 40, 75, 28, 4);
+                }
+                c.fill();
+
+                c.fillStyle = '#555';
+                for (let m = 0; m < 3; m++) {
+                    c.fillRect(98, -50 + m * 40, 12, 18);
+                }
+                c.restore();
+            }
+
+            drawArmSegment(c, x, y, len, ang, isL1) {
+                c.save();
+                c.translate(x, y); c.rotate(ang);
+
+                const thick = isL1 ? 55 : 40;
+
+                const grd = c.createLinearGradient(0, -thick / 2, 0, thick / 2);
+                grd.addColorStop(0, KUKA_ORANGE_LIGHT);
+                grd.addColorStop(0.5, KUKA_ORANGE);
+                grd.addColorStop(1, KUKA_ORANGE_DARK);
+
+                c.fillStyle = grd;
+                rrect(c, 0, -thick / 2, len, thick, thick * 0.4);
+                c.fill();
+                c.strokeStyle = 'rgba(0,0,0,0.2)'; c.lineWidth = 1; c.stroke();
+
+                if (isL1) {
+                    c.save();
+                    c.fillStyle = '#111';
+                    c.font = `900 ${thick * 0.25}px 'Orbitron', sans-serif`;
+                    c.textAlign = 'center'; c.textBaseline = 'middle';
+                    c.fillText("  ING.CESAR", len * 0.5, 0);
+                    c.restore();
+                }
+
+                c.restore();
+            }
+
+            drawJoint(c, x, y, radius, ang = 0) {
+                c.save();
+                c.translate(x, y);
+
+                c.beginPath(); c.arc(0, 0, radius, 0, Math.PI * 2);
+                c.fillStyle = KUKA_ORANGE_DARK; c.fill();
+
+                c.beginPath(); c.arc(0, 0, radius * 0.85, 0, Math.PI * 2);
+                c.fillStyle = '#111'; c.fill();
+
+                c.strokeStyle = '#333'; c.lineWidth = 2;
+                c.beginPath(); c.arc(0, 0, radius * 0.65, 0, Math.PI * 2); c.stroke();
+                c.beginPath(); c.arc(0, 0, radius * 0.45, 0, Math.PI * 2); c.stroke();
+
+                c.beginPath(); c.arc(0, 0, radius * 0.2, 0, Math.PI * 2);
+                c.fillStyle = KUKA_GREY; c.fill();
+
+                c.save();
+                c.rotate(ang);
+                c.fillStyle = '#555';
+                for (let i = 0; i < 6; i++) {
+                    const a = (i / 6) * Math.PI * 2;
+                    c.beginPath(); c.arc(Math.cos(a) * radius * 0.7, Math.sin(a) * radius * 0.7, radius * 0.08, 0, Math.PI * 2); c.fill();
+                }
+                c.fillStyle = '#fff';
+                c.fillRect(0, -2, radius * 0.8, 4);
+                c.restore();
+
+                c.restore();
+            }
+
+            drawWristAndTorch(c, x, y, ang) {
+                c.save();
+                c.translate(x, y); c.rotate(ang); 
+
+                c.fillStyle = SILVER;
+                rrect(c, -5, -15, 30, 30, 4);
+                c.fill();
+
+                c.fillStyle = '#888';
+                rrect(c, 25, -10, 40, 20, 2);
+                c.fill();
+
+                c.fillStyle = '#444';
+                c.fillRect(30, -5, 30, 10);
+
+                c.fillStyle = '#222';
+                c.beginPath(); c.moveTo(65, -8); c.lineTo(85, -3); c.lineTo(85, 3); c.lineTo(65, 8); c.fill();
+
+                c.fillStyle = '#b87333';
+                c.fillRect(85, -2, 5, 4); 
+
+                c.restore();
+            }
+
+            drawDynamicCables(c, cx, cy, ex, ey, wx, wy, th1, th2) {
+                c.save();
+                c.lineCap = 'round';
+                c.lineJoin = 'round';
+
+                c.strokeStyle = '#151515';
+                c.lineWidth = 18;
+
+                c.beginPath();
+                const start1X = this.bx - 40;
+                const start1Y = this.by - 90;
+                const entry1X = cx + Math.cos(th1 - Math.PI) * 20;
+                const entry1Y = cy + Math.sin(th1 - Math.PI) * 20;
+
+                c.moveTo(start1X, start1Y);
+                c.quadraticCurveTo(cx - 50, cy, entry1X, entry1Y);
+                c.stroke();
+
+                c.beginPath();
+                const exit1X = ex - Math.cos(th1) * 30;
+                const exit1Y = ey - Math.sin(th1) * 30;
+                const end1X = ex + Math.cos(th1 + Math.PI - 0.2) * 50;
+                const end1Y = ey + Math.sin(th1 + Math.PI - 0.2) * 50;
+
+                c.moveTo(exit1X, exit1Y);
+                c.quadraticCurveTo(ex - Math.cos(th1) * 80, ey - Math.sin(th1) * 80, end1X, end1Y);
+                c.stroke();
+
+                c.strokeStyle = '#2a2a2a';
+                c.lineWidth = 18;
+                c.setLineDash([4, 6]);
+                c.beginPath(); c.moveTo(start1X, start1Y); c.quadraticCurveTo(cx - 50, cy, entry1X, entry1Y); c.stroke();
+                c.beginPath(); c.moveTo(exit1X, exit1Y); c.quadraticCurveTo(ex - Math.cos(th1) * 80, ey - Math.sin(th1) * 80, end1X, end1Y); c.stroke();
+
+                c.setLineDash([]);
+                c.strokeStyle = '#151515';
+                c.lineWidth = 14;
+                c.beginPath();
+
+                const end2X = wx - Math.cos(th1 + th2) * 30;
+                const end2Y = wy - Math.sin(th1 + th2) * 30;
+
+                const cp2_1X = ex + Math.cos(th1 + th2 - Math.PI / 2) * 80;
+                const cp2_1Y = ey + Math.sin(th1 + th2 - Math.PI / 2) * 80;
+
+                const cp2_2X = ex + (wx - ex) * 0.5 + Math.cos(th1 + th2 - Math.PI / 2) * 40;
+                const cp2_2Y = ey + (wy - ey) * 0.5 + Math.sin(th1 + th2 - Math.PI / 2) * 40;
+
+                c.moveTo(end1X, end1Y);
+                c.bezierCurveTo(cp2_1X, cp2_1Y, cp2_2X, cp2_2Y, end2X, end2Y);
+                c.stroke();
+
+                c.strokeStyle = '#2a2a2a';
+                c.setLineDash([3, 5]);
+                c.stroke();
+
+                c.restore();
+            }
+
+            drawControlCabinet(c) {
+                const boxW = 210;
+                const boxH = 150;
+                const cabinetX = window.innerWidth * 0.05 - 20; 
+                const cabinetY = this.by + 65 - boxH;
+
+                c.save();
+                c.fillStyle = '#2a2a2a';
+                rrect(c, cabinetX, cabinetY, boxW, boxH, 4);
+                c.fill();
+
+                c.fillStyle = '#FF6600';
+                const panelX = cabinetX + 40; 
+                const panelY = cabinetY + 5;
+                const panelW = boxW - 45;
+                const panelH = boxH - 20;
+                c.fillRect(panelX, panelY, panelW, panelH);
+
+                c.fillStyle = '#111';
+                c.fillRect(panelX + 20, panelY + 15, 60, 25);
+                c.fillStyle = '#ff3333'; c.beginPath(); c.arc(panelX + 30, panelY + 27, 3, 0, Math.PI*2); c.fill();
+                c.fillStyle = '#ffcc00'; c.beginPath(); c.arc(panelX + 45, panelY + 27, 3, 0, Math.PI*2); c.fill();
+                c.fillStyle = '#33cc33'; c.beginPath(); c.arc(panelX + 60, panelY + 27, 3, 0, Math.PI*2); c.fill();
+
+                c.fillStyle = '#111';
+                rrect(c, panelX + 15, panelY + 70, 12, 35, 2);
+                c.fill();
+
+                c.fillStyle = '#fff';
+                c.strokeStyle = '#000'; c.lineWidth = 1;
+                c.fillRect(cabinetX + 8, cabinetY + 40, 24, 30);
+                c.strokeRect(cabinetX + 8, cabinetY + 40, 24, 30);
+                c.fillStyle = '#000';
+                c.font = 'bold 8px sans-serif'; c.textAlign = 'center'; c.textBaseline = 'alphabetic';
+                c.fillText("KUKA", cabinetX + 20, cabinetY + 52);
+                c.font = '6px sans-serif';
+                c.fillText("KR C4", cabinetX + 20, cabinetY + 62);
+
+                const triX = panelX + 90;
+                const triY = panelY + 60;
+                c.fillStyle = '#FFD700';
+                c.strokeStyle = '#000'; c.lineWidth = 2; c.lineJoin = 'miter';
+                c.beginPath();
+                c.moveTo(triX, triY - 14);
+                c.lineTo(triX + 16, triY + 14);
+                c.lineTo(triX - 16, triY + 14);
+                c.closePath();
+                c.fill(); c.stroke();
+                c.fillStyle = '#000';
+                c.font = 'bold 18px sans-serif';
+                c.textAlign = 'center';
+                c.textBaseline = 'middle';
+                c.fillText("!", triX, triY + 2);
+                
+                c.fillStyle = '#fff'; c.fillRect(triX + 25, triY - 14, 40, 24);
+                c.strokeRect(triX + 25, triY - 14, 40, 24);
+                c.fillStyle = 'red'; c.fillRect(triX + 27, triY - 12, 36, 4);
+                c.fillStyle = '#000'; c.fillRect(triX + 27, triY - 4, 20, 2); c.fillRect(triX + 27, triY + 1, 25, 2); c.fillRect(triX + 27, triY + 6, 15, 2);
+
+                c.fillStyle = '#111';
+                c.font = '900 26px "Orbitron", sans-serif';
+                c.textAlign = 'left';
+                c.textBaseline = 'alphabetic';
+                c.fillText("KUKA", panelX + 35, panelY + panelH - 12);
+
+                c.fillStyle = '#111';
+                c.beginPath(); c.moveTo(panelX + panelW - 50, panelY - 5);
+                c.lineTo(panelX + panelW, panelY + 25);
+                c.lineTo(panelX + panelW - 10, panelY + 30);
+                c.lineTo(panelX + panelW - 50, panelY);
+                c.fill();
+
+                c.translate(cabinetX + boxW - 20, cabinetY + 40);
+                c.rotate(Math.PI / 16);
+                c.fillStyle = '#333';
+                rrect(c, -20, 0, 50, 65, 8); c.fill();
+                c.fillStyle = '#222';
+                rrect(c, -18, 2, 46, 61, 6); c.fill();
+                c.fillStyle = KUKA_ORANGE;
+                c.fillRect(-16, 4, 42, 57);
+                c.fillStyle = '#eee';
+                c.fillRect(-12, 15, 34, 35);
+                c.fillStyle = '#111';
+                c.beginPath(); c.arc(15, 8, 5, 0, Math.PI*2); c.fill(); 
+                c.fillStyle = 'red';
+                c.beginPath(); c.arc(15, 8, 3.5, 0, Math.PI*2); c.fill();
+
+                c.restore();
+            }
+
+            draw(c) {
+                this.drawLinearRail(c);
+                this.drawDragChain(c);
+                this.drawCarriageAndBase(c);
+
+                const cx = this.bx + 55;
+                const cy = this.by - 110; 
+                const ex = cx + Math.cos(this.th1) * this.L1;
+                const ey = cy + Math.sin(this.th1) * this.L1;
+                const wx = ex + Math.cos(this.th1 + this.th2) * this.L2;
+                const wy = ey + Math.sin(this.th1 + this.th2) * this.L2;
+
+                this.drawDynamicCables(c, cx, cy, ex, ey, wx, wy, this.th1, this.th2);
+
+                this.drawElbowMotors(c, ex, ey, this.th1 + this.th2); 
+                this.drawArmSegment(c, ex, ey, this.L2, this.th1 + this.th2, false); 
+                this.drawJoint(c, ex, ey, 35, this.th1 + this.th2); 
+                
+                this.drawArmSegment(c, cx, cy, this.L1, this.th1, true); 
+                this.drawJoint(c, cx, cy, 45, this.th1);
+
+                this.drawWristAndTorch(c, wx, wy, this.th1 + this.th2);
+                this.drawJoint(c, wx, wy, 25, this.th1 + this.th2);
+
+                this.drawControlCabinet(c);
+            }
+        }
+
+        const arm = new RealisticKukaArm();
+
+        function animate() {
+            ctx.clearRect(0, 0, W, H);
+
+            // Grid background to give scale
+            ctx.strokeStyle = '#dae0e8'; ctx.lineWidth = 1;
+            for (let x = 0; x < W; x += 50) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke(); }
+            for (let y = 0; y < H; y += 50) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
+
+            arm.ik(mouse.x, mouse.y);
+            arm.draw(ctx);
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+</body>
+
+</html>
