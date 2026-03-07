@@ -69,45 +69,12 @@
                 this.th1 = -Math.PI / 2;
                 this.th2 = 0;
                 this.th3 = 0; 
-                this.linkLen = 18;
-                
-                this.chainN = Math.ceil((window.innerWidth * 0.72) / this.linkLen);
-                this.chain = [];
-                this.initChain();
-            }
-
-            initChain() {
-                this.chain = [];
-                const anchorX = window.innerWidth * 0.05 + 10; 
-                const anchorY = this.by + 65;
-                const carriageW = 160;
-                const carX = this.bx - (carriageW / 2);
-                const carY = this.by - 25;
-                
-                const dx = anchorX - carX;
-                const dy = anchorY - carY;
-                const dist = Math.hypot(dx, dy);
-                
-                for(let i=0; i<this.chainN; i++) {
-                    let t = i / (this.chainN - 1 || 1);
-                    let sag = Math.sin(t * Math.PI) * (this.chainN * this.linkLen - dist) * 0.3;
-                    let nx = carX + t * dx;
-                    let ny = carY + t * dy + sag;
-                    if (ny > anchorY - 10) ny = anchorY - 10;
-                    this.chain.push({x: nx, y: ny, a: 0});
-                }
             }
 
             ik(tx, ty) {
                 this.L1 = Math.min(window.innerWidth, window.innerHeight) * 0.22;
                 this.L2 = Math.min(window.innerWidth, window.innerHeight) * 0.18;
                 this.by = window.innerHeight * 0.8;
-                const newChainN = Math.ceil((window.innerWidth * 0.72) / this.linkLen);
-                
-                if (newChainN !== this.chainN) {
-                    this.chainN = newChainN;
-                    this.initChain();
-                }
 
                 const idealBx = clamp(tx, window.innerWidth * 0.1, window.innerWidth * 0.9);
                 this.bx += (idealBx - this.bx) * 0.08;
@@ -144,103 +111,59 @@
                 const toolTarget = Math.atan2(ty - wy, tx - wx);
                 const th3Target = toolTarget - (this.th1 + this.th2);
                 this.th3 += (th3Target - this.th3) * 0.2;
-
-                this.updateDragChain();
-            }
-
-            updateDragChain() {
-                // FIXED LEFT SIDE WALL ANCHOR
-                const anchorX = window.innerWidth * 0.05 + 10; 
-                const anchorY = this.by + 65;
-                
-                // MOVING CARRIAGE LEFT SIDE ANCHOR
-                const carriageW = 160;
-                const carX = this.bx - (carriageW / 2);
-                const carY = this.by - 25;
-                
-                // PURE POSITIONAL CONSTRAINT (FABRIK)
-                const maxBend = 25 * (Math.PI / 180);
-                
-                // Add soft sag to all unconstrained links
-                for (let i = 1; i < this.chainN - 1; i++) {
-                    this.chain[i].y += 3; 
-                }
-                
-                for (let iter = 0; iter < 15; iter++) {
-                    // Backwards pass: Fixed Wall to Robot
-                    this.chain[this.chainN - 1].x = anchorX;
-                    this.chain[this.chainN - 1].y = anchorY;
-                    for (let i = this.chainN - 2; i >= 0; i--) {
-                        let p1 = this.chain[i+1];
-                        let p2 = this.chain[i];
-                        let dx = p2.x - p1.x;
-                        let dy = p2.y - p1.y;
-                        let dist = Math.hypot(dx, dy);
-                        if (dist > 0) {
-                            p2.x = p1.x + (dx/dist) * this.linkLen;
-                            p2.y = p1.y + (dy/dist) * this.linkLen;
-                        }
-                    }
-                    
-                    // Forwards pass (Robot to Wall) with angle limit ±25°
-                    this.chain[0].x = carX;
-                    this.chain[0].y = carY;
-                    for (let i = 0; i < this.chainN - 1; i++) {
-                        let p1 = this.chain[i];
-                        let p2 = this.chain[i+1];
-                        let dx = p2.x - p1.x;
-                        let dy = p2.y - p1.y;
-                        
-                        let ang = Math.atan2(dy, dx);
-                        
-                        if (i > 0) {
-                            let prevA = this.chain[i-1].a;
-                            let delta = ang - prevA;
-                            while (delta > Math.PI) delta -= Math.PI * 2;
-                            while (delta < -Math.PI) delta += Math.PI * 2;
-                            
-                            if (delta > maxBend) ang = prevA + maxBend;
-                            if (delta < -maxBend) ang = prevA - maxBend;
-                        } else {
-                            // Initial link drop tendency checking
-                            if (ang < 0 && ang > -Math.PI) {
-                                // Encourage pointing initially down-ish not up-ish
-                                if (ang > -Math.PI/4) ang = -Math.PI/4;
-                            }
-                        }
-                        
-                        this.chain[i].a = ang;
-                        p2.x = p1.x + Math.cos(ang) * this.linkLen;
-                        p2.y = p1.y + Math.sin(ang) * this.linkLen;
-                        
-                        // Enforce absolute floor 
-                        if (p2.y > anchorY - 10) {
-                            p2.y = anchorY - 10;
-                        }
-                    }
-                }
-                
-                // Final angle compute for drawing
-                for (let i = 0; i < this.chainN - 1; i++) {
-                    this.chain[i].a = Math.atan2(this.chain[i+1].y - this.chain[i].y, this.chain[i+1].x - this.chain[i].x);
-                }
-                this.chain[this.chainN-1].a = this.chain[this.chainN-2].a;
             }
 
             drawDragChain(c) {
+                const startX = this.bx + 80; 
+                const startY = this.by - 22;
+                
+                const cabinetX = window.innerWidth * 0.05 + 10;
+                const endX = cabinetX + 210;
+                const endY = this.by - 22;
+                
+                const cpX = (startX + endX) / 2;
+                const cpY = this.by - 22 + 50; 
+                
                 c.save();
-                for (let i = 0; i < this.chainN; i++) {
-                    c.save();
-                    c.translate(this.chain[i].x, this.chain[i].y);
-                    c.rotate(this.chain[i].a);
+                
+                const steps = 50;
+                let prevX = startX, prevY = startY;
+                let arcLen = 0;
+                for(let i=1; i<=steps; i++) {
+                    let t = i / steps;
+                    let u = 1 - t;
+                    let x = u*u*startX + 2*u*t*cpX + t*t*endX;
+                    let y = u*u*startY + 2*u*t*cpY + t*t*endY;
+                    arcLen += Math.hypot(x - prevX, y - prevY);
+                    prevX = x; prevY = y;
+                }
+
+                const N = Math.max(1, Math.ceil(arcLen / 18));
+                
+                for(let i=0; i<N; i++) {
+                    let t = i / (N - 1 || 1);
+                    let u = 1 - t;
+                    let x = u*u*startX + 2*u*t*cpX + t*t*endX;
+                    let y = u*u*startY + 2*u*t*cpY + t*t*endY;
                     
-                    c.fillStyle = '#1c1c1c';
-                    rrect(c, 0, -12, this.linkLen, 24, 3);
+                    let dx = 2*u*(cpX - startX) + 2*t*(endX - cpX);
+                    let dy = 2*u*(cpY - startY) + 2*t*(endY - cpY);
+                    let ang = Math.atan2(dy, dx);
+
+                    c.save();
+                    c.translate(x, y);
+                    c.rotate(ang);
+                    
+                    c.fillStyle = '#1a1a1a';
+                    rrect(c, -8, -5, 16, 10, 2);
                     c.fill();
-                    c.fillStyle = '#666'; // edge highlight
-                    c.fillRect(1, -11, this.linkLen - 2, 2);
-                    c.fillStyle = '#0a0a0a'; // side details
-                    c.fillRect(this.linkLen/2 - 2, -6, 4, 12);
+                    
+                    c.fillStyle = '#3a3a3a';
+                    c.fillRect(-7, -4, 14, 1);
+                    
+                    c.fillStyle = '#111';
+                    c.fillRect(-2, -3, 4, 6);
+                    
                     c.restore();
                 }
                 c.restore();
@@ -271,22 +194,17 @@
                 const cx = this.bx;
 
                 c.save();
-                
-                // Main dark sliding block
                 c.fillStyle = '#111';
                 c.fillRect(cx - (carriageW/2), ry - 15, carriageW, 35);
                 
-                // Orange matching left/right endplates
                 c.fillStyle = KUKA_ORANGE;
                 rrect(c, cx - (carriageW/2) - 10, ry - 15, 20, 35, 4); c.fill();
                 rrect(c, cx + (carriageW/2) - 10, ry - 15, 20, 35, 4); c.fill();
                 
-                // Front and Back connection housings
                 c.fillStyle = '#222';
                 c.fillRect(cx - (carriageW/2) - 10, ry - 5, 25, 20); 
                 c.fillRect(cx + (carriageW/2) - 15, ry - 5, 25, 20); 
 
-                // Dark Cylinder Turntable base extending slightly upward
                 c.fillStyle = KUKA_BLACK;
                 const turnRadius = carriageW * 0.28;
                 c.beginPath(); 
@@ -296,7 +214,6 @@
                 c.lineTo(cx - turnRadius + 10, ry - 100);
                 c.fill();
 
-                // Turntable shadowing
                 const grd = c.createLinearGradient(cx - turnRadius, 0, cx + turnRadius, 0);
                 grd.addColorStop(0, 'rgba(255,255,255,0.05)');
                 grd.addColorStop(0.3, 'rgba(255,255,255,0.15)');
@@ -305,90 +222,51 @@
                 c.fillStyle = grd;
                 c.fill();
 
-                // Small rotating orange shoulder mount offset to the right slightly
                 c.fillStyle = KUKA_ORANGE_DARK;
                 rrect(c, cx + 55 - 45, ry - 120, 90, 25, 6);
                 c.fill();
-                
                 c.restore();
             }
 
-            drawMotorDisc(c, x, y, outerR, innerR, isFront, ang) {
-                if (x < -100 || x > window.innerWidth + 100 || y < -100 || y > window.innerHeight + 100) return;
+            drawMotorDisc(c, x, y, radius, ang) {
+                if (x < -20 || x > window.innerWidth + 20 || y < -20 || y > window.innerHeight + 20) {
+                    console.warn("Floating artifact prevented at", x, y);
+                    return;
+                }
                 c.save();
                 c.translate(x, y);
-                // Base shadow exterior ring
-                c.beginPath(); c.arc(0, 0, outerR, 0, Math.PI * 2);
+                
+                c.beginPath(); c.arc(0, 0, radius, 0, Math.PI * 2);
                 c.fillStyle = '#1a1a1a'; c.fill();
                 
-                if (innerR > 0) {
-                    c.beginPath(); c.arc(0, 0, innerR, 0, Math.PI * 2);
-                    c.fillStyle = '#FF6600'; c.fill();
+                c.beginPath(); c.arc(0, 0, radius * 0.88, 0, Math.PI * 2);
+                c.strokeStyle = '#FF5500'; c.lineWidth = 3.5; c.stroke();
 
-                    c.beginPath(); c.arc(0, 0, innerR * 0.7, 0, Math.PI * 2);
-                    c.fillStyle = '#1a1a1a'; c.fill();
-                    c.strokeStyle = '#222'; c.lineWidth = 1; c.stroke();
+                c.rotate(ang);
+                
+                c.fillStyle = '#555555';
+                for (let i = 0; i < 6; i++) {
+                    const a = (i / 6) * Math.PI * 2;
+                    c.beginPath(); 
+                    c.arc(Math.cos(a) * radius * 0.72, Math.sin(a) * radius * 0.72, 2.5, 0, Math.PI * 2); 
+                    c.fill();
                 }
 
-                if (isFront) {
-                    c.rotate(ang);
-                    c.fillStyle = '#444';
-                    for (let i = 0; i < 6; i++) {
-                        const a = (i / 6) * Math.PI * 2;
-                        c.beginPath(); 
-                        c.arc(Math.cos(a) * outerR * 0.6, Math.sin(a) * outerR * 0.6, outerR * 0.08, 0, Math.PI * 2); 
-                        c.fill();
-                    }
-                    // Bright white rotation indicator
-                    c.fillStyle = '#fff';
-                    c.fillRect(0, -1.5, outerR * 0.7, 3);
-                }
-                c.restore();
-            }
-
-            drawShoulderJoint(c, x, y, segW, ang) {
-                // Stack of 3 discs with 3px total offset
-                this.drawMotorDisc(c, x - 3, y + 2, segW * 0.75, 0, false, ang);
-                this.drawMotorDisc(c, x - 1, y + 0.5, segW * 0.65, 0, false, ang);
-                this.drawMotorDisc(c, x, y, segW * 0.55, segW * 0.45, true, ang);
-            }
-
-            drawElbowJoint(c, x, y, segW, ang) {
-                // Stack of 2 discs
-                this.drawMotorDisc(c, x - 2, y + 1, segW * 0.65, 0, false, ang);
-                this.drawMotorDisc(c, x, y, segW * 0.48, segW * 0.4, true, ang);
-            }
-
-            drawWristJoint(c, x, y, segW, ang) {
-                // Single small disc
-                this.drawMotorDisc(c, x, y, segW * 0.42, segW * 0.35, true, ang);
-            }
-
-            drawElbowMotors(c, x, y, ang) {
-                if (x < -100 || x > window.innerWidth + 100 || y < -100 || y > window.innerHeight + 100) return;
-                c.save();
-                c.translate(x, y);
-                c.rotate(ang + Math.PI); 
-
-                // Backplate BEHIND logo
-                c.fillStyle = KUKA_ORANGE_DARK;
-                c.fillRect(-15, -45, 30, 90);
-
-                // Extended black engine modules clamped to 18% size max (45px)
-                c.fillStyle = '#151515';
-                for (let m = 0; m < 3; m++) {
-                    rrect(c, 15, -40 + m * 30, 45, 20, 4);
-                }
-                c.fill();
+                c.beginPath();
+                c.moveTo(0, 0);
+                c.lineTo(radius, 0);
+                c.strokeStyle = '#fff';
+                c.lineWidth = 2;
+                c.stroke();
+                
                 c.restore();
             }
 
             drawArmQuad(c, x, y, len, ang, startW, endW, isL1) {
-                if (x < -300 || x > window.innerWidth + 300 || y < -300 || y > window.innerHeight + 300) return;
+                if (x < -20 || x > window.innerWidth + 20 || y < -20 || y > window.innerHeight + 20) return;
                 c.save();
                 c.translate(x, y); c.rotate(ang);
 
-                // Main Orange Center Trapezoid
                 c.beginPath();
                 c.moveTo(0, -startW / 2);
                 c.lineTo(len, -endW / 2);
@@ -398,7 +276,6 @@
                 c.fillStyle = '#FF6600';
                 c.fill();
                 
-                // Highlight Trim (Top Edge Polygon)
                 c.beginPath();
                 c.moveTo(0, -startW / 2);
                 c.lineTo(len, -endW / 2);
@@ -408,7 +285,6 @@
                 c.fillStyle = '#ff8833';
                 c.fill();
 
-                // Shadow Trim (Bottom Edge Polygon)
                 c.beginPath();
                 c.moveTo(0, startW / 2);
                 c.lineTo(len, endW / 2);
@@ -421,7 +297,6 @@
                 c.strokeStyle = '#1a1a1a'; c.lineWidth = 2; c.stroke();
 
                 if (isL1) {
-                    // Recessed panel inside the Upper Arm
                     c.fillStyle = '#1a1a1a';
                     c.beginPath();
                     c.moveTo(len * 0.1, -startW * 0.2);
@@ -431,7 +306,6 @@
                     c.closePath();
                     c.fill();
                 } else {
-                    // ING.CESAR Logo accurately angled on Forearm tube
                     c.save();
                     c.fillStyle = '#111';
                     c.font = `900 ${endW * 0.45}px 'Orbitron', sans-serif`;
@@ -444,11 +318,10 @@
             }
 
             drawWristAndTorch(c, x, y, ang) {
-                if (x < -100 || x > window.innerWidth + 100 || y < -100 || y > window.innerHeight + 100) return;
+                if (x < -20 || x > window.innerWidth + 20 || y < -20 || y > window.innerHeight + 20) return;
                 c.save();
                 c.translate(x, y); c.rotate(ang); 
 
-                // Compact base box matching end effector scale
                 c.fillStyle = '#111';
                 rrect(c, -5, -15, 30, 30, 4);
                 c.fill();
@@ -457,11 +330,9 @@
                 rrect(c, 25, -10, 25, 20, 2);
                 c.fill();
 
-                // Torch nozzle
                 c.fillStyle = '#222';
                 c.beginPath(); c.moveTo(50, -8); c.lineTo(75, -3); c.lineTo(75, 3); c.lineTo(50, 8); c.fill();
 
-                // Copper tip
                 c.fillStyle = '#b87333';
                 c.fillRect(75, -2, 5, 4); 
 
@@ -499,7 +370,6 @@
                 c.quadraticCurveTo(ex - Math.cos(th1) * 80, ey - Math.sin(th1) * 80, end1X, end1Y);
                 c.stroke();
 
-                // Detailed Corrugated Hosing Pass
                 c.strokeStyle = '#2a2a2a';
                 c.lineWidth = cableW;
                 c.setLineDash([4, 6]);
@@ -538,12 +408,10 @@
                 const cabinetY = this.by + 65 - boxH;
 
                 c.save();
-                // Outer Shell (Dark Graphite)
                 c.fillStyle = '#2a2a2a';
                 rrect(c, cabinetX, cabinetY, boxW, boxH, 4);
                 c.fill();
 
-                // Bright Orange Door
                 c.fillStyle = '#FF6600';
                 const panelX = cabinetX + 35; 
                 const panelY = cabinetY + 5;
@@ -551,26 +419,22 @@
                 const panelH = boxH - 20;
                 c.fillRect(panelX, panelY, panelW, panelH);
 
-                // LED Recess Plate
                 c.fillStyle = '#111';
                 c.fillRect(panelX + 20, panelY + 15, 60, 25);
-                c.fillStyle = '#ff3333'; c.beginPath(); c.arc(panelX + 30, panelY + 27, 3, 0, Math.PI*2); c.fill(); // Red LED
-                c.fillStyle = '#ffcc00'; c.beginPath(); c.arc(panelX + 45, panelY + 27, 3, 0, Math.PI*2); c.fill(); // Yellow LED
-                c.fillStyle = '#33cc33'; c.beginPath(); c.arc(panelX + 60, panelY + 27, 3, 0, Math.PI*2); c.fill(); // Green LED
+                c.fillStyle = '#ff3333'; c.beginPath(); c.arc(panelX + 30, panelY + 27, 3, 0, Math.PI*2); c.fill();
+                c.fillStyle = '#ffcc00'; c.beginPath(); c.arc(panelX + 45, panelY + 27, 3, 0, Math.PI*2); c.fill();
+                c.fillStyle = '#33cc33'; c.beginPath(); c.arc(panelX + 60, panelY + 27, 3, 0, Math.PI*2); c.fill();
 
-                // Switch Breaker Bar
                 c.fillStyle = '#111';
                 rrect(c, panelX + 7, panelY + 70, 12, 45, 2);
                 c.fill();
 
-                // 'KUKA' Main Door Font Tracking Text (Bottom)
                 c.fillStyle = '#111';
                 c.font = '900 30px "Orbitron", sans-serif';
                 c.textAlign = 'left';
                 c.textBaseline = 'alphabetic';
                 c.fillText("KUKA", panelX + 30, panelY + panelH - 15);
 
-                // KR C4 Plate Label (CE Marking zone)
                 c.fillStyle = '#fff';
                 c.strokeStyle = '#000'; c.lineWidth = 1;
                 c.fillRect(panelX + 115, panelY + 68, 45, 25);
@@ -581,7 +445,6 @@
                 c.font = '7px sans-serif';
                 c.fillText("KR C4", panelX + 137, panelY + 89);
 
-                // Hazard Warning Triangle EXACT specs (Solid yellow, 2px borders)
                 const triX = panelX + 138;
                 const triY = panelY + 38;
                 c.fillStyle = '#FFD700';
@@ -598,7 +461,6 @@
                 c.textBaseline = 'middle';
                 c.fillText("!", triX, triY + 4);
 
-                // Hook Area Bottom-Right Add-on for SmartPAD
                 c.fillStyle = '#111';
                 c.beginPath(); 
                 c.moveTo(panelX + panelW - 5, panelY + panelH - 60);
@@ -607,7 +469,6 @@
                 c.lineTo(panelX + panelW - 5, panelY + panelH - 10);
                 c.fill();
 
-                // Teach Pendant Overlay Details (Hooked Bottom Right)
                 c.translate(cabinetX + boxW - 5, cabinetY + boxH - 60);
                 c.rotate(Math.PI / 16);
                 c.fillStyle = '#333';
@@ -627,15 +488,8 @@
             }
 
             draw(c) {
-                // FIXED Z-ORDER SEQUENCE 1 TO 9 
-                
-                // 1. Static base rail rendering
                 this.drawLinearRail(c);
-                
-                // 1.5 Drag chain rendering BEFORE the base column (Overlaid on floor rails, behind base)
                 this.drawDragChain(c);
-
-                // 2. Base column / Turret
                 this.drawCarriage(c);
 
                 const cx = this.bx + 55;
@@ -645,31 +499,47 @@
                 const wx = ex + Math.cos(this.th1 + this.th2) * this.L2;
                 const wy = ey + Math.sin(this.th1 + this.th2) * this.L2;
                 
-                const segW = 55; // Universal segment thickness variable
+                const segW = 55; 
 
-                // 2B. J1: Shoulder Joint - Rendered BEHIND upper arm as a 3D separated stack
-                this.drawShoulderJoint(c, cx, cy, segW, this.th1);
+                // --- 1. Draw Rear J2 ---
+                this.drawMotorDisc(c, cx - 4, cy + 3, segW * 0.72, this.th1);
 
-                // 3. Upper arm segment L1 (Thick solid orange block no-taper covering Elbow backplates)
-                this.drawElbowMotors(c, ex, ey, this.th1 + this.th2); // Motor protrusion Behind L2
+                // --- 2. Orange base bracket embracing stack ---
+                c.save();
+                c.translate(cx - 2, cy + 1.5);
+                c.rotate(this.th1);
+                c.fillStyle = '#FF6600';
+                c.strokeStyle = '#1a1a1a'; c.lineWidth = 2;
+                c.beginPath(); c.roundRect(-segW*0.6, -segW*0.75, segW*1.2, segW*0.2, 4); c.fill(); c.stroke();
+                c.beginPath(); c.roundRect(-segW*0.6, segW*0.55, segW*1.2, segW*0.2, 4); c.fill(); c.stroke();
+                c.restore();
+
+                // --- 3. Upper Arm L1 ---
                 this.drawArmQuad(c, cx, cy, this.L1, this.th1, segW * 1.0, segW * 1.0, true);
 
-                // 4. J2: Elbow Joint - ON TOP of L1, BEHIND L2 Forearm (2 disc stack)
-                this.drawElbowJoint(c, ex, ey, segW, this.th1 + this.th2);
+                // --- 4. Middle J3 ---
+                this.drawMotorDisc(c, cx - 2, cy + 1, segW * 0.63, this.th1 + this.th2);
 
-                // 5. Forearm segment (Thinner L2 with logo)
+                // --- 5. Front J4 ---
+                this.drawMotorDisc(c, cx, cy, segW * 0.54, this.th1 + this.th2 + this.th3);
+
+                // Elbow Joint Stack
+                this.drawMotorDisc(c, ex - 2, ey + 1, segW * 0.65, this.th1 + this.th2);
+                this.drawMotorDisc(c, ex, ey, segW * 0.48, this.th1 + this.th2 + this.th3);
+
+                // Forearm L2
                 this.drawArmQuad(c, ex, ey, this.L2, this.th1 + this.th2, segW * 0.8, segW * 0.55, false);
 
-                // 6. J3: Wrist Joint - ON TOP of Forearm (th3 precise indicator scale 0.42)
-                this.drawWristJoint(c, wx, wy, segW, this.th1 + this.th2 + this.th3);
+                // Wrist Joint
+                this.drawMotorDisc(c, wx, wy, segW * 0.42, this.th1 + this.th2 + this.th3);
 
-                // 7. Tool / end effector (Unobscured on top of wrist - cleaned up stray floats)
+                // Tool
                 this.drawWristAndTorch(c, wx, wy, this.th1 + this.th2 + this.th3);
 
-                // 8. Corrugated cables mapped over the finished architecture layout
+                // Cables
                 this.drawDynamicCables(c, cx, cy, ex, ey, wx, wy, this.th1, this.th2);
                 
-                // 9. KR C4 Control Cabinet foreground rendering absolute highest z-index priority
+                // Cabinet
                 this.drawControlCabinet(c);
             }
         }
