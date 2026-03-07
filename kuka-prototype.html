@@ -68,17 +68,30 @@
                 this.bx = window.innerWidth / 2;
                 this.th1 = -Math.PI / 2;
                 this.th2 = 0;
+                this.th3 = 0; // Wrist joint rotation
                 this.linkLen = 18;
                 
-                // N recalculates dynamically per window width (chain handles ~72% travel)
+                // Left Anchor chain length calculation
                 this.chainN = Math.ceil((window.innerWidth * 0.72) / this.linkLen);
+                this.chain = [];
+                for(let i=0; i<this.chainN; i++) {
+                    this.chain.push({x: this.bx - i*this.linkLen, y: this.by, a: 0});
+                }
             }
 
             ik(tx, ty) {
                 this.L1 = Math.min(window.innerWidth, window.innerHeight) * 0.22;
                 this.L2 = Math.min(window.innerWidth, window.innerHeight) * 0.18;
                 this.by = window.innerHeight * 0.8;
-                this.chainN = Math.ceil((window.innerWidth * 0.72) / this.linkLen);
+                const newChainN = Math.ceil((window.innerWidth * 0.72) / this.linkLen);
+                
+                if (newChainN !== this.chainN) {
+                    this.chainN = newChainN;
+                    this.chain = [];
+                    for(let i=0; i<this.chainN; i++) {
+                        this.chain.push({x: this.bx - i*this.linkLen, y: this.by, a: 0});
+                    }
+                }
 
                 const idealBx = clamp(tx, window.innerWidth * 0.1, window.innerWidth * 0.9);
                 this.bx += (idealBx - this.bx) * 0.08;
@@ -106,69 +119,133 @@
 
                 this.th1 += (th1Target - this.th1) * 0.12;
                 this.th2 += (th2Target - this.th2) * 0.12;
+                
+                // Track tool tip direction for th3 (Wrist kinematics)
+                const ex = (this.bx + 55) + Math.cos(this.th1) * this.L1;
+                const ey = (this.by - 110) + Math.sin(this.th1) * this.L1;
+                const wx = ex + Math.cos(this.th1 + this.th2) * this.L2;
+                const wy = ey + Math.sin(this.th1 + this.th2) * this.L2;
+                const toolTarget = Math.atan2(ty - wy, tx - wx);
+                const th3Target = toolTarget - (this.th1 + this.th2);
+                this.th3 += (th3Target - this.th3) * 0.2;
+
+                // Chain Physics update
+                this.updateDragChain();
+            }
+
+            updateDragChain() {
+                // LEFT SIDE WALL ANCHOR
+                const anchorX = 20; 
+                const anchorY = this.by + 65;
+                
+                // CARRIAGE LEFT SIDE ANCHOR
+                const carriageW = 160;
+                const carX = this.bx - (carriageW / 2);
+                const carY = this.by - 25;
+                
+                // Gravity & Verlet
+                for (let i = 1; i < this.chainN; i++) {
+                    this.chain[i].y += 5; // Gravity pull down to simulate drop
+                }
+                
+                // Constrain loop (FABRIK-like)
+                for (let iter = 0; iter < 15; iter++) {
+                    // Start anchored to carriage
+                    this.chain[0].x = carX;
+                    this.chain[0].y = carY;
+                    
+                    // Forward Kinematics (Attachment -> Wall)
+                    for (let i = 0; i < this.chainN - 1; i++) {
+                        let p1 = this.chain[i];
+                        let p2 = this.chain[i+1];
+                        
+                        let dx = p2.x - p1.x;
+                        let dy = p2.y - p1.y;
+                        let dist = Math.hypot(dx, dy);
+                        
+                        // Push to strict length
+                        if (dist > 0) {
+                            let diff = (this.linkLen - dist) / dist;
+                            p2.x += dx * diff;
+                            p2.y += dy * diff;
+                        }
+                        
+                        // Enforce angle limit ±35 deg (drag chain stiffness limit)
+                        if (i > 0) {
+                            let p0 = this.chain[i-1];
+                            let a1 = Math.atan2(p1.y - p0.y, p1.x - p0.x);
+                            let a2 = Math.atan2(p2.y - p1.y, p2.x - p1.x);
+                            let delta = a2 - a1;
+                            
+                            // Normalize delta to -PI to PI
+                            while (delta > Math.PI) delta -= Math.PI * 2;
+                            while (delta < -Math.PI) delta += Math.PI * 2;
+                            
+                            const maxBend = 35 * (Math.PI / 180);
+                            if (delta > maxBend) {
+                                a2 = a1 + maxBend;
+                                p2.x = p1.x + Math.cos(a2) * this.linkLen;
+                                p2.y = p1.y + Math.sin(a2) * this.linkLen;
+                            } else if (delta < -maxBend) {
+                                a2 = a1 - maxBend;
+                                p2.x = p1.x + Math.cos(a2) * this.linkLen;
+                                p2.y = p1.y + Math.sin(a2) * this.linkLen;
+                            }
+                        }
+                        
+                        // Floor constraint
+                        if (p2.y > anchorY) {
+                            p2.y = anchorY;
+                        }
+                    }
+                    
+                    // End anchored to Wall
+                    this.chain[this.chainN - 1].x = anchorX;
+                    this.chain[this.chainN - 1].y = anchorY;
+                    
+                    // Backward Kinematics (Wall -> Attachment)
+                    for (let i = this.chainN - 1; i > 0; i--) {
+                        let p1 = this.chain[i];
+                        let p2 = this.chain[i-1];
+                        
+                        let dx = p2.x - p1.x;
+                        let dy = p2.y - p1.y;
+                        let dist = Math.hypot(dx, dy);
+                        
+                        if (dist > 0) {
+                            let diff = (this.linkLen - dist) / dist;
+                            p2.x += dx * diff;
+                            p2.y += dy * diff;
+                        }
+                        
+                        // Floor constraint backwards
+                        if (p2.y > anchorY) {
+                            p2.y = anchorY;
+                        }
+                    }
+                }
+                
+                // Calculate rendering angles based on positions
+                for (let i = 0; i < this.chainN - 1; i++) {
+                    this.chain[i].a = Math.atan2(this.chain[i+1].y - this.chain[i].y, this.chain[i+1].x - this.chain[i].x);
+                }
+                this.chain[this.chainN - 1].a = this.chain[this.chainN - 2].a;
             }
 
             drawDragChain(c) {
                 c.save();
-                
-                // RIGHT SIDE WALL ANCHOR
-                const anchorX = window.innerWidth - 20; 
-                // CARRIAGE RIGHT SIDE ANCHOR
-                const carriageW = 160;
-                const carX = this.bx + (carriageW / 2);
-                
-                const topY = this.by - 25;
-                const botY = this.by + 65;
-                const radius = (botY - topY) / 2;
-                const cy = topY + radius;
-
-                // Physical constraint (Total geometrical length of the fixed link setup)
-                const L_geo = this.chainN * this.linkLen;
-                
-                // Calculates the right-facing loop core center (Extends/bunches properly)
-                let loopCenterX = (carX + anchorX - Math.PI * radius + L_geo) / 2;
-                
-                // Make sure loop never exceeds the screen boundary roughly, tracking right.
-                if (loopCenterX < carX + radius * 1.5) {
-                    loopCenterX = carX + radius * 1.5;
-                }
-
-                // L1 = Total straight top length. L2 = Semicircle arc length.
-                const L1 = loopCenterX - carX;
-                const L2 = Math.PI * radius;
-
                 for (let i = 0; i < this.chainN; i++) {
-                    const d = i * this.linkLen;
-                    let x, y, ang;
-
-                    if (d <= L1) { // Running along top layer horizontally right
-                        x = carX + d;
-                        y = topY;
-                        ang = 0;
-                    } else if (d > L1 && d <= L1 + L2) { // Looping downwards mathematically
-                        const u = (d - L1) / L2;
-                        const a = -Math.PI / 2 + u * Math.PI; 
-                        x = loopCenterX + Math.cos(a) * radius;
-                        y = cy + Math.sin(a) * radius;
-                        ang = a + Math.PI / 2;
-                    } else { // Running along grounded bottom rail returning to right wall anchor
-                        const d3 = d - (L1 + L2);
-                        x = loopCenterX - d3;
-                        y = botY;
-                        ang = Math.PI;
-                    }
-
                     c.save();
-                    c.translate(x, y);
-                    c.rotate(ang);
-                    // Single cable chain link profile
+                    c.translate(this.chain[i].x, this.chain[i].y);
+                    c.rotate(this.chain[i].a);
+                    
                     c.fillStyle = '#1c1c1c';
-                    rrect(c, -this.linkLen / 2, -12, this.linkLen, 24, 3);
+                    rrect(c, 0, -12, this.linkLen, 24, 3);
                     c.fill();
                     c.fillStyle = '#666'; // edge highlight
-                    c.fillRect(-this.linkLen / 2 + 1, -11, this.linkLen - 2, 2);
+                    c.fillRect(1, -11, this.linkLen - 2, 2);
                     c.fillStyle = '#0a0a0a'; // side details
-                    c.fillRect(-2, -6, 4, 12);
+                    c.fillRect(this.linkLen/2 - 2, -6, 4, 12);
                     c.restore();
                 }
                 c.restore();
@@ -246,7 +323,7 @@
                 c.translate(x, y);
                 c.rotate(ang + Math.PI); 
 
-                // Backplate
+                // Backplate BEHIND logo
                 c.fillStyle = KUKA_ORANGE_DARK;
                 c.fillRect(-15, -60, 40, 120);
 
@@ -311,7 +388,7 @@
                     c.closePath();
                     c.fill();
                 } else {
-                    // ING.CESAR Logo migrated specifically to L2 (Thin Forearm tube)
+                    // ING.CESAR Logo accurately angled on Forearm tube
                     c.save();
                     c.fillStyle = '#111';
                     c.font = `900 ${endW * 0.45}px 'Orbitron', sans-serif`;
@@ -446,8 +523,8 @@
             drawControlCabinet(c) {
                 const boxW = 210;
                 const boxH = 150;
-                // Placed far right
-                const cabinetX = window.innerWidth * 0.9 - boxW + 40; 
+                // Placed far left as the standard anchor site for KL 250-3 rails
+                const cabinetX = window.innerWidth * 0.05 + 10; 
                 const cabinetY = this.by + 65 - boxH;
 
                 c.save();
@@ -458,9 +535,9 @@
 
                 // Bright Orange Door
                 c.fillStyle = '#FF6600';
-                const panelX = cabinetX + 40; 
+                const panelX = cabinetX + 35; 
                 const panelY = cabinetY + 5;
-                const panelW = boxW - 45;
+                const panelW = boxW - 40;
                 const panelH = boxH - 20;
                 c.fillRect(panelX, panelY, panelW, panelH);
 
@@ -473,60 +550,55 @@
 
                 // Switch Breaker Bar
                 c.fillStyle = '#111';
-                rrect(c, panelX + 15, panelY + 70, 12, 35, 2);
+                rrect(c, panelX + 7, panelY + 70, 12, 45, 2);
                 c.fill();
+
+                // 'KUKA' Main Door Font Tracking Text (Bottom)
+                c.fillStyle = '#111';
+                c.font = '900 30px "Orbitron", sans-serif';
+                c.textAlign = 'left';
+                c.textBaseline = 'alphabetic';
+                c.fillText("KUKA", panelX + 30, panelY + panelH - 15);
 
                 // KR C4 Plate Label (CE Marking zone)
                 c.fillStyle = '#fff';
                 c.strokeStyle = '#000'; c.lineWidth = 1;
-                c.fillRect(cabinetX + 8, cabinetY + 40, 24, 30);
-                c.strokeRect(cabinetX + 8, cabinetY + 40, 24, 30);
+                c.fillRect(panelX + 115, panelY + 68, 45, 25);
+                c.strokeRect(panelX + 115, panelY + 68, 45, 25);
                 c.fillStyle = '#000';
-                c.font = 'bold 8px sans-serif'; c.textAlign = 'center'; c.textBaseline = 'alphabetic';
-                c.fillText("KUKA", cabinetX + 20, cabinetY + 52);
-                c.font = '6px sans-serif';
-                c.fillText("KR C4", cabinetX + 20, cabinetY + 62);
+                c.font = 'bold 9px sans-serif'; c.textAlign = 'center'; c.textBaseline = 'alphabetic';
+                c.fillText("KUKA", panelX + 137, panelY + 79);
+                c.font = '7px sans-serif';
+                c.fillText("KR C4", panelX + 137, panelY + 89);
 
-                // Hazard Warning Triangle EXACT specs
-                const triX = panelX + 90;
-                const triY = panelY + 60;
+                // Hazard Warning Triangle EXACT specs (Solid yellow, 2px borders)
+                const triX = panelX + 138;
+                const triY = panelY + 38;
                 c.fillStyle = '#FFD700';
                 c.strokeStyle = '#000'; c.lineWidth = 2; c.lineJoin = 'miter';
                 c.beginPath();
-                c.moveTo(triX, triY - 14);
-                c.lineTo(triX + 16, triY + 14);
-                c.lineTo(triX - 16, triY + 14);
+                c.moveTo(triX, triY - 18);
+                c.lineTo(triX + 20, triY + 14);
+                c.lineTo(triX - 20, triY + 14);
                 c.closePath();
                 c.fill(); c.stroke();
                 c.fillStyle = '#000';
-                c.font = 'bold 18px sans-serif';
+                c.font = 'bold 22px sans-serif';
                 c.textAlign = 'center';
                 c.textBaseline = 'middle';
-                c.fillText("!", triX, triY + 2);
-                
-                // Extra sticker zones mapped adjacent
-                c.fillStyle = '#fff'; c.fillRect(triX + 25, triY - 14, 40, 24);
-                c.strokeRect(triX + 25, triY - 14, 40, 24);
-                c.fillStyle = 'red'; c.fillRect(triX + 27, triY - 12, 36, 4);
-                c.fillStyle = '#000'; c.fillRect(triX + 27, triY - 4, 20, 2); c.fillRect(triX + 27, triY + 1, 25, 2); c.fillRect(triX + 27, triY + 6, 15, 2);
+                c.fillText("!", triX, triY + 4);
 
-                // 'KUKA' Main Door Font Tracking Text
+                // Hook Area Bottom-Right Add-on for SmartPAD
                 c.fillStyle = '#111';
-                c.font = '900 26px "Orbitron", sans-serif';
-                c.textAlign = 'left';
-                c.textBaseline = 'alphabetic';
-                c.fillText("KUKA", panelX + 35, panelY + panelH - 12);
-
-                // Hook Area Right Frame Add-on
-                c.fillStyle = '#111';
-                c.beginPath(); c.moveTo(panelX + panelW - 50, panelY - 5);
-                c.lineTo(panelX + panelW, panelY + 25);
-                c.lineTo(panelX + panelW - 10, panelY + 30);
-                c.lineTo(panelX + panelW - 50, panelY);
+                c.beginPath(); 
+                c.moveTo(panelX + panelW - 5, panelY + panelH - 60);
+                c.lineTo(panelX + panelW + 15, panelY + panelH - 60);
+                c.lineTo(panelX + panelW + 15, panelY + panelH - 10);
+                c.lineTo(panelX + panelW - 5, panelY + panelH - 10);
                 c.fill();
 
-                // Teach Pendant Overlay Details
-                c.translate(cabinetX + boxW - 20, cabinetY + 40);
+                // Teach Pendant Overlay Details (Hooked Bottom Right)
+                c.translate(cabinetX + boxW - 5, cabinetY + boxH - 60);
                 c.rotate(Math.PI / 16);
                 c.fillStyle = '#333';
                 rrect(c, -20, 0, 50, 65, 8); c.fill();
@@ -550,6 +622,9 @@
                 // 1. Static base rail rendering
                 this.drawLinearRail(c);
                 
+                // 1.5 Drag chain rendering BEFORE the base column (Overlaid on floor rails, behind base)
+                this.drawDragChain(c);
+
                 // 2. Base column / Turret
                 this.drawCarriage(c);
 
@@ -566,27 +641,27 @@
                 this.drawJoint(c, cx, cy, segW * 1.1, this.th1);
 
                 // 3. Upper arm segment L1 (Thick solid orange trapezoid covering Elbow backplates)
-                this.drawElbowMotors(c, ex, ey, this.th1 + this.th2); // Motor protrusion
+                // Draw elbow motors behind L2 as requested
+                this.drawElbowMotors(c, ex, ey, this.th1 + this.th2); // Motor protrusion Behind L2
+                
                 this.drawArmQuad(c, cx, cy, this.L1, this.th1, segW, segW * 0.8, true);
 
                 // 4. J2: Elbow Joint - ON TOP of L1, BEHIND L2 Forearm
                 this.drawJoint(c, ex, ey, segW * 0.95, this.th1 + this.th2);
 
                 // 5. Forearm segment (Thin L2 with logo migrated here per instructions)
+                // Segment with ING.CESAR runs in front of Elbow Motors
                 this.drawArmQuad(c, ex, ey, this.L2, this.th1 + this.th2, segW * 0.75, segW * 0.45, false);
 
                 // 6. J3: Wrist Joint - ON TOP of Forearm 
-                this.drawJoint(c, wx, wy, segW * 0.75, this.th1 + this.th2);
+                this.drawJoint(c, wx, wy, segW * 0.75, this.th1 + this.th2 + this.th3);
 
                 // 7. Tool / end effector (Unobscured on top of wrist)
-                this.drawWristAndTorch(c, wx, wy, this.th1 + this.th2);
+                this.drawWristAndTorch(c, wx, wy, this.th1 + this.th2 + this.th3);
 
                 // 8. Corrugated cables mapped over the finished architecture layout
                 this.drawDynamicCables(c, cx, cy, ex, ey, wx, wy, this.th1, this.th2);
                 
-                // 8.5. Drag chain rendering strictly constrained to bottom rail bounds on the far right
-                this.drawDragChain(c);
-
                 // 9. KR C4 Control Cabinet foreground rendering absolute highest z-index priority
                 this.drawControlCabinet(c);
             }
