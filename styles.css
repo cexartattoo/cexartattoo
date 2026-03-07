@@ -11,11 +11,11 @@
     --bg-tertiary: #1a1a25;
     --bg-card: #15151f;
 
-    /* Accent Colors - Neon Cyan */
-    --accent-primary: #00f0ff;
-    --accent-secondary: #7b2dff;
+    /* Accent Colors - Circuit Green & Electric Blue */
+    --accent-primary: #00ff88;
+    --accent-secondary: #0088ff;
     --accent-tertiary: #ff0080;
-    --accent-glow: rgba(0, 240, 255, 0.3);
+    --accent-glow: rgba(0, 255, 136, 0.3);
 
     /* Text Colors */
     --text-primary: #ffffff;
@@ -242,8 +242,8 @@ img {
     position: absolute;
     inset: 0;
     background-image:
-        linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
+        linear-gradient(rgba(0, 255, 136, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 136, 0.03) 1px, transparent 1px);
     background-size: 50px 50px;
     animation: gridMove 20s linear infinite;
 }
@@ -276,8 +276,8 @@ img {
     align-items: center;
     gap: 8px;
     padding: 8px 20px;
-    background: rgba(0, 240, 255, 0.1);
-    border: 1px solid rgba(0, 240, 255, 0.3);
+    background: rgba(0, 255, 136, 0.1);
+    border: 1px solid rgba(0, 255, 136, 0.3);
     border-radius: 50px;
     font-size: 0.85rem;
     color: var(--accent-primary);
@@ -704,7 +704,7 @@ section {
 .timeline-date {
     display: inline-block;
     padding: 5px 15px;
-    background: rgba(0, 240, 255, 0.1);
+    background: rgba(0, 255, 136, 0.1);
     border-radius: 50px;
     font-size: 0.85rem;
     color: var(--accent-primary);
@@ -886,8 +886,8 @@ section {
 
 .edu-badge {
     padding: 5px 15px;
-    background: rgba(0, 240, 255, 0.1);
-    border: 1px solid rgba(0, 240, 255, 0.3);
+    background: rgba(0, 255, 136, 0.1);
+    border: 1px solid rgba(0, 255, 136, 0.3);
     border-radius: 50px;
     font-size: 0.85rem;
     color: var(--accent-primary);
