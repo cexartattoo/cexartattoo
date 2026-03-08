@@ -77,20 +77,8 @@
             }
 
             updateChainLength() {
-                // Calculate max distance to left rail limit
-                const maxCarX = (window.innerWidth * 0.1) + (160 / 2); 
-                const anchorX = window.innerWidth * 0.05 + 210; // Cabinet anchor
-                const maxDist = Math.abs(anchorX - maxCarX);
-                
-                // Semicircle arc length math
-                const topY = this.by - 25;
-                const botY = this.by + 65;
-                const radius = (botY - topY) / 2;
-                const arcLen = Math.PI * radius;
-                
-                // Absolute maximum required geometry length + 100px explicit safety slack
-                const requiredLength = maxDist - (radius * 2) + arcLen + 100;
-                this.chainN = Math.ceil(requiredLength / this.linkLen);
+                // The explicit request: just cleanly double the screen width for massive slack.
+                this.chainN = Math.ceil((window.innerWidth * 2) / this.linkLen);
             }
 
             ik(tx, ty) {
