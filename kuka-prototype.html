@@ -69,13 +69,18 @@
                 this.th1 = -Math.PI / 2;
                 this.th2 = 0;
                 this.th3 = 0; 
-                this.th4 = 0; // telemetric wrist follow
+                this.th4 = 0;
+                
+                // Track chain variables
+                this.linkLen = 26; // Retaining thick Industrial Link Length Phase 12
+                this.chainN = Math.ceil((window.innerWidth * 0.72) / this.linkLen);
             }
 
             ik(tx, ty) {
                 this.L1 = Math.min(window.innerWidth, window.innerHeight) * 0.22;
                 this.L2 = Math.min(window.innerWidth, window.innerHeight) * 0.18;
                 this.by = window.innerHeight * 0.8;
+                this.chainN = Math.ceil((window.innerWidth * 0.72) / this.linkLen);
 
                 const idealBx = clamp(tx, window.innerWidth * 0.1, window.innerWidth * 0.9);
                 this.bx += (idealBx - this.bx) * 0.08;
@@ -104,7 +109,6 @@
                 this.th1 += (th1Target - this.th1) * 0.12;
                 this.th2 += (th2Target - this.th2) * 0.12;
                 
-                // Track tool tip direction for th3
                 const ex = (this.bx + 55) + Math.cos(this.th1) * this.L1;
                 const ey = (this.by - 110) + Math.sin(this.th1) * this.L1;
                 const wx = ex + Math.cos(this.th1 + this.th2) * this.L2;
@@ -112,76 +116,72 @@
                 const toolTarget = Math.atan2(ty - wy, tx - wx);
                 const th3Target = toolTarget - (this.th1 + this.th2);
                 this.th3 += (th3Target - this.th3) * 0.2;
-                this.th4 = this.th3 * 0.5; // Artificial telemetry derivative for front motor disc tracking
+                this.th4 = this.th3 * 0.5;
             }
 
             drawDragChain(c) {
-                const carriageW = 160;
-                const cabinetX = window.innerWidth * 0.05 + 10;
-                const cabinetW = 210;
-                
-                // Moving Anchor (Right of Robot)
-                const startX = this.bx + carriageW/2; 
-                const startY = this.by - 25;
-                
-                // Fixed Anchor (Right of Cabinet)
-                const endX = cabinetX + cabinetW;
-                const endY = this.by - 10;
-                
-                // C-Shape curve control points extending horizontally outwards to the right
-                // It balloons out past the carriage before returning leftwards along the ground
-                const maxRight = Math.max(startX, endX);
-                const cp1X = maxRight + 200 + (startX - endX) * 0.15;
-                const cp1Y = startY + 5;
-                const cp2X = maxRight + 200 + (startX - endX) * 0.15;
-                const cp2Y = endY; 
-                
+                // Restoring exact 4:48 PM Mathematical tracking loop [commit 05fad06]
                 c.save();
                 
-                // Calculate total approximation length of Cubic Bezier
-                const steps = 60;
-                let prevX = startX, prevY = startY;
-                let arcLen = 0;
-                for(let i=1; i<=steps; i++) {
-                    let t = i / steps;
-                    let u = 1 - t;
-                    let x = u*u*u*startX + 3*u*u*t*cp1X + 3*u*t*t*cp2X + t*t*t*endX;
-                    let y = u*u*u*startY + 3*u*u*t*cp1Y + 3*u*t*t*cp2Y + t*t*t*endY;
-                    arcLen += Math.hypot(x - prevX, y - prevY);
-                    prevX = x; prevY = y;
+                // RIGHT SIDE WALL ANCHOR
+                const anchorX = window.innerWidth * 0.05 + 210; // Connect to cabinet right border
+                // CARRIAGE RIGHT SIDE ANCHOR
+                const carriageW = 160;
+                const carX = this.bx + (carriageW / 2);
+                
+                const topY = this.by - 25;
+                const botY = this.by + 65;
+                const radius = (botY - topY) / 2;
+                const cy = topY + radius;
+
+                // Physical constraint
+                const L_geo = this.chainN * this.linkLen;
+                
+                // Calculates the right-facing loop core center (Extends/bunches properly)
+                let loopCenterX = (carX + anchorX - Math.PI * radius + L_geo) / 2;
+                
+                // Make sure loop never exceeds the screen boundary roughly, tracking right.
+                if (loopCenterX < carX + radius * 1.5) {
+                    loopCenterX = carX + radius * 1.5;
                 }
 
-                // Increase base length divisor for thicker links (26px length per link)
-                const N = Math.max(1, Math.ceil(arcLen / 26)); 
-                
-                for(let i=0; i<N; i++) {
-                    let t = i / (N - 1 || 1);
-                    let u = 1 - t;
-                    
-                    // Position mapping (Cubic Bezier)
-                    let x = u*u*u*startX + 3*u*u*t*cp1X + 3*u*t*t*cp2X + t*t*t*endX;
-                    let y = u*u*u*startY + 3*u*u*t*cp1Y + 3*u*t*t*cp2Y + t*t*t*endY;
-                    
-                    // Derivation tracking tangent orientation over cubic curve
-                    let dx = 3*u*u*(cp1X - startX) + 6*u*t*(cp2X - cp1X) + 3*t*t*(endX - cp2X);
-                    let dy = 3*u*u*(cp1Y - startY) + 6*u*t*(cp2Y - cp1Y) + 3*t*t*(endY - cp2Y);
-                    let ang = Math.atan2(dy, dx);
+                // L1 = Total straight top length. L2 = Semicircle arc length.
+                const L1 = loopCenterX - carX;
+                const L2 = Math.PI * radius;
 
-                    // Physical floor constraint mapping
-                    if (y > endY) y = endY;
+                for (let i = 0; i < this.chainN; i++) {
+                    const d = i * this.linkLen;
+                    let x, y, ang;
+
+                    if (d <= L1) { // Running along top layer horizontally right
+                        x = carX + d;
+                        y = topY;
+                        ang = 0;
+                    } else if (d > L1 && d <= L1 + L2) { // Looping downwards mathematically
+                        const u = (d - L1) / L2;
+                        const a = -Math.PI / 2 + u * Math.PI; 
+                        x = loopCenterX + Math.cos(a) * radius;
+                        y = cy + Math.sin(a) * radius;
+                        ang = a + Math.PI / 2;
+                    } else { // Running along grounded bottom rail returning to right wall anchor
+                        const d3 = d - (L1 + L2);
+                        x = loopCenterX - d3;
+                        y = botY;
+                        ang = Math.PI;
+                    }
 
                     c.save();
                     c.translate(x, y);
                     c.rotate(ang);
                     
-                    // Thicker Industrial Chain Links (26x16)
+                    // Phase 12 Retained Industrial Thicker Aesthetics (26x16)
                     c.fillStyle = '#1a1a1a';
-                    rrect(c, -13, -8, 26, 16, 2.5);
+                    rrect(c, -this.linkLen / 2, -8, this.linkLen, 16, 2.5);
                     c.fill();
                     
                     // Bright top edge highlight
                     c.fillStyle = '#3a3a3a';
-                    c.fillRect(-12, -7, 24, 2);
+                    c.fillRect(-this.linkLen / 2 + 1, -7, this.linkLen - 2, 2);
                     
                     // Expanded vertical groove lines inside each link
                     c.fillStyle = '#0f0f0f';
