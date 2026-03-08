@@ -68,17 +68,33 @@
                 this.bx = window.innerWidth / 2;
                 this.th1 = -Math.PI / 2;
                 this.th2 = 0;
-                this.th3 = 0; 
+                this.th3 = 0;
                 this.th4 = 0;
-                
+
                 // Track chain variables
                 this.linkLen = 26; // Retaining thick Industrial Link Length
                 this.updateChainLength();
             }
 
             updateChainLength() {
-                // The explicit request: just cleanly double the screen width for massive slack.
-                this.chainN = Math.ceil((window.innerWidth * 2) / this.linkLen);
+                // Phase 16: Apples-to-Apples Exact Tracking geometric constraint
+                const maxCarX = (window.innerWidth * 0.9) + (160 / 2); // Furthest the carriage can travel right
+                const anchorX = window.innerWidth * 0.05 + 210; // Cabinet right-side anchor
+
+                // Max physical distance before breaking
+                const maxDist = Math.abs(maxCarX - anchorX);
+
+                // Semicircle arc loop length down to rail
+                const topY = this.by - 25;
+                const botY = this.by + 65;
+                const radius = (botY - topY) / 2;
+                const arcLen = Math.PI * radius;
+
+                // Total geometric pixels needed
+                const requiredPx = maxDist + arcLen;
+
+                // Converting total pixels natively into exact required link units
+                this.chainN = Math.ceil(requiredPx / this.linkLen);
             }
 
             ik(tx, ty) {
@@ -113,7 +129,7 @@
 
                 this.th1 += (th1Target - this.th1) * 0.12;
                 this.th2 += (th2Target - this.th2) * 0.12;
-                
+
                 const ex = (this.bx + 55) + Math.cos(this.th1) * this.L1;
                 const ey = (this.by - 110) + Math.sin(this.th1) * this.L1;
                 const wx = ex + Math.cos(this.th1 + this.th2) * this.L2;
@@ -127,13 +143,13 @@
             drawDragChain(c) {
                 // Restoring exact 4:48 PM Mathematical tracking loop [commit 05fad06]
                 c.save();
-                
+
                 // RIGHT SIDE WALL ANCHOR
                 const anchorX = window.innerWidth * 0.05 + 210; // Connect to cabinet right border
                 // CARRIAGE RIGHT SIDE ANCHOR
                 const carriageW = 160;
                 const carX = this.bx + (carriageW / 2);
-                
+
                 const topY = this.by - 25;
                 const botY = this.by + 65;
                 const radius = (botY - topY) / 2;
@@ -141,9 +157,9 @@
 
                 // Physical constraint mapping utilizing the dynamically computed length
                 const L_geo = this.chainN * this.linkLen;
-                
+
                 let loopCenterX = (carX + anchorX - Math.PI * radius + L_geo) / 2;
-                
+
                 // Bound check tracking right.
                 if (loopCenterX < carX + radius * 1.5) {
                     loopCenterX = carX + radius * 1.5;
@@ -156,17 +172,17 @@
                     const d = i * this.linkLen;
                     let x, y, ang;
 
-                    if (d <= L1) { 
+                    if (d <= L1) {
                         x = carX + d;
                         y = topY;
                         ang = 0;
                     } else if (d > L1 && d <= L1 + L2) {
                         const u = (d - L1) / L2;
-                        const a = -Math.PI / 2 + u * Math.PI; 
+                        const a = -Math.PI / 2 + u * Math.PI;
                         x = loopCenterX + Math.cos(a) * radius;
                         y = cy + Math.sin(a) * radius;
                         ang = a + Math.PI / 2;
-                    } else { 
+                    } else {
                         const d3 = d - (L1 + L2);
                         x = loopCenterX - d3;
                         y = botY;
@@ -176,19 +192,19 @@
                     c.save();
                     c.translate(x, y);
                     c.rotate(ang);
-                    
+
                     // Retained Industrial Thicker Aesthetics (26x16)
                     c.fillStyle = '#1a1a1a';
                     rrect(c, -this.linkLen / 2, -8, this.linkLen, 16, 2.5);
                     c.fill();
-                    
+
                     c.fillStyle = '#3a3a3a';
                     c.fillRect(-this.linkLen / 2 + 1, -7, this.linkLen - 2, 2);
-                    
+
                     c.fillStyle = '#0f0f0f';
                     c.fillRect(-4, -4, 3, 8);
                     c.fillRect(2, -4, 3, 8);
-                    
+
                     c.restore();
                 }
                 c.restore();
@@ -200,7 +216,7 @@
                 const rx = window.innerWidth * 0.05;
                 const ry = this.by;
 
-                c.fillStyle = '#2d2f33'; 
+                c.fillStyle = '#2d2f33';
                 c.fillRect(rx, ry, railW, railH);
 
                 c.fillStyle = '#a0a5ad';
@@ -220,19 +236,19 @@
 
                 c.save();
                 c.fillStyle = '#111';
-                c.fillRect(cx - (carriageW/2), ry - 15, carriageW, 35);
-                
+                c.fillRect(cx - (carriageW / 2), ry - 15, carriageW, 35);
+
                 c.fillStyle = KUKA_ORANGE;
-                rrect(c, cx - (carriageW/2) - 10, ry - 15, 20, 35, 4); c.fill();
-                rrect(c, cx + (carriageW/2) - 10, ry - 15, 20, 35, 4); c.fill();
-                
+                rrect(c, cx - (carriageW / 2) - 10, ry - 15, 20, 35, 4); c.fill();
+                rrect(c, cx + (carriageW / 2) - 10, ry - 15, 20, 35, 4); c.fill();
+
                 c.fillStyle = '#222';
-                c.fillRect(cx - (carriageW/2) - 10, ry - 5, 25, 20); 
-                c.fillRect(cx + (carriageW/2) - 15, ry - 5, 25, 20); 
+                c.fillRect(cx - (carriageW / 2) - 10, ry - 5, 25, 20);
+                c.fillRect(cx + (carriageW / 2) - 15, ry - 5, 25, 20);
 
                 c.fillStyle = KUKA_BLACK;
                 const turnRadius = carriageW * 0.28;
-                c.beginPath(); 
+                c.beginPath();
                 c.moveTo(cx - turnRadius, ry - 15);
                 c.lineTo(cx + turnRadius, ry - 15);
                 c.lineTo(cx + turnRadius - 10, ry - 100);
@@ -259,20 +275,20 @@
                 }
                 c.save();
                 c.translate(x, y);
-                
+
                 c.beginPath(); c.arc(0, 0, radius, 0, Math.PI * 2);
                 c.fillStyle = '#1a1a1a'; c.fill();
-                
+
                 c.beginPath(); c.arc(0, 0, radius * 0.88, 0, Math.PI * 2);
                 c.strokeStyle = '#FF5500'; c.lineWidth = 3.5; c.stroke();
 
                 c.rotate(ang);
-                
+
                 c.fillStyle = '#555555';
                 for (let i = 0; i < 6; i++) {
                     const a = (i / 6) * Math.PI * 2;
-                    c.beginPath(); 
-                    c.arc(Math.cos(a) * radius * 0.72, Math.sin(a) * radius * 0.72, 2.5, 0, Math.PI * 2); 
+                    c.beginPath();
+                    c.arc(Math.cos(a) * radius * 0.72, Math.sin(a) * radius * 0.72, 2.5, 0, Math.PI * 2);
                     c.fill();
                 }
 
@@ -282,7 +298,7 @@
                 c.strokeStyle = '#fff';
                 c.lineWidth = 2;
                 c.stroke();
-                
+
                 c.restore();
             }
 
@@ -299,7 +315,7 @@
                 c.closePath();
                 c.fillStyle = '#FF6600';
                 c.fill();
-                
+
                 c.beginPath();
                 c.moveTo(0, -startW / 2);
                 c.lineTo(len, -endW / 2);
@@ -334,16 +350,16 @@
                     c.fillStyle = '#111';
                     c.font = `900 ${endW * 0.45}px 'Orbitron', sans-serif`;
                     c.textAlign = 'center'; c.textBaseline = 'middle';
-                    
+
                     let rawAngle = Math.atan2(nextY - y, nextX - x);
                     let displayAngle = 0;
-                    if (rawAngle > Math.PI/2 || rawAngle < -Math.PI/2) {
-                        displayAngle = Math.PI; 
+                    if (rawAngle > Math.PI / 2 || rawAngle < -Math.PI / 2) {
+                        displayAngle = Math.PI;
                     }
-                    
-                    c.translate(len * 0.5, 0); 
-                    c.rotate(-ang + rawAngle + displayAngle); 
-                    
+
+                    c.translate(len * 0.5, 0);
+                    c.rotate(-ang + rawAngle + displayAngle);
+
                     c.fillText("ING.CESAR", 0, 0);
                     c.restore();
                 }
@@ -354,7 +370,7 @@
             drawWristAndTorch(c, x, y, ang) {
                 if (x < -20 || x > window.innerWidth + 20 || y < -20 || y > window.innerHeight + 20) return;
                 c.save();
-                c.translate(x, y); c.rotate(ang); 
+                c.translate(x, y); c.rotate(ang);
 
                 c.fillStyle = '#111';
                 rrect(c, -5, -15, 30, 30, 4);
@@ -368,7 +384,7 @@
                 c.beginPath(); c.moveTo(50, -8); c.lineTo(75, -3); c.lineTo(75, 3); c.lineTo(50, 8); c.fill();
 
                 c.fillStyle = '#b87333';
-                c.fillRect(75, -2, 5, 4); 
+                c.fillRect(75, -2, 5, 4);
 
                 c.restore();
             }
@@ -414,46 +430,46 @@
 
             drawHarnessCablesL2(c, ex, ey, wx, wy, th1, th2, segW) {
                 if (ex < -200 || ex > window.innerWidth + 200) return;
-                
+
                 c.save();
                 c.lineCap = 'round';
                 c.lineJoin = 'round';
-                
+
                 const offsets = [segW * 0.55, segW * 0.65, segW * 0.75];
-                
-                const ang = th1 + th2; 
-                const nx = Math.cos(ang - Math.PI/2);
-                const ny = Math.sin(ang - Math.PI/2);
-                
-                for(let k = 0; k < 3; k++) {
-                    const P0x = ex + nx * (offsets[k] - 20); 
+
+                const ang = th1 + th2;
+                const nx = Math.cos(ang - Math.PI / 2);
+                const ny = Math.sin(ang - Math.PI / 2);
+
+                for (let k = 0; k < 3; k++) {
+                    const P0x = ex + nx * (offsets[k] - 20);
                     const P0y = ey + ny * (offsets[k] - 20);
-                    const P2x = wx + nx * offsets[k] * 0.5; 
+                    const P2x = wx + nx * offsets[k] * 0.5;
                     const P2y = wy + ny * offsets[k] * 0.5;
-                    
-                    const midX = (P0x + P2x)/2 + nx * 8;
-                    const midY = (P0y + P2y)/2 + ny * 8;
-                    
+
+                    const midX = (P0x + P2x) / 2 + nx * 8;
+                    const midY = (P0y + P2y) / 2 + ny * 8;
+
                     c.beginPath();
                     c.moveTo(P0x, P0y);
                     c.quadraticCurveTo(midX, midY, P2x, P2y);
-                    
+
                     c.strokeStyle = '#111111';
                     c.lineWidth = 3.5;
                     c.stroke();
-                    
+
                     c.strokeStyle = '#2a2a2a';
                     c.lineWidth = 1;
                     c.stroke();
                 }
-                
+
                 c.restore();
             }
 
             drawControlCabinet(c) {
                 const boxW = 210;
                 const boxH = 150;
-                const cabinetX = window.innerWidth * 0.05 + 10; 
+                const cabinetX = window.innerWidth * 0.05 + 10;
                 const cabinetY = this.by + 65 - boxH;
 
                 c.save();
@@ -462,7 +478,7 @@
                 c.fill();
 
                 c.fillStyle = '#FF6600';
-                const panelX = cabinetX + 35; 
+                const panelX = cabinetX + 35;
                 const panelY = cabinetY + 5;
                 const panelW = boxW - 40;
                 const panelH = boxH - 20;
@@ -470,9 +486,15 @@
 
                 c.fillStyle = '#111';
                 c.fillRect(panelX + 20, panelY + 15, 60, 25);
-                c.fillStyle = '#ff3333'; c.beginPath(); c.arc(panelX + 30, panelY + 27, 3, 0, Math.PI*2); c.fill();
-                c.fillStyle = '#ffcc00'; c.beginPath(); c.arc(panelX + 45, panelY + 27, 3, 0, Math.PI*2); c.fill();
-                c.fillStyle = '#33cc33'; c.beginPath(); c.arc(panelX + 60, panelY + 27, 3, 0, Math.PI*2); c.fill();
+                c.fillStyle = '#ff3333'; c.beginPath(); c.arc(panelX + 30, panelY + 27, 3, 0, Math.PI * 2); c.fill();
+                c.fillStyle = '#ffcc00'; c.beginPath(); c.arc(panelX + 45, panelY + 27, 3, 0, Math.PI * 2); c.fill();
+                const pulse = (Math.sin(Date.now() * 0.005) + 1) / 2;
+                c.save();
+                c.fillStyle = `rgba(51, 255, 51, ${0.4 + pulse * 0.6})`;
+                c.shadowColor = '#33ff33';
+                c.shadowBlur = 4 + (pulse * 8);
+                c.beginPath(); c.arc(panelX + 60, panelY + 27, 3, 0, Math.PI * 2); c.fill();
+                c.restore();
 
                 c.fillStyle = '#111';
                 rrect(c, panelX + 7, panelY + 70, 12, 45, 2);
@@ -511,7 +533,7 @@
                 c.fillText("!", triX, triY + 4);
 
                 c.fillStyle = '#111';
-                c.beginPath(); 
+                c.beginPath();
                 c.moveTo(panelX + panelW - 5, panelY + panelH - 60);
                 c.lineTo(panelX + panelW + 15, panelY + panelH - 60);
                 c.lineTo(panelX + panelW + 15, panelY + panelH - 10);
@@ -526,12 +548,36 @@
                 rrect(c, -18, 2, 46, 61, 6); c.fill();
                 c.fillStyle = KUKA_ORANGE;
                 c.fillRect(-16, 4, 42, 57);
-                c.fillStyle = '#eee';
+                // Animated SmartPAD Screen
+                c.save();
+                c.beginPath();
+                c.rect(-12, 15, 34, 35);
+                c.clip();
+
+                c.fillStyle = '#0a192f';
                 c.fillRect(-12, 15, 34, 35);
+
+                const t2 = Date.now() * 0.002;
+                c.fillStyle = 'rgba(0, 255, 204, 0.4)';
+                for (let i = 0; i < 3; i++) {
+                    let yOffset = ((t2 * 20 + i * 15) % 40);
+                    c.fillRect(-8, 50 - yOffset, 12, 4);
+                }
+
+                c.strokeStyle = '#00ffcc';
+                c.lineWidth = 1;
+                c.beginPath();
+                for (let lx = 0; lx < 34; lx += 2) {
+                    let ly = 32 + Math.sin((lx * 0.2) - (t2 * 2)) * 6;
+                    if (lx === 0) c.moveTo(-12 + lx, ly);
+                    else c.lineTo(-12 + lx, ly);
+                }
+                c.stroke();
+                c.restore();
                 c.fillStyle = '#111';
-                c.beginPath(); c.arc(15, 8, 5, 0, Math.PI*2); c.fill(); 
+                c.beginPath(); c.arc(15, 8, 5, 0, Math.PI * 2); c.fill();
                 c.fillStyle = 'red';
-                c.beginPath(); c.arc(15, 8, 3.5, 0, Math.PI*2); c.fill();
+                c.beginPath(); c.arc(15, 8, 3.5, 0, Math.PI * 2); c.fill();
 
                 c.restore();
             }
@@ -542,13 +588,13 @@
                 this.drawCarriage(c);
 
                 const cx = this.bx + 55;
-                const cy = this.by - 110; 
+                const cy = this.by - 110;
                 const ex = cx + Math.cos(this.th1) * this.L1;
                 const ey = cy + Math.sin(this.th1) * this.L1;
                 const wx = ex + Math.cos(this.th1 + this.th2) * this.L2;
                 const wy = ey + Math.sin(this.th1 + this.th2) * this.L2;
-                
-                const segW = 55; 
+
+                const segW = 55;
 
                 // --- 1. Draw Rear J2 (Shoulder Area) ---
                 this.drawMotorDisc(c, cx - 4, cy + 3, segW * 0.72, this.th1);
@@ -559,8 +605,8 @@
                 c.rotate(this.th1);
                 c.fillStyle = '#FF6600';
                 c.strokeStyle = '#1a1a1a'; c.lineWidth = 2;
-                c.beginPath(); c.roundRect(-segW*0.6, -segW*0.75, segW*1.2, segW*0.2, 4); c.fill(); c.stroke();
-                c.beginPath(); c.roundRect(-segW*0.6, segW*0.55, segW*1.2, segW*0.2, 4); c.fill(); c.stroke();
+                c.beginPath(); c.roundRect(-segW * 0.6, -segW * 0.75, segW * 1.2, segW * 0.2, 4); c.fill(); c.stroke();
+                c.beginPath(); c.roundRect(-segW * 0.6, segW * 0.55, segW * 1.2, segW * 0.2, 4); c.fill(); c.stroke();
                 c.restore();
 
                 // --- 3. Upper Arm L1 ---
@@ -574,21 +620,21 @@
 
                 // --- ELBOW JOINT 3-STACK REFACTOR ---
                 this.drawMotorDisc(c, ex - 4, ey + 3, segW * 0.68, this.th1 + this.th2);
-                
+
                 c.save();
                 c.translate(ex - 2, ey + 1);
                 c.rotate(this.th1 + this.th2);
                 c.fillStyle = '#FF6600';
                 c.strokeStyle = '#1a1a1a'; c.lineWidth = 2;
-                c.beginPath(); c.roundRect(-segW*0.5, -segW*0.70, segW, segW*0.15, 3); c.fill(); c.stroke();
-                c.beginPath(); c.roundRect(-segW*0.5, segW*0.55, segW, segW*0.15, 3); c.fill(); c.stroke();
+                c.beginPath(); c.roundRect(-segW * 0.5, -segW * 0.70, segW, segW * 0.15, 3); c.fill(); c.stroke();
+                c.beginPath(); c.roundRect(-segW * 0.5, segW * 0.55, segW, segW * 0.15, 3); c.fill(); c.stroke();
                 c.restore();
 
                 this.drawMotorDisc(c, ex - 2, ey + 1, segW * 0.60, this.th1 + this.th2 + this.th3);
 
                 // Forearm L2
                 this.drawArmQuad(c, ex, ey, this.L2, this.th1 + this.th2, segW * 0.8, segW * 0.55, false, wx, wy);
-                
+
                 // Harness
                 this.drawHarnessCablesL2(c, ex, ey, wx, wy, this.th1, this.th2, segW);
 
@@ -602,7 +648,7 @@
 
                 // Cables L1 Internal
                 this.drawDynamicCables(c, cx, cy, ex, ey, wx, wy, this.th1, this.th2);
-                
+
                 // Cabinet
                 this.drawControlCabinet(c);
             }
