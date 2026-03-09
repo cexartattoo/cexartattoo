@@ -1,0 +1,1345 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CexArt — Ingeniero Mecatrónico</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+  <style>
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #080a08;
+      cursor: none
+    }
+
+    canvas {
+      position: fixed;
+      inset: 0;
+      display: block
+    }
+
+    #sub {
+      position: fixed;
+      bottom: 6.5%;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: 'Orbitron', monospace;
+      font-size: clamp(.5rem, .85vw, .8rem);
+      color: rgba(0, 255, 136, .3);
+      letter-spacing: .3em;
+      text-transform: uppercase;
+      opacity: 0;
+      transition: opacity 2.2s ease;
+      white-space: nowrap;
+      pointer-events: none;
+      text-shadow: 0 0 18px rgba(0, 255, 136, .25);
+    }
+
+    #sub.show {
+      opacity: 1
+    }
+
+    #cur {
+      position: fixed;
+      width: 22px;
+      height: 22px;
+      border: 1.5px solid rgba(255, 165, 0, .7);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: width .12s, height .12s, border-color .12s;
+    }
+
+    #cur.boom {
+      border-color: rgba(255, 60, 0, 1) !important;
+      width: 34px !important;
+      height: 34px !important;
+    }
+
+    #cur.track {
+      border-color: rgba(255, 220, 0, .9);
+    }
+
+    #cur.welding {
+      border-color: rgba(255, 255, 100, 1) !important;
+      width: 14px !important;
+      height: 14px !important;
+      box-shadow: 0 0 12px rgba(255, 200, 0, .8);
+    }
+
+    #cur::before,
+    #cur::after {
+      content: '';
+      position: absolute;
+      background: rgba(255, 165, 0, .6);
+      left: 50%;
+      top: 50%;
+    }
+
+    #cur::before {
+      width: 1px;
+      height: 7px;
+      transform: translate(-50%, 11px)
+    }
+
+    #cur::after {
+      width: 7px;
+      height: 1px;
+      transform: translate(11px, -50%)
+    }
+
+    #hint {
+      position: fixed;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: monospace;
+      font-size: 8px;
+      color: rgba(255, 150, 0, .14);
+      letter-spacing: .22em;
+      pointer-events: none;
+    }
+
+    #weld-hint {
+      position: fixed;
+      top: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: 'Orbitron', monospace;
+      font-size: 9px;
+      color: rgba(255, 180, 0, .22);
+      letter-spacing: .28em;
+      pointer-events: none;
+      white-space: nowrap;
+      opacity: 0;
+      transition: opacity 1.4s ease;
+    }
+
+    #weld-hint.show {
+      opacity: 1
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="c"></canvas>
+  <div id="sub">Robótica · Automatización · Visión Artificial</div>
+  <div id="cur"></div>
+  <div id="weld-hint">[ MANTENER CLICK PARA SOLDAR ]</div>
+  <div id="hint">[ DOBLE CLICK PARA REINICIAR ]</div>
+  <script>
+    // ══════════════════════════════════════════════════════════════════
+    //  SETUP
+    // ══════════════════════════════════════════════════════════════════
+    const cv = document.getElementById('c');
+    const ctx = cv.getContext('2d');
+    const sub = document.getElementById('sub');
+    const cur = document.getElementById('cur');
+    const weldHint = document.getElementById('weld-hint');
+    let W, H;
+    const mouse = { x: -9999, y: -9999, down: false };
+    let totalCols = 0, totalRows = 0;
+
+    document.addEventListener('mousemove', e => {
+      mouse.x = e.clientX; mouse.y = e.clientY;
+      cur.style.left = e.clientX + 'px'; cur.style.top = e.clientY + 'px';
+    });
+    let clickTarget = null;
+    let clickExpires = 0;
+    document.addEventListener('mousedown', e => {
+      mouse.down = true; cur.classList.add('welding');
+      clickTarget = { x: e.clientX, y: e.clientY };
+      clickExpires = Date.now() + 1200;
+      cur.classList.add('boom'); setTimeout(() => cur.classList.remove('boom'), 300);
+      explode(e.clientX, e.clientY);
+    });
+    document.addEventListener('mouseup', () => { mouse.down = false; cur.classList.remove('welding'); });
+
+    function resize() { W = cv.width = innerWidth; H = cv.height = innerHeight; }
+    resize();
+    window.addEventListener('resize', () => { resize(); init(); });
+
+    // ══════════════════════════════════════════════════════════════════
+    //  MATH
+    // ══════════════════════════════════════════════════════════════════
+    const lerp = (a, b, t) => a + (b - a) * t;
+    const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+    function easeOutBack(t) {
+      if (t >= 1) return 1;
+      const c = 1.06;
+      return 1 + (c + 1) * Math.pow(t - 1, 3) + c * Math.pow(t - 1, 2);
+    }
+    function seededRNG(seed) {
+      let s = seed | 0;
+      return () => {
+        s = (s + 0x6D2B79F5) | 0;
+        let t = Math.imul(s ^ s >>> 15, 1 | s);
+        t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+        return ((t ^ t >>> 14) >>> 0) / 4294967296;
+      };
+    }
+    function rrect(c, x, y, w, h, r) {
+      c.beginPath();
+      c.moveTo(x + r, y); c.lineTo(x + w - r, y);
+      c.quadraticCurveTo(x + w, y, x + w, y + r);
+      c.lineTo(x + w, y + h - r);
+      c.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+      c.lineTo(x + r, y + h);
+      c.quadraticCurveTo(x, y + h, x, y + h - r);
+      c.lineTo(x, y + r);
+      c.quadraticCurveTo(x, y, x + r, y);
+      c.closePath();
+    }
+
+    // ══════════════════════════════════════════════════════════════════
+    //  BACKGROUND
+    // ══════════════════════════════════════════════════════════════════
+    function drawBG() {
+      ctx.fillStyle = '#080a08';
+      ctx.fillRect(0, 0, W, H);
+      const gs = 38;
+      ctx.strokeStyle = 'rgba(8,20,12,.95)'; ctx.lineWidth = .35;
+      for (let x = 0; x < W; x += gs) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke(); }
+      for (let y = 0; y < H; y += gs) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
+      ctx.fillStyle = 'rgba(0,255,136,.025)';
+      for (let x = 0; x < W; x += gs)
+        for (let y = 0; y < H; y += gs) { ctx.beginPath(); ctx.arc(x, y, .7, 0, Math.PI * 2); ctx.fill(); }
+      const sw = 20;
+      for (let i = 0; i < 8; i++) {
+        ctx.fillStyle = i % 2 === 0 ? 'rgba(255,140,0,.05)' : 'transparent';
+        ctx.fillRect(0, i * sw * 2, sw * 1.2, sw);
+        ctx.fillRect(W - sw * 1.2, i * sw * 2 + sw, sw * 1.2, sw);
+      }
+    }
+
+    // ══════════════════════════════════════════════════════════════════
+    //  PANEL DECOR
+    // ══════════════════════════════════════════════════════════════════
+    function drawHexBolt(c, x, y, r, col) {
+      c.save();
+      c.beginPath();
+      for (let i = 0; i < 6; i++) {
+        const a = (i / 6) * Math.PI * 2 + Math.PI / 6;
+        i === 0 ? c.moveTo(x + Math.cos(a) * r, y + Math.sin(a) * r) : c.lineTo(x + Math.cos(a) * r, y + Math.sin(a) * r);
+      }
+      c.closePath();
+      c.fillStyle = '#0e1318'; c.fill();
+      c.strokeStyle = col; c.lineWidth = .8; c.stroke();
+      c.beginPath(); c.moveTo(x - r * .45, y); c.lineTo(x + r * .45, y);
+      c.strokeStyle = 'rgba(0,0,0,.6)'; c.lineWidth = .6; c.stroke();
+      c.beginPath(); c.moveTo(x, y - r * .45); c.lineTo(x, y + r * .45); c.stroke();
+      c.restore();
+    }
+
+    function drawPanelDecor(px1, py1, pw1, ph1, px2, py2, pw2, ph2) {
+      const rn = seededRNG(99);
+      ctx.save();
+      rrect(ctx, px1, py1, pw1, ph1, 4);
+      ctx.fillStyle = 'rgba(8,13,20,.9)'; ctx.fill();
+      ctx.strokeStyle = 'rgba(0,100,200,.2)'; ctx.lineWidth = 1.4; ctx.stroke();
+      ctx.strokeStyle = 'rgba(0,90,180,.065)'; ctx.lineWidth = .8; ctx.lineCap = 'square';
+      for (let i = 0; i < 20; i++) {
+        const sx = px1 + rn() * pw1 * .88 + pw1 * .06;
+        const sy = py1 + rn() * ph1 * .65 + ph1 * .18;
+        const l = 14 + rn() * 30; const hz = rn() > .5;
+        ctx.beginPath(); ctx.moveTo(sx, sy);
+        if (hz) { ctx.lineTo(sx + l, sy); ctx.lineTo(sx + l, sy - (8 + rn() * 12)); }
+        else { ctx.lineTo(sx, sy + l); ctx.lineTo(sx + (8 + rn() * 12), sy + l); }
+        ctx.stroke();
+        ctx.beginPath(); ctx.arc(sx, sy, 1.1, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(0,120,220,.08)'; ctx.fill();
+      }
+      [[px1 + 14, py1 + 14], [px1 + pw1 - 14, py1 + 14], [px1 + 14, py1 + ph1 - 14], [px1 + pw1 - 14, py1 + ph1 - 14]].forEach(([bx, by]) => drawHexBolt(ctx, bx, by, 6, 'rgba(0,90,200,.25)'));
+      if (pw1 > 200) drawHexBolt(ctx, px1 + pw1 / 2, py1 + 12, 4.5, 'rgba(0,90,200,.15)');
+      ctx.beginPath(); ctx.arc(px1 + pw1 - 9, py1 + 8, 2, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(0,160,255,1)'; ctx.shadowColor = '#0088ff'; ctx.shadowBlur = 6; ctx.fill(); ctx.shadowBlur = 0;
+
+      rrect(ctx, px2, py2, pw2, ph2, 4);
+      ctx.fillStyle = 'rgba(5,14,8,.9)'; ctx.fill();
+      ctx.strokeStyle = 'rgba(0,180,60,.2)'; ctx.lineWidth = 1.4; ctx.stroke();
+      ctx.strokeStyle = 'rgba(0,160,50,.065)'; ctx.lineWidth = .8;
+      for (let i = 0; i < 14; i++) {
+        const sx = px2 + rn() * pw2 * .85 + pw2 * .08;
+        const sy = py2 + rn() * ph2 * .55 + ph2 * .22;
+        const l = 10 + rn() * 22; const hz = rn() > .5;
+        ctx.beginPath(); ctx.moveTo(sx, sy);
+        hz ? ctx.lineTo(sx + l, sy) : ctx.lineTo(sx, sy + l);
+        ctx.stroke();
+        ctx.beginPath(); ctx.arc(sx, sy, .9, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(0,180,60,.08)'; ctx.fill();
+      }
+      [[px2 + 12, py2 + 11], [px2 + pw2 - 12, py2 + 11], [px2 + 12, py2 + ph2 - 11], [px2 + pw2 - 12, py2 + ph2 - 11]].forEach(([bx, by]) => drawHexBolt(ctx, bx, by, 5, 'rgba(0,150,50,.28)'));
+      ctx.beginPath(); ctx.arc(px2 + pw2 - 9, py2 + 8, 2, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(0,220,100,1)'; ctx.shadowColor = '#00ff88'; ctx.shadowBlur = 6; ctx.fill(); ctx.shadowBlur = 0;
+      ctx.restore();
+    }
+
+    // ══════════════════════════════════════════════════════════════════
+    //  ARM VISUALS
+    // ══════════════════════════════════════════════════════════════════
+    function drawArmSeg(c, x1, y1, x2, y2, w) {
+      const ang = Math.atan2(y2 - y1, x2 - x1);
+      const len = Math.hypot(x2 - x1, y2 - y1);
+      if (len < 2) return;
+      c.save();
+      c.translate(x1, y1); c.rotate(ang);
+      c.shadowColor = 'rgba(0,0,0,.6)'; c.shadowBlur = 9; c.shadowOffsetY = 2;
+      const gr = c.createLinearGradient(0, -w / 2, 0, w / 2);
+      gr.addColorStop(0, '#4a1500'); gr.addColorStop(.16, '#ba3200'); gr.addColorStop(.38, '#ff5500');
+      gr.addColorStop(.5, '#ff6600'); gr.addColorStop(.62, '#ff5500'); gr.addColorStop(.84, '#ba3200'); gr.addColorStop(1, '#4a1500');
+      const rr = Math.min(w / 2, 5);
+      rrect(c, 0, -w / 2, len, w, rr);
+      c.fillStyle = gr; c.fill(); c.shadowBlur = 0;
+      c.strokeStyle = '#2e1a00'; c.lineWidth = 1; c.stroke();
+      c.beginPath(); c.moveTo(rr, -w / 2 + .9); c.lineTo(len - rr, -w / 2 + .9);
+      c.strokeStyle = 'rgba(255,255,180,.24)'; c.lineWidth = .8; c.stroke();
+      const slots = Math.max(1, Math.floor(len / 22));
+      for (let i = 1; i <= slots; i++) {
+        const tx = i * len / (slots + 1);
+        c.beginPath(); c.moveTo(tx, -w * .45); c.lineTo(tx, w * .45);
+        c.strokeStyle = 'rgba(50,30,0,.6)'; c.lineWidth = 1.5; c.stroke();
+        [-.3, .3].forEach(fy => {
+          c.beginPath(); c.arc(tx, w * fy, Math.min(w * .11, 2), 0, Math.PI * 2);
+          c.fillStyle = 'rgba(70,42,0,.55)'; c.fill();
+        });
+      }
+      c.beginPath(); c.moveTo(10, w * .55);
+      for (let i = 1; i <= 4; i++) c.quadraticCurveTo(len * i / 4.8, w * .6 + Math.sin(i * 1.3) * 2.5, len * (i + .2) / 5, w * .55);
+      c.strokeStyle = 'rgba(25,15,0,.8)'; c.lineWidth = 3; c.lineCap = 'round'; c.stroke();
+      c.strokeStyle = 'rgba(70,42,0,.35)'; c.lineWidth = 1.5; c.stroke();
+      c.lineCap = 'butt';
+      // KUKA LOGO
+      if (w > 18) {
+        c.save();
+        c.fillStyle = '#181818';
+        c.font = `900 ${w * 0.58}px 'Orbitron', monospace`;
+        c.textAlign = 'center'; c.textBaseline = 'middle';
+        c.fillText("KUKA", len * 0.45, 0);
+        c.restore();
+      }
+      c.restore();
+    }
+
+    function drawPiston(c, x1, y1, x2, y2, segW) {
+      const ang = Math.atan2(y2 - y1, x2 - x1);
+      const len = Math.hypot(x2 - x1, y2 - y1);
+      if (len < 12) return;
+      c.save(); c.translate(x1, y1); c.rotate(ang);
+      const pw = segW * .3, ph = len * .48, py = segW * .6 + 3;
+      const pg = c.createLinearGradient(0, -pw / 2, 0, pw / 2);
+      pg.addColorStop(0, '#1a1a1a'); pg.addColorStop(.5, '#444'); pg.addColorStop(1, '#1a1a1a');
+      rrect(c, len * .24, py, ph, pw, 2);
+      c.fillStyle = pg; c.fill(); c.strokeStyle = '#4a2a00'; c.lineWidth = .8; c.stroke();
+      rrect(c, len * .21, py + pw * .12, len * .13, pw * .76, 1);
+      c.fillStyle = '#888'; c.fill(); c.strokeStyle = '#222'; c.lineWidth = 1; c.stroke();
+      c.restore();
+    }
+
+    function drawJoint(c, x, y, r) {
+      const gr = c.createRadialGradient(x - r * .3, y - r * .3, 0, x, y, r);
+      gr.addColorStop(0, '#444'); gr.addColorStop(.32, '#282828'); gr.addColorStop(.68, '#1a1a1a'); gr.addColorStop(1, '#050505');
+      c.beginPath(); c.arc(x, y, r, 0, Math.PI * 2);
+      c.fillStyle = gr; c.shadowColor = 'rgba(0,0,0,.75)'; c.shadowBlur = 9; c.fill(); c.shadowBlur = 0;
+      c.strokeStyle = '#2e1800'; c.lineWidth = 1.4; c.stroke();
+      c.beginPath(); c.arc(x, y, r * .5, 0, Math.PI * 2);
+      c.fillStyle = '#1a1000'; c.fill(); c.strokeStyle = '#4a2e00'; c.lineWidth = 1; c.stroke();
+      c.beginPath(); c.arc(x, y, r * .18, 0, Math.PI * 2);
+      c.fillStyle = '#ff5500'; c.shadowColor = '#ff3300'; c.shadowBlur = 5; c.fill(); c.shadowBlur = 0;
+      for (let i = 0; i < 6; i++) {
+        const a = (i / 6) * Math.PI * 2;
+        c.beginPath();
+        c.moveTo(x + Math.cos(a) * r * .64, y + Math.sin(a) * r * .64);
+        c.lineTo(x + Math.cos(a) * r * .87, y + Math.sin(a) * r * .87);
+        c.strokeStyle = 'rgba(70,44,0,.5)'; c.lineWidth = .8; c.stroke();
+      }
+    }
+
+    function drawBase(c, x, y) {
+      const colW = clamp(W * .028, 15, 30), colH = clamp(H * .1, 48, 84);
+      const pW = colW * 2.5, pH = clamp(H * .044, 20, 36);
+      const cg = c.createLinearGradient(x - colW / 2, 0, x + colW / 2, 0);
+      cg.addColorStop(0, '#4a1500'); cg.addColorStop(.5, '#ff5500'); cg.addColorStop(1, '#4a1500');
+      rrect(c, x - colW / 2, y, colW, colH, 3);
+      c.fillStyle = cg; c.strokeStyle = '#2e1800'; c.lineWidth = 1; c.fill(); c.stroke();
+      for (let i = 0; i < 4; i++) { c.fillStyle = 'rgba(40,24,0,.45)'; c.fillRect(x - colW * .38, y + colH * .11 + i * (colH * .21), colW * .76, 2); }
+      const bg = c.createLinearGradient(x - pW / 2, 0, x + pW / 2, 0);
+      bg.addColorStop(0, '#1a1000'); bg.addColorStop(.5, '#382400'); bg.addColorStop(1, '#1a1000');
+      rrect(c, x - pW / 2, y + colH, pW, pH, 5);
+      c.fillStyle = bg; c.fill(); c.strokeStyle = '#503000'; c.lineWidth = 1.8; c.stroke();
+      c.strokeStyle = 'rgba(160,100,0,.18)'; c.lineWidth = .8;
+      rrect(c, x - pW / 2 + 5, y + colH + 4, pW - 10, pH - 8, 3); c.stroke();
+      [-pW * .34, pW * .34].forEach(ox => drawHexBolt(c, x + ox, y + colH + pH * .5, 3.8, 'rgba(190,130,0,.5)'));
+      const pulse = Math.sin(Date.now() * .003) * .5 + .5;
+      c.beginPath(); c.arc(x, y - 7, 5, 0, Math.PI * 2);
+      c.fillStyle = `rgba(255,${100 + pulse * 85 | 0},0,${.72 + pulse * .28})`;
+      c.shadowColor = '#ff8800'; c.shadowBlur = 10 * pulse; c.fill(); c.shadowBlur = 0;
+      c.beginPath(); c.arc(x, y - 7, 6.5, 0, Math.PI * 2);
+      c.strokeStyle = 'rgba(160,80,0,.28)'; c.lineWidth = .8; c.stroke();
+    }
+
+    // Enhanced torch that takes exact tip position
+    function drawTorch(c, x, y, ang) {
+      c.save(); c.translate(x, y); c.rotate(ang + Math.PI / 2);
+      const g = c.createLinearGradient(-10, 0, 10, 0);
+      g.addColorStop(0, '#3a2200'); g.addColorStop(.5, '#e8a800'); g.addColorStop(1, '#3a2200');
+      rrect(c, -9, -34, 18, 34, 5);
+      c.fillStyle = g; c.strokeStyle = '#2e1800'; c.lineWidth = 1; c.fill(); c.stroke();
+      for (let i = 0; i < 3; i++) { c.fillStyle = 'rgba(40,24,0,.4)'; c.fillRect(-6, -28 + i * 9, 12, 2); }
+      rrect(c, -6, 0, 12, 12, 2);
+      const ng = c.createLinearGradient(-6, 0, 6, 0);
+      ng.addColorStop(0, '#2e1600'); ng.addColorStop(.5, '#b07000'); ng.addColorStop(1, '#2e1600');
+      c.fillStyle = ng; c.fill(); c.strokeStyle = '#221000'; c.lineWidth = .8; c.stroke();
+      c.beginPath(); c.moveTo(-5, 12); c.lineTo(0, 27); c.lineTo(5, 12);
+      c.fillStyle = '#160c08'; c.strokeStyle = '#2e1a10'; c.lineWidth = 1; c.fill(); c.stroke();
+      c.beginPath(); c.moveTo(0, 27); c.lineTo(0, 38);
+      c.strokeStyle = '#7a6000'; c.lineWidth = 2.5; c.lineCap = 'round'; c.stroke(); c.lineCap = 'butt';
+      c.beginPath(); c.arc(0, -5, 2.4, 0, Math.PI * 2);
+      c.fillStyle = '#00ff88'; c.shadowColor = '#00ff88'; c.shadowBlur = 7; c.fill(); c.shadowBlur = 0;
+      c.beginPath(); c.moveTo(-8, -18); c.quadraticCurveTo(-22, -28, -30, -20);
+      c.strokeStyle = '#160e00'; c.lineWidth = 5; c.lineCap = 'round'; c.stroke();
+      c.strokeStyle = 'rgba(90,54,0,.45)'; c.lineWidth = 3; c.stroke(); c.lineCap = 'butt';
+      c.restore();
+    }
+
+    // ══════════════════════════════════════════════════════════════════
+    //  WELD EFFECTS
+    // ══════════════════════════════════════════════════════════════════
+    const SCOLS = ['#ffcc00', '#ff9900', '#ffffff', '#ffee44', '#ff6600', '#ffe080'];
+
+    function spawnSparks(arr, x, y, n) {
+      for (let i = 0; i < n; i++) {
+        const a = Math.random() * Math.PI * 2, sp = .8 + Math.random() * 4.5;
+        arr.push({
+          x, y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp - .8, life: 1,
+          r: .3 + Math.random() * 2.2, decay: .025 + Math.random() * .04,
+          col: SCOLS[Math.floor(Math.random() * SCOLS.length)], len: 3 + Math.random() * 10
+        });
+      }
+    }
+    function tickSparks(arr) {
+      for (let i = arr.length - 1; i >= 0; i--) {
+        const s = arr[i];
+        s.x += s.vx; s.y += s.vy; s.vy += .1; s.vx *= .97; s.life -= s.decay;
+        if (s.life <= 0) { arr.splice(i, 1); continue; }
+        ctx.save(); ctx.globalAlpha = s.life;
+        ctx.beginPath(); ctx.moveTo(s.x, s.y); ctx.lineTo(s.x - s.vx * s.len * .4, s.y - s.vy * s.len * .4);
+        ctx.strokeStyle = s.col; ctx.lineWidth = 1.6 * s.life; ctx.lineCap = 'round'; ctx.stroke();
+        ctx.beginPath(); ctx.arc(s.x, s.y, s.r * s.life, 0, Math.PI * 2);
+        ctx.fillStyle = s.col; ctx.shadowColor = '#ff8800'; ctx.shadowBlur = 4; ctx.fill(); ctx.shadowBlur = 0;
+        ctx.restore();
+      }
+    }
+    function spawnSmoke(arr, x, y) {
+      arr.push({ x, y, vx: (Math.random() - .5) * .4, vy: -.5 - Math.random() * .4, r: 3, life: 1, decay: .006 + Math.random() * .005 });
+    }
+    function tickSmoke(arr) {
+      for (let i = arr.length - 1; i >= 0; i--) {
+        const s = arr[i];
+        s.x += s.vx; s.y += s.vy; s.r += .12; s.life -= s.decay;
+        if (s.life <= 0) { arr.splice(i, 1); continue; }
+        ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(165,155,145,${s.life * .2})`; ctx.fill();
+      }
+    }
+
+    // Weld arc drawn with clip region to stay INSIDE pieces
+    function drawWeldArc(c, x, y, q, clipPath) {
+      if (q <= 0) return;
+      c.save();
+      if (clipPath) {
+        c.beginPath();
+        // re-execute the clip path
+        clipPath();
+        c.clip();
+      }
+      const ga = c.createRadialGradient(x, y, 0, x, y, 46);
+      ga.addColorStop(0, `rgba(255,175,35,${.22 * q})`); ga.addColorStop(.5, `rgba(255,90,0,${.08 * q})`); ga.addColorStop(1, 'transparent');
+      c.fillStyle = ga; c.beginPath(); c.arc(x, y, 46, 0, Math.PI * 2); c.fill();
+      const gf = c.createRadialGradient(x, y, 0, x, y, 13);
+      gf.addColorStop(0, `rgba(255,255,230,${.92 * q})`); gf.addColorStop(.35, `rgba(255,195,55,${.7 * q})`); gf.addColorStop(1, 'transparent');
+      c.fillStyle = gf; c.beginPath(); c.arc(x, y, 13, 0, Math.PI * 2); c.fill();
+      for (let i = 0; i < 3; i++) {
+        c.beginPath(); c.moveTo(x, y);
+        const mx = x + (Math.random() - .5) * 10, my = y + Math.random() * 8 + 2;
+        c.quadraticCurveTo(mx, my, x + (Math.random() - .5) * 6, y + 13);
+        c.strokeStyle = `rgba(255,${175 + Math.random() * 60 | 0},${Math.random() * 30 | 0},${(.5 + Math.random() * .4) * q})`;
+        c.lineWidth = .9; c.stroke();
+      }
+      c.restore();
+    }
+
+    // ══════════════════════════════════════════════════════════════════
+    //  TILE COLOR TRANSITION — border evolves as weld passes
+    //  cold=dark steel → hot=bright orange → welded=copper-gold
+    // ══════════════════════════════════════════════════════════════════
+    function tileWeldColor(t, weldProgress) {
+      // weldProgress: 0=unwelded, 0..1=being welded, >1=fully welded (stored as weldAge)
+      const wa = t.weldAge || 0;  // 0..1 how "done" the weld is
+      const wh = t.weldHeat || 0; // 0..1 current heat / proximity
+      const heat = Math.max(wh, wa);
+
+      if (wa >= 1) {
+        // Fully welded — copper-gold-amber gradient over time
+        const age = (Date.now() * 0.0004 + t.col * 0.3 + t.row * 0.17) % 1;
+        const r = (180 + Math.sin(age * Math.PI * 2) * 40) | 0;
+        const g = (90 + Math.sin(age * Math.PI * 2 + 1) * 30) | 0;
+        return `rgba(${r},${g},0,${.75 * t.alpha})`;
+      } else if (wh > 0.05) {
+        // Being welded — glowing orange-white
+        const r = 255;
+        const g = (140 + wh * 115) | 0;
+        const b = (wh * 80) | 0;
+        return `rgba(${r},${g},${b},${(.5 + wh * .5) * t.alpha})`;
+      } else if (wa > 0) {
+        // Cooling — orange fading to copper
+        const r = (160 + wa * 60) | 0;
+        const g = (70 + wa * 20) | 0;
+        return `rgba(${r},${g},0,${(.4 + wa * .3) * t.alpha})`;
+      }
+      // Cold / unassembled
+      return `rgba(55,75,45,${.28 * (1 - t.alpha * .4)})`;
+    }
+
+    // ══════════════════════════════════════════════════════════════════
+    //  ROBOTIC ARM — IK + mouse-follow weld
+    // ══════════════════════════════════════════════════════════════════
+    const PROX = 185, WELD_DUR = 15;
+
+    // Mouse-welding arm: follows cursor exactly when mouse held down
+    class MouseWeldArm {
+      constructor(side) {
+        this.side = side;
+        this.sk = [];
+        this.sm = [];
+        this.flash = 0;
+        this.ft = 0;
+        this.active = false;
+        this.tipX = 0;
+        this.tipY = 0;
+        this.weldTimer = 0;
+        this.lastWeldTile = null;
+      }
+
+      getTipPos() {
+        // Torch tip is exactly at mouse position when active
+        return { tipX: mouse.x, tipY: mouse.y };
+      }
+
+      update() {
+        this.active = mouse.down && mouse.x > -100;
+        const { tipX, tipY } = this.getTipPos();
+        this.tipX = tipX;
+        this.tipY = tipY;
+
+        if (this.active) {
+          // Find tile under cursor
+          const t = getTileAt(mouse.x, mouse.y);
+          if (t && t.assembled) {
+            this.ft = (this.ft + 1) % 3;
+            this.flash = this.ft < 2 ? 1 : 0;
+            if (Math.random() < .55) spawnSparks(this.sk, tipX, tipY, 3);
+            if (Math.random() < .09) spawnSmoke(this.sm, tipX, tipY - 4);
+            // Pump heat into nearby tiles
+            pumpWeldHeat(mouse.x, mouse.y, 38);
+            this.weldTimer++;
+          } else {
+            this.flash = 0;
+            this.weldTimer = 0;
+          }
+        } else {
+          this.flash = 0;
+          this.weldTimer = 0;
+        }
+        tickSparks(this.sk);
+        tickSmoke(this.sm);
+      }
+
+      draw(c) {
+        if (!this.active) return;
+        const { tipX, tipY } = this.getTipPos();
+        const t = getTileAt(mouse.x, mouse.y);
+        if (t && t.assembled && this.flash) {
+          // Build a clip function for the tile at cursor
+          const clipFn = () => {
+            mechPath(t.col, t.row, t.destX, t.destY, t.w, t.h);
+          };
+          drawWeldArc(c, tipX, tipY, 1, clipFn);
+        }
+      }
+    }
+
+    class RoboticArm {
+      constructor(by, L1, L2, es) {
+        this.bx = W / 2; this.by = by; this.L1 = L1; this.L2 = L2; this.es = es;
+        this.th1 = es < 0 ? -0.52 : Math.PI + 0.52;
+        this.th2 = es * (-1.0);
+        this.t1 = this.th1; this.t2 = this.th2;
+        this.pts = []; this.wi = 0; this.wf = 0;
+        this.state = 'welding';
+        this.sk = []; this.sm = [];
+        this.flash = 0; this.ft = 0;
+        this.jv1 = 0; this.jv2 = 0;
+        this.pathTrace = null; // Edge trace points
+        this.traceI = 0;
+      }
+
+      getTip() {
+        const { ex, ey } = this.joints();
+        const aa = this.th1 + this.th2;
+        return { x: ex + Math.cos(aa + Math.PI / 2) * 38, y: ey + Math.sin(aa + Math.PI / 2) * 38 };
+      }
+
+      ik(tx, ty) {
+        // Rail sliding logic: move base towards target x to avoid stretching
+        const idealBx = clamp(tx + this.es * (this.L1 * .3), W * 0.05, W * 0.95);
+        this.bx += (idealBx - this.bx) * 0.05;
+
+        tx = clamp(tx, 60, W - 60); ty = clamp(ty, 60, H - 60);
+        const dx = tx - this.bx, dy = ty - this.by;
+        const d = Math.hypot(dx, dy);
+        const mx = this.L1 + this.L2 - 4, mn = Math.abs(this.L1 - this.L2) + 4;
+        const r = clamp(d, mn, mx);
+        const sx = d > 0 ? (dx / d) * r : 0, sy = d > 0 ? (dy / d) * r : r;
+        const c2 = (r * r - this.L1 * this.L1 - this.L2 * this.L2) / (2 * this.L1 * this.L2);
+        const th2 = this.es * Math.acos(clamp(c2, -1, 1));
+        const k1 = this.L1 + this.L2 * Math.cos(th2), k2 = this.L2 * Math.sin(th2);
+        this.t1 = Math.atan2(sy, sx) - Math.atan2(k2, k1); this.t2 = th2;
+      }
+
+      jolt(f) { this.jv1 += (Math.random() - .5) * f; this.jv2 += (Math.random() - .5) * f; }
+
+      joints() {
+        const cx = this.bx + Math.cos(this.th1) * this.L1, cy = this.by + Math.sin(this.th1) * this.L1;
+        const ex = cx + Math.cos(this.th1 + this.th2) * this.L2, ey = cy + Math.sin(this.th1 + this.th2) * this.L2;
+        return { cx, cy, ex, ey };
+      }
+
+      buildPathTrace(t) {
+        // Create a simple bounding box trace for quick precise edge welding
+        let pts = [];
+        let lx = t.destX, ly = t.destY, w = t.w, h = t.h;
+        const step = 6;
+        for (let x = 0; x <= w; x += step) pts.push({ x: lx + x, y: ly });
+        for (let y = 0; y <= h; y += step) pts.push({ x: lx + w, y: ly + y });
+        for (let x = w; x >= 0; x -= step) pts.push({ x: lx + x, y: ly + h });
+        for (let y = h; y >= 0; y -= step) pts.push({ x: lx, y: ly + y });
+        if (pts.length === 0) pts.push({ x: lx + w / 2, y: ly + h / 2 });
+        return pts;
+      }
+
+      update() {
+        this.th1 += this.jv1; this.th2 += this.jv2;
+        this.jv1 *= .8; this.jv2 *= .8;
+        // Faster IK snap
+        this.th1 += (this.t1 - this.th1) * 0.08;
+        this.th2 += (this.t2 - this.th2) * 0.08;
+
+        let tip = this.getTip();
+        let tgt = null;
+        let isTracing = false;
+
+        const now = Date.now();
+        if (clickTarget && now < clickExpires) {
+          tgt = clickTarget;
+          this.pathTrace = null;
+        } else {
+          if (this.pathTrace && this.traceI < this.pathTrace.length) {
+            tgt = this.pathTrace[this.traceI];
+            isTracing = true;
+          } else {
+            this.pathTrace = null;
+            let distMin = 9999;
+            for (const t of tiles) {
+              // Only consider tiles assigned to this arm's side to avoid collision
+              let assignedToUs = (this.es < 0 && t.row < totalRows / 2 + 2) || (this.es > 0 && t.row >= totalRows / 2 - 2);
+              if (!t.assembled && t.alpha > 0 && assignedToUs) {
+                let dTip = Math.hypot((t.destX + t.w / 2) - tip.x, (t.destY + t.h / 2) - tip.y);
+                if (dTip < distMin) {
+                  distMin = dTip;
+                  tgt = { x: t.destX + t.w / 2, y: t.destY + t.h / 2 };
+                  this.activeTile = t;
+                }
+              }
+            }
+          }
+        }
+
+        if (tgt) {
+          const aa = this.th1 + this.th2;
+          this.ik(tgt.x - Math.cos(aa + Math.PI / 2) * 38, tgt.y - Math.sin(aa + Math.PI / 2) * 38);
+
+          if (isTracing) {
+            this.flash = 1;
+            this.traceI += 2; // Jump sub-points for very fast tracing
+            if (Math.random() < .8) spawnSparks(this.sk, tip.x, tip.y, 1);
+            if (Math.random() < .15) spawnSmoke(this.sm, tip.x, tip.y - 4);
+            pumpWeldHeat(tip.x, tip.y, 40);
+            if (this.traceI >= this.pathTrace.length) {
+              this.pathTrace = null;
+              this.flash = 0;
+            }
+          } else {
+            const dist = Math.hypot(tip.x - tgt.x, tip.y - tgt.y);
+            if (dist < 22 && !clickTarget) {
+              // Reached piece, start tracing edges
+              this.pathTrace = this.buildPathTrace(this.activeTile);
+              this.traceI = 0;
+            }
+            this.flash = 0;
+          }
+        } else {
+          this.flash = 0;
+          // Default idle pose on rail
+          this.ik(this.es < 0 ? W * 0.2 : W * 0.8, this.by + this.es * H * 0.1);
+        }
+        tickSparks(this.sk); tickSmoke(this.sm);
+      }
+
+      draw(c) {
+        const { cx, cy, ex, ey } = this.joints();
+        const aa = this.th1 + this.th2;
+        const jrS = clamp(W * .024, 18, 30), jrM = clamp(W * .02, 14, 24), jrE = clamp(W * .015, 10, 18);
+        const segW1 = clamp(W * .028, 22, 38), segW2 = clamp(W * .022, 16, 28);
+
+        // Draw Linear Rail
+        c.save();
+        c.fillStyle = '#080c0a'; c.fillRect(0, this.by - 20, W, 40);
+        c.strokeStyle = '#223322'; c.lineWidth = 1.5;
+        c.beginPath(); c.moveTo(0, this.by - 10); c.lineTo(W, this.by - 10); c.stroke();
+        c.beginPath(); c.moveTo(0, this.by + 10); c.lineTo(W, this.by + 10); c.stroke();
+        for (let rx = 20; rx < W; rx += 100) { c.fillStyle = '#112215'; c.fillRect(rx, this.by - 18, 8, 36); }
+        c.restore();
+
+        drawBase(c, this.bx, this.by);
+        drawArmSeg(c, this.bx, this.by, cx, cy, segW1);
+        drawPiston(c, this.bx, this.by, cx, cy, segW1);
+        drawJoint(c, this.bx, this.by, jrS);
+        drawArmSeg(c, cx, cy, ex, ey, segW2);
+        drawJoint(c, cx, cy, jrM);
+        drawTorch(c, ex, ey, aa);
+        drawJoint(c, ex, ey, jrE);
+
+        if (this.flash) {
+          const tx = ex + Math.cos(aa + Math.PI / 2) * 38, ty = ey + Math.sin(aa + Math.PI / 2) * 38;
+          const nearTile = getTileAt(tx, ty);
+          const clipFn = nearTile ? () => mechPath(nearTile.col, nearTile.row, nearTile.destX, nearTile.destY, nearTile.w, nearTile.h) : null;
+          drawWeldArc(c, tx, ty, 1, clipFn);
+        }
+      }
+    }
+    function buildTiles(off) {
+      tiles = [];
+      const data = off.getContext('2d').getImageData(0, 0, W, H).data;
+      totalCols = Math.ceil(W / TILE); totalRows = Math.ceil(H / TILE);
+
+      for (let row = 0; row < totalRows; row++) {
+        for (let col = 0; col < totalCols; col++) {
+          const tx = col * TILE, ty = row * TILE;
+          const tw = Math.min(TILE, W - tx), th = Math.min(TILE, H - ty);
+          let hits = 0, tot = 0;
+          for (let sy = ty; sy < ty + th; sy += 2)
+            for (let sx = tx; sx < tx + tw; sx += 2) {
+              tot++; const idx = (sy * W + sx) * 4;
+              if (idx < data.length && data[idx + 3] > 18) hits++;
+            }
+          // Lower tolerance to 0.02 for denser text
+          if (tot && hits / tot >= 0.02) {
+            tiles.push({ destX: tx, destY: ty, w: tw, h: th, col, row, valid: true });
+          }
+        }
+      }
+
+      const tileGrid = new Array(totalRows).fill(0).map(() => new Array(totalCols).fill(false));
+      tiles.forEach(t => tileGrid[t.row][t.col] = true);
+      // Fills holes: ANY tile with 2+ neighbors is filled
+      for (let row = 1; row < totalRows - 1; row++) {
+        for (let col = 1; col < totalCols - 1; col++) {
+          if (!tileGrid[row][col]) {
+            let neighbors = (tileGrid[row - 1][col] ? 1 : 0) + (tileGrid[row + 1][col] ? 1 : 0) +
+              (tileGrid[row][col - 1] ? 1 : 0) + (tileGrid[row][col + 1] ? 1 : 0);
+            if (neighbors >= 2) {
+              tiles.push({ destX: col * TILE, destY: row * TILE, w: TILE, h: TILE, col, row, valid: true });
+              tileGrid[row][col] = true;
+            }
+          }
+        }
+      }
+
+      for (let i = 0; i < tiles.length; i++) {
+        let t = tiles[i];
+
+        // 80% chance to be pre-assembled immediately
+        let isAssembled = Math.random() < 0.8;
+
+        const a = Math.random() * Math.PI * 2;
+        const dist = 8 + Math.random() * 10;
+        const rot = (Math.random() - .5) * 16 * (Math.PI / 180);
+
+        Object.assign(t, {
+          scX: t.destX + Math.cos(a) * dist, scY: t.destY + Math.sin(a) * dist, scRot: rot,
+          x: isAssembled ? t.destX : t.destX + Math.cos(a) * dist,
+          y: isAssembled ? t.destY : t.destY + Math.sin(a) * dist,
+          rot: isAssembled ? 0 : rot,
+          delay: 0, alpha: 1, vx: 0, vy: 0,
+          assembled: isAssembled, asmProgress: isAssembled ? 1 : 0,
+          weldHeat: 0, weldAge: isAssembled ? 1 : 0
+        });
+      }
+      const L1 = clamp(W * .18, 90, 320), L2 = clamp(W * .18, 80, 280);
+      armL = new RoboticArm(H * 0.1, L1, L2, -1);
+      armR = new RoboticArm(H * 0.9, L1, L2, +1);
+      mouseArm = new MouseWeldArm('mouse');
+    }
+    // ══════════════════════════════════════════════════════════════════
+
+    // ══════════════════════════════════════════════════════════════════
+    //  WELD HEAT PROPAGATION
+    // ══════════════════════════════════════════════════════════════════
+    function pumpWeldHeat(wx, wy, radius) {
+      for (const t of tiles) {
+        if (!t.assembled) continue;
+        const cx = t.destX + t.w / 2;
+        const cy = t.destY + t.h / 2;
+        const d = Math.hypot(cx - wx, cy - wy);
+        if (d < radius) {
+          const str = 1 - d / radius;
+          t.weldHeat = Math.min(1, (t.weldHeat || 0) + str * 0.08);
+          if (t.weldHeat > 0.85) t.weldAge = Math.min(1, (t.weldAge || 0) + 0.004);
+        }
+      }
+    }
+
+    function coolTiles() {
+      for (const t of tiles) {
+        if (t.weldHeat > 0) t.weldHeat = Math.max(0, t.weldHeat - 0.012);
+        // weldAge never decreases once set
+      }
+    }
+
+    // Fast tile lookup by pixel position
+    function getTileAt(px, py) {
+      for (const t of tiles) {
+        if (!t.assembled) continue;
+        if (px >= t.destX && px < t.destX + t.w && py >= t.destY && py < t.destY + t.h) return t;
+      }
+      return null;
+    }
+
+    // ══════════════════════════════════════════════════════════════════
+    //  WELD PATH GENERATION
+    // ══════════════════════════════════════════════════════════════════
+    function buildWeldPath(side, L1, L2, bx, by) {
+      const pts = [];
+      const maxR = L1 + L2 - 12;
+      const cx = side === 'left' ? W * .33 : W * .67, cy = H * .46;
+      const rx = W * .17, ry = H * .2;
+      const cols = 4, rows = 3;
+      const minX = PR.px1;
+      const maxX = PR.px2 > 0 ? Math.max(PR.px1 + PR.pw1, PR.px2 + PR.pw2) : PR.px1 + PR.pw1;
+      const minY = PR.py1;
+      const maxY = PR.py2 > 0 ? Math.max(PR.py1 + PR.ph1, PR.py2 + PR.ph2) : PR.py1 + PR.ph1;
+      for (let row = 0; row < rows; row++) {
+        for (let col = 0; col < cols; col++) {
+          const jcol = row % 2 === 0 ? col : (cols - 1 - col);
+          let tx = cx - rx + (jcol / (cols - 1)) * rx * 2;
+          let ty = cy - ry + (row / (rows - 1)) * ry * 2;
+          tx = clamp(tx, minX, maxX);
+          ty = clamp(ty, minY, maxY);
+          if (Math.hypot(tx - bx, ty - by) <= maxR) pts.push({ x: tx, y: ty });
+        }
+      }
+      if (!pts.length) pts.push({ x: cx, y: cy });
+      return pts;
+    }
+
+    // ══════════════════════════════════════════════════════════════════
+    //  MECHANICAL INTERLOCKING TILE PATH — 8 VARIED SHAPES
+    //  Each tile type has unique mechanical connectors:
+    //  gear-tooth, hex-tab, chamfer-cut, dovetail, pin-notch,
+    //  T-slot, wave-fit, stepped-key
+    // ══════════════════════════════════════════════════════════════════
+    function mechPath(col, row, x, y, w, h) {
+      const ts = w * 0.38, td = w * 0.22;
+      const R = row, C = col;
+      const hash = (r, c, side) => {
+        let edgeC = c, edgeR = r;
+        if (side === 'right') edgeC = c + 1;
+        if (side === 'bottom') edgeR = r + 1;
+        let isHoriz = (side === 'top' || side === 'bottom') ? 1 : 0;
+        let cType = (edgeC + edgeR + isHoriz) % 5;
+        let sign = ((edgeC + edgeR) % 2 === 0) ? 1 : -1;
+
+        if (side === 'top' && r === 0) sign = 0;
+        if (side === 'bottom' && r >= totalRows - 1) sign = 0;
+        if (side === 'left' && c === 0) sign = 0;
+        if (side === 'right' && c >= totalCols - 1) sign = 0;
+
+        if (side === 'bottom' || side === 'right') sign = -sign;
+        return { cType, sign };
+      };
+      const tEdge = hash(R, C, 'top');
+      const rEdge = hash(R, C, 'right');
+      const bEdge = hash(R, C, 'bottom');
+      const lEdge = hash(R, C, 'left');
+      ctx.beginPath();
+      drawEdge(x, y, w, h, 'top', tEdge.cType, tEdge.sign, ts, td);
+      drawEdge(x, y, w, h, 'right', rEdge.cType, rEdge.sign, ts, td);
+      drawEdge(x, y, w, h, 'bottom', bEdge.cType, bEdge.sign, ts, td);
+      drawEdge(x, y, w, h, 'left', lEdge.cType, lEdge.sign, ts, td);
+      ctx.closePath();
+    }
+
+    function drawEdge(x, y, w, h, side, cType, sign, ts, td) {
+      if (side === 'top') ctx.moveTo(x, y);
+      if (sign === 0) {
+        if (side === 'top') { ctx.lineTo(x + w, y); }
+        if (side === 'right') { ctx.lineTo(x + w, y + h); }
+        if (side === 'bottom') { ctx.lineTo(x, y + h); }
+        if (side === 'left') { ctx.lineTo(x, y); }
+        return;
+      }
+      let dx = 0, dy = 0, nx = 0, ny = 0;
+      let cx = 0, cy = 0;
+      if (side === 'top') { dx = 1; nx = 0; ny = -1; cx = x + w / 2; cy = y; }
+      else if (side === 'right') { dy = 1; nx = 1; ny = 0; cx = x + w; cy = y + h / 2; }
+      else if (side === 'bottom') { dx = -1; nx = 0; ny = 1; cx = x + w / 2; cy = y + h; }
+      else if (side === 'left') { dy = -1; nx = -1; ny = 0; cx = x; cy = y + h / 2; }
+      let sx = cx - dx * (ts / 2), sy = cy - dy * (ts / 2);
+      ctx.lineTo(sx, sy);
+      let tnx = nx * sign * td, tny = ny * sign * td;
+      switch (cType) {
+        case 0:
+          ctx.lineTo(sx + dx * (ts * .2) + tnx, sy + dy * (ts * .2) + tny);
+          ctx.lineTo(cx + dx * (ts * .3) + tnx, cy + dy * (ts * .3) + tny);
+          ctx.lineTo(cx + dx * (ts * .5), cy + dy * (ts * .5));
+          break;
+        case 1:
+          for (let i = 1; i < 4; i++) {
+            let a = (i / 4) * Math.PI;
+            let ox = -Math.cos(a) * ts / 2, oy = Math.sin(a) * td;
+            if (sign < 0) oy = -oy;
+            let px = cx + dx * ox + nx * oy;
+            let py = cy + dy * ox + ny * oy;
+            ctx.lineTo(px, py);
+          }
+          ctx.lineTo(cx + dx * (ts / 2), cy + dy * (ts / 2));
+          break;
+        case 2:
+          for (let p = 0; p < 3; p++) {
+            let psx = cx - dx * (ts / 2) + dx * (p * (ts / 3) + ts * .05);
+            let psy = cy - dy * (ts / 2) + dy * (p * (ts / 3) + ts * .05);
+            ctx.lineTo(psx, psy);
+            ctx.lineTo(psx + tnx, psy + tny);
+            ctx.lineTo(psx + dx * (ts * .15) + tnx, psy + dy * (ts * .15) + tny);
+            ctx.lineTo(psx + dx * (ts * .15), psy + dy * (ts * .15));
+          }
+          ctx.lineTo(cx + dx * (ts / 2), cy + dy * (ts / 2));
+          break;
+        case 3:
+          ctx.lineTo(sx + tnx * .5, sy + tny * .5);
+          ctx.lineTo(sx + tnx * .5 + dx * (ts * .6), sy + tny * .5 + dy * (ts * .6));
+          ctx.lineTo(cx + dx * (ts / 2), cy + dy * (ts / 2));
+          break;
+        case 4:
+          ctx.quadraticCurveTo(sx + tnx, sy + tny, cx - dx * (ts * .1) + tnx, cy - dy * (ts * .1) + tny);
+          ctx.lineTo(cx + dx * (ts * .1) + tnx, cy + dy * (ts * .1) + tny);
+          ctx.quadraticCurveTo(cx + dx * (ts * .5) + tnx, cy + dy * (ts * .5) + tny, cx + dx * (ts / 2), cy + dy * (ts / 2));
+          break;
+      }
+      if (side === 'top') { ctx.lineTo(x + w, y); }
+      if (side === 'right') { ctx.lineTo(x + w, y + h); }
+      if (side === 'bottom') { ctx.lineTo(x, y + h); }
+      if (side === 'left') { ctx.lineTo(x, y); }
+    }
+    // ══════════════════════════════════════════════════════════════════
+    // ══════════════════════════════════════════════════════════════════
+    //  TILE SYSTEM
+    // ══════════════════════════════════════════════════════════════════
+    const TILE = 24, ASS_MS = 3400;
+    const REPR = 88, REPMAX = 5.5, FRIC = .78, RET = .115;
+    let tiles = [], startTs = null, rafId = null;
+    let armL = null, armR = null, mouseArm = null;
+
+    function buildTiles(off) {
+      tiles = [];
+      const data = off.getContext('2d').getImageData(0, 0, W, H).data;
+      totalCols = Math.ceil(W / TILE); totalRows = Math.ceil(H / TILE);
+
+      for (let row = 0; row < totalRows; row++) {
+        for (let col = 0; col < totalCols; col++) {
+          const tx = col * TILE, ty = row * TILE;
+          const tw = Math.min(TILE, W - tx), th = Math.min(TILE, H - ty);
+          let hits = 0, tot = 0;
+          for (let sy = ty; sy < ty + th; sy += 2)
+            for (let sx = tx; sx < tx + tw; sx += 2) {
+              tot++; const idx = (sy * W + sx) * 4;
+              if (idx < data.length && data[idx + 3] > 18) hits++;
+            }
+          if (tot && hits / tot >= 0.04) {
+            tiles.push({ destX: tx, destY: ty, w: tw, h: th, col, row, valid: true });
+          }
+        }
+      }
+
+      const tileGrid = new Array(totalRows).fill(0).map(() => new Array(totalCols).fill(false));
+      tiles.forEach(t => tileGrid[t.row][t.col] = true);
+      for (let row = 1; row < totalRows - 1; row++) {
+        for (let col = 1; col < totalCols - 1; col++) {
+          if (!tileGrid[row][col]) {
+            let neighbors = (tileGrid[row - 1][col] ? 1 : 0) + (tileGrid[row + 1][col] ? 1 : 0) +
+              (tileGrid[row][col - 1] ? 1 : 0) + (tileGrid[row][col + 1] ? 1 : 0);
+            if (neighbors >= 3) tiles.push({ destX: col * TILE, destY: row * TILE, w: TILE, h: TILE, col, row, valid: true });
+          }
+        }
+      }
+
+      for (let i = 0; i < tiles.length; i++) {
+        let t = tiles[i];
+        const a = Math.random() * Math.PI * 2;
+        const dist = 8 + Math.random() * 10;
+        const delay = (t.col / totalCols) * .26 + (t.row / totalRows) * .1 + Math.random() * .07;
+        const rot = (Math.random() - .5) * 16 * (Math.PI / 180);
+        Object.assign(t, {
+          scX: t.destX + Math.cos(a) * dist, scY: t.destY + Math.sin(a) * dist, scRot: rot,
+          x: t.destX + Math.cos(a) * dist, y: t.destY + Math.sin(a) * dist, rot: rot,
+          delay, alpha: 1, vx: 0, vy: 0,
+          assembled: false, asmProgress: 0, weldHeat: 0, weldAge: 0
+        });
+      }
+      const L1 = clamp(W * .32, 110, 480), L2 = clamp(W * .28, 95, 420);
+      armL = new RoboticArm(W * .02, H * .8, L1, L2, -1, 0);
+      armR = new RoboticArm(W * .98, H * .8, L1, L2, +1, 0);
+      const ptsL = buildWeldPath('left', L1, L2, W * .02, H * .8);
+      const ptsR = buildWeldPath('right', L1, L2, W * .98, H * .8);
+      armL.pts = ptsL; armL.wi = 0;
+      armR.pts = ptsR; armR.wi = Math.floor(ptsR.length / 2);
+      mouseArm = new MouseWeldArm('mouse');
+    }
+
+    function drawTile(t) {
+      if (t.alpha < .01) return;
+      const cx = t.x + t.w / 2, cy = t.y + t.h / 2;
+      ctx.save();
+      ctx.translate(cx, cy); ctx.rotate(t.rot); ctx.globalAlpha = t.alpha;
+      ctx.rotate(-t.rot);
+      const lx = -t.w / 2, ly = -t.h / 2;
+
+      // Clip & draw image
+      mechPath(t.col, t.row, lx, ly, t.w, t.h);
+      ctx.save(); ctx.clip();
+      ctx.drawImage(textCanvas, t.destX, t.destY, t.w, t.h, lx, ly, t.w, t.h);
+      ctx.restore();
+
+      // Dynamic color border based on weld state
+      mechPath(t.col, t.row, lx, ly, t.w, t.h);
+      const borderColor = tileWeldColor(t, 0);
+      const lineW = t.assembled ? (0.9 + (t.weldHeat || 0) * 1.8) : 0.5;
+      ctx.strokeStyle = borderColor;
+      ctx.lineWidth = lineW;
+      if (t.assembled && (t.weldHeat > 0.1 || t.weldAge > 0.1)) {
+        ctx.shadowColor = `rgba(255,${120 + (t.weldHeat || 0) * 135 | 0},0,${(t.weldHeat || 0) * .8 + .2})`;
+        ctx.shadowBlur = 4 + (t.weldHeat || 0) * 12;
+      }
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+
+      // Weld bead dot
+      if (t.assembled && t.weldAge > 0.5) {
+        if ((t.col % 2 === 0) && t.col < totalCols - 1) {
+          const dotX = lx + t.w + t.w * .19 * .55, dotY = ly + t.h / 2;
+          ctx.beginPath(); ctx.arc(dotX, dotY, 1.5, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255,150,0,${.7 * t.alpha * t.weldAge})`;
+          ctx.shadowColor = '#ff8800'; ctx.shadowBlur = 3; ctx.fill(); ctx.shadowBlur = 0;
+        }
+      }
+      ctx.restore();
+    }
+
+    // ══════════════════════════════════════════════════════════════════
+    //  EXPLOSION
+    // ══════════════════════════════════════════════════════════════════
+    let exP = [], swv = [], flashI = 0;
+
+    function explode(x, y) {
+      for (let i = 0; i < 70; i++) {
+        const a = Math.random() * Math.PI * 2, sp = 1.5 + Math.random() * 13;
+        exP.push({
+          x, y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp - 1.5, life: 1,
+          r: .3 + Math.random() * 3, decay: .015 + Math.random() * .032,
+          col: SCOLS[Math.floor(Math.random() * SCOLS.length)]
+        });
+      }
+      for (let i = 0; i < 3; i++) swv.push({ x, y, r: 2, life: 1, delay: i * .09, speed: Math.max(W, H) * (.013 + i * .004) });
+      flashI = 1;
+      if (armL) armL.jolt(.45); if (armR) armR.jolt(.45);
+      tiles.forEach(t => {
+        const cx = t.destX + t.w / 2, cy = t.destY + t.h / 2;
+        const dx = cx - x, dy = cy - y;
+        const d = Math.hypot(dx, dy);
+        if (d < 90) {
+          t.assembled = false; t.asmProgress = 0; t.weldAge = 0; t.weldHeat = 0;
+          const f = (90 - d) * 0.18;
+          t.vx += (dx / d) * f; t.vy += (dy / d) * f;
+        }
+      });
+    }
+
+    function drawExpl() {
+      if (flashI > 0) { ctx.fillStyle = `rgba(255,155,35,${flashI * .1})`; ctx.fillRect(0, 0, W, H); flashI = Math.max(0, flashI - .04); }
+      swv = swv.filter(sw => {
+        if (sw.delay > 0) { sw.delay -= .016; return true; }
+        sw.r += sw.speed; sw.life -= .032; if (sw.life <= 0) return false;
+        ctx.beginPath(); ctx.arc(sw.x, sw.y, sw.r, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(255,145,0,${sw.life * .42})`; ctx.lineWidth = 2.5 * sw.life;
+        ctx.shadowColor = '#ff8800'; ctx.shadowBlur = 12 * sw.life; ctx.stroke(); ctx.shadowBlur = 0;
+        return true;
+      });
+      for (let i = exP.length - 1; i >= 0; i--) {
+        const p = exP[i];
+        p.x += p.vx; p.y += p.vy; p.vy += .07; p.vx *= .97; p.life -= p.decay;
+        if (p.life <= 0) { exP.splice(i, 1); continue; }
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.r * p.life, 0, Math.PI * 2);
+        ctx.fillStyle = p.col; ctx.globalAlpha = p.life;
+        ctx.shadowColor = '#ff8800'; ctx.shadowBlur = 4; ctx.fill(); ctx.shadowBlur = 0;
+      }
+      ctx.globalAlpha = 1;
+    }
+
+    // ══════════════════════════════════════════════════════════════════
+    //  TEXT CANVAS
+    // ══════════════════════════════════════════════════════════════════
+    let textCanvas = null;
+    let PR = { px1: 0, py1: 0, pw1: 0, ph1: 0, px2: 0, py2: 0, pw2: 0, ph2: 0 };
+
+    function buildTextCanvas() {
+      const off = document.createElement('canvas');
+      off.width = W; off.height = H;
+      const c = off.getContext('2d');
+
+      const name = 'César Javier Ramírez';
+      const title = 'INGENIERO MECATRÓNICO';
+
+      c.font = `900 100px 'Orbitron',monospace`;
+      const rw1 = c.measureText(name).width;
+      const fs1 = clamp(Math.min((W * .84) / rw1 * 100, H * .18), 30, 230);
+
+      c.font = `700 100px 'Orbitron',monospace`;
+      const rw2 = c.measureText(title).width;
+      const fs2 = clamp(Math.min((W * .72) / rw2 * 100, H * .085), 13, 108);
+
+      const gap = fs1 * .24;
+      const totalH = fs1 * 1.1 + gap + fs2 * 1.42;
+      const baseY = H / 2 - totalH / 2;
+      const ty1 = baseY + fs1 * .8;
+      const ty2 = ty1 + fs1 * .76 + gap + fs2 * .78;
+
+      c.textAlign = 'center'; c.textBaseline = 'middle';
+
+      // Panel 1
+      c.font = `900 ${fs1}px 'Orbitron',monospace`;
+      const mw1 = c.measureText(name).width, pad1 = fs1 * .13;
+      const px1 = W / 2 - mw1 / 2 - pad1, py1 = baseY, pw1 = mw1 + pad1 * 2, ph1 = fs1 * 1.1;
+      rrect(c, px1, py1, pw1, ph1, 4);
+      c.fillStyle = 'rgba(6,10,18,.9)'; c.fill();
+      c.strokeStyle = 'rgba(0,80,180,.32)'; c.lineWidth = 1.4; c.stroke();
+      c.fillStyle = 'rgba(0,0,0,.022)';
+      for (let s = py1; s < py1 + ph1; s += 2) c.fillRect(px1, s, pw1, 1);
+      c.fillStyle = '#dce4f0';
+      c.shadowColor = 'rgba(80,150,255,.55)'; c.shadowBlur = 20;
+      c.fillText(name, W / 2, ty1); c.shadowBlur = 0;
+      c.globalAlpha = .42; c.shadowColor = 'rgba(30,80,255,.6)'; c.shadowBlur = 42;
+      c.fillText(name, W / 2, ty1); c.shadowBlur = 0; c.globalAlpha = 1;
+
+      // Panel 2
+      c.font = `700 ${fs2}px 'Orbitron',monospace`;
+      const mw2 = c.measureText(title).width, pad2 = fs2 * .2;
+      const px2 = W / 2 - mw2 / 2 - pad2, py2 = ty1 + fs1 * .44 + gap, pw2 = mw2 + pad2 * 2, ph2 = fs2 * 1.42;
+      rrect(c, px2, py2, pw2, ph2, 4);
+      c.fillStyle = 'rgba(4,12,7,.9)'; c.fill();
+      c.strokeStyle = 'rgba(0,160,55,.32)'; c.lineWidth = 1.4; c.stroke();
+      c.fillStyle = 'rgba(0,0,0,.022)';
+      for (let s = py2; s < py2 + ph2; s += 2) c.fillRect(px2, s, pw2, 1);
+      c.fillStyle = '#00ff88';
+      c.shadowColor = 'rgba(0,255,136,.58)'; c.shadowBlur = 18;
+      c.fillText(title, W / 2, ty2); c.shadowBlur = 0;
+      c.globalAlpha = .4; c.shadowColor = 'rgba(0,220,100,.7)'; c.shadowBlur = 40;
+      c.fillText(title, W / 2, ty2); c.shadowBlur = 0; c.globalAlpha = 1;
+
+      PR = { px1, py1, pw1, ph1, px2, py2, pw2, ph2 };
+      return off;
+    }
+
+    // ══════════════════════════════════════════════════════════════════
+    //  MOUSE-WELD CURSOR TORCH VISUALS (drawn at exact cursor position)
+    // ══════════════════════════════════════════════════════════════════
+    function drawMouseTorch() {
+      if (!mouse.down || mouse.x < 0) return;
+      const t = getTileAt(mouse.x, mouse.y);
+      if (!t || !t.assembled) return;
+
+      ctx.save();
+      // Draw a small welding torch tip pointing down toward cursor
+      const mx = mouse.x, my = mouse.y;
+      ctx.translate(mx, my);
+
+      // Arm/handle coming from top-right
+      ctx.beginPath();
+      ctx.moveTo(18, -26);
+      ctx.quadraticCurveTo(10, -14, 0, 0);
+      ctx.strokeStyle = '#e8a800';
+      ctx.lineWidth = 3.5;
+      ctx.lineCap = 'round';
+      ctx.shadowColor = 'rgba(255,180,0,.5)';
+      ctx.shadowBlur = 6;
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+      ctx.lineCap = 'butt';
+
+      // Torch body
+      const tg = ctx.createLinearGradient(-5, -18, 5, -18);
+      tg.addColorStop(0, '#3a2200');
+      tg.addColorStop(.5, '#e8a800');
+      tg.addColorStop(1, '#3a2200');
+      rrect(ctx, -5, -18, 10, 16, 3);
+      ctx.fillStyle = tg;
+      ctx.strokeStyle = '#2e1800';
+      ctx.lineWidth = 1;
+      ctx.fill();
+      ctx.stroke();
+
+      // Nozzle tip
+      ctx.beginPath();
+      ctx.moveTo(-3, -2);
+      ctx.lineTo(0, 7);
+      ctx.lineTo(3, -2);
+      ctx.fillStyle = '#160c08';
+      ctx.strokeStyle = '#553300';
+      ctx.lineWidth = 1;
+      ctx.fill();
+      ctx.stroke();
+
+      // Glowing tip
+      const heat = t.weldHeat || 0;
+      const pulse = Math.sin(Date.now() * 0.018) * 0.5 + 0.5;
+      ctx.beginPath();
+      ctx.arc(0, 8, 2.5 + pulse * 1.5, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255,${200 + pulse * 55 | 0},${heat * 80 | 0},${.8 + pulse * .2})`;
+      ctx.shadowColor = '#ffcc00';
+      ctx.shadowBlur = 8 + pulse * 8;
+      ctx.fill();
+      ctx.shadowBlur = 0;
+
+      ctx.restore();
+    }
+
+    // ══════════════════════════════════════════════════════════════════
+    //  MAIN LOOP
+    // ══════════════════════════════════════════════════════════════════
+    function animate(ts) {
+      if (!startTs) startTs = ts;
+      const gp = Math.min((ts - startTs) / ASS_MS, 1);
+      ctx.clearRect(0, 0, W, H);
+      drawBG();
+
+      const { px1, py1, pw1, ph1, px2, py2, pw2, ph2 } = PR;
+      drawPanelDecor(px1, py1, pw1, ph1, px2, py2, pw2, ph2);
+
+      coolTiles();
+
+      for (const t of tiles) {
+        if (!t.assembled) {
+          let welding = false;
+          for (const arm of [armL, armR]) {
+            if (arm) {
+              const tip = arm.getTip();
+              if (Math.hypot(tip.x - (t.destX + t.w / 2), tip.y - (t.destY + t.h / 2)) < 32) welding = true;
+            }
+          }
+          if (mouseArm && mouseArm.active) {
+            const tip = mouseArm.getTipPos();
+            if (Math.hypot(tip.tipX - (t.destX + t.w / 2), tip.tipY - (t.destY + t.h / 2)) < 32) welding = true;
+          }
+          const distToMouse = Math.hypot((t.destX + t.w / 2) - mouse.x, (t.destY + t.h / 2) - mouse.y);
+          if (distToMouse < 80 || welding) {
+            t.asmProgress += (0.016 / 0.6) * (distToMouse < 80 ? 3 : 1);
+          }
+          if (t.asmProgress >= 1) {
+            t.asmProgress = 1; t.assembled = true;
+            t.x = t.destX; t.y = t.destY; t.rot = 0; t.vx = 0; t.vy = 0;
+          } else {
+            t.vx *= FRIC; t.vy *= FRIC; t.x += t.vx; t.y += t.vy;
+            if (t.asmProgress > 0) {
+              const e = easeOutBack(t.asmProgress);
+              t.x += (lerp(t.scX, t.destX, e) - t.x) * 0.3;
+              t.y += (lerp(t.scY, t.destY, e) - t.y) * 0.3;
+              t.rot += (lerp(t.scRot, 0, e) - t.rot) * 0.3;
+            } else {
+              t.x += (t.scX - t.x) * 0.15; t.y += (t.scY - t.y) * 0.15; t.rot += (t.scRot - t.rot) * 0.15;
+            }
+          }
+        } else {
+          t.vx *= FRIC; t.vy *= FRIC; t.x += t.vx; t.y += t.vy;
+          t.x += (t.destX - t.x) * RET; t.y += (t.destY - t.y) * RET; t.rot = 0;
+          const mdx = (t.x + t.w / 2) - mouse.x, mdy = (t.y + t.h / 2) - mouse.y;
+          const md = Math.hypot(mdx, mdy);
+          if (!mouse.down && md < REPR && md > 0) {
+            const str = ((REPR - md) / REPR) * REPMAX; t.vx += (mdx / md) * str * .22; t.vy += (mdy / md) * str * .22;
+          }
+        }
+        drawTile(t);
+      }
+
+      if (armL) { armL.update(); armL.draw(ctx); }
+      if (armR) { armR.update(); armR.draw(ctx); }
+      if (mouseArm) { mouseArm.update(); }
+
+      // Draw mouse sparks & smoke (from mouseArm)
+      if (mouseArm) {
+        tickSparks(mouseArm.sk);
+        tickSmoke(mouseArm.sm);
+        mouseArm.draw(ctx);
+      }
+
+      drawMouseTorch();
+      drawExpl();
+
+      if (gp >= .86 && !sub.classList.contains('show')) sub.classList.add('show');
+      if (gp >= .5 && !weldHint.classList.contains('show')) weldHint.classList.add('show');
+      rafId = requestAnimationFrame(animate);
+    }
+
+    // ══════════════════════════════════════════════════════════════════
+    //  INIT + EVENTS
+    // ══════════════════════════════════════════════════════════════════
+    function init() {
+      cancelAnimationFrame(rafId); rafId = null; startTs = null; armL = null; armR = null; mouseArm = null;
+      sub.classList.remove('show'); weldHint.classList.remove('show');
+      cur.classList.remove('track', 'boom', 'welding');
+      exP = []; swv = []; flashI = 0; tiles = [];
+      ctx.clearRect(0, 0, W, H);
+      textCanvas = buildTextCanvas();
+      buildTiles(textCanvas);
+      if (tiles.length < 5) { ctx.drawImage(textCanvas, 0, 0); sub.classList.add('show'); return; }
+      requestAnimationFrame(animate);
+    }
+
+    document.fonts.ready.then(() => setTimeout(init, 220));
+    document.fonts.ready.then(() => setTimeout(init, 220));
+    document.addEventListener('dblclick', () => init());
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,545 @@
+import re
+
+file_path = r"d:\oct 2025\PycharmProjects\CV hoja de vida\Portafolio ing CESAR RAMIREZ\cexartattoo\kuka-prototype.html"
+
+with open(file_path, "r", encoding="utf-8") as f:
+    content = f.read()
+
+new_class = """class RealisticKukaArm {
+            constructor() {
+                this.L1 = Math.min(window.innerWidth, window.innerHeight) * 0.22;
+                this.L2 = Math.min(window.innerWidth, window.innerHeight) * 0.18;
+                this.by = window.innerHeight * 0.8;
+                this.bx = window.innerWidth / 2;
+                this.th1 = -Math.PI / 2;
+                this.th2 = 0;
+                this.linkLen = 18;
+                
+                // N recalculates dynamically per window width (chain handles ~72% travel)
+                this.chainN = Math.ceil((window.innerWidth * 0.72) / this.linkLen);
+            }
+
+            ik(tx, ty) {
+                this.L1 = Math.min(window.innerWidth, window.innerHeight) * 0.22;
+                this.L2 = Math.min(window.innerWidth, window.innerHeight) * 0.18;
+                this.by = window.innerHeight * 0.8;
+                this.chainN = Math.ceil((window.innerWidth * 0.72) / this.linkLen);
+
+                const idealBx = clamp(tx, window.innerWidth * 0.1, window.innerWidth * 0.9);
+                this.bx += (idealBx - this.bx) * 0.08;
+
+                const TOOL_LENGTH = 90;
+                const effective_L2 = this.L2 + TOOL_LENGTH;
+
+                const dx = tx - (this.bx + 55);
+                const dy = ty - (this.by - 110);
+                const d = Math.hypot(dx, dy);
+
+                const mx = this.L1 + effective_L2 - 2;
+                const mn = Math.abs(this.L1 - effective_L2) + 2;
+                const r = clamp(d, mn, mx);
+
+                const sx = d > 0 ? (dx / d) * r : 0;
+                const sy = d > 0 ? (dy / d) * r : -r;
+
+                const c2 = (r * r - this.L1 * this.L1 - effective_L2 * effective_L2) / (2 * this.L1 * effective_L2);
+                const th2Target = -Math.acos(clamp(c2, -1, 1));
+
+                const k1 = this.L1 + effective_L2 * Math.cos(th2Target);
+                const k2 = effective_L2 * Math.sin(th2Target);
+                const th1Target = Math.atan2(sy, sx) - Math.atan2(k2, k1);
+
+                this.th1 += (th1Target - this.th1) * 0.12;
+                this.th2 += (th2Target - this.th2) * 0.12;
+            }
+
+            drawDragChain(c) {
+                c.save();
+                
+                // RIGHT SIDE WALL ANCHOR
+                const anchorX = window.innerWidth - 20; 
+                // CARRIAGE RIGHT SIDE ANCHOR
+                const carriageW = 160;
+                const carX = this.bx + (carriageW / 2);
+                
+                const topY = this.by - 25;
+                const botY = this.by + 65;
+                const radius = (botY - topY) / 2;
+                const cy = topY + radius;
+
+                // Physical constraint (Total geometrical length of the fixed link setup)
+                const L_geo = this.chainN * this.linkLen;
+                
+                // Calculates the right-facing loop core center (Extends/bunches properly)
+                let loopCenterX = (carX + anchorX - Math.PI * radius + L_geo) / 2;
+                
+                // Make sure loop never exceeds the screen boundary roughly, tracking right.
+                if (loopCenterX < carX + radius * 1.5) {
+                    loopCenterX = carX + radius * 1.5;
+                }
+
+                // L1 = Total straight top length. L2 = Semicircle arc length.
+                const L1 = loopCenterX - carX;
+                const L2 = Math.PI * radius;
+
+                for (let i = 0; i < this.chainN; i++) {
+                    const d = i * this.linkLen;
+                    let x, y, ang;
+
+                    if (d <= L1) { // Running along top layer horizontally right
+                        x = carX + d;
+                        y = topY;
+                        ang = 0;
+                    } else if (d > L1 && d <= L1 + L2) { // Looping downwards mathematically
+                        const u = (d - L1) / L2;
+                        const a = -Math.PI / 2 + u * Math.PI; 
+                        x = loopCenterX + Math.cos(a) * radius;
+                        y = cy + Math.sin(a) * radius;
+                        ang = a + Math.PI / 2;
+                    } else { // Running along grounded bottom rail returning to right wall anchor
+                        const d3 = d - (L1 + L2);
+                        x = loopCenterX - d3;
+                        y = botY;
+                        ang = Math.PI;
+                    }
+
+                    c.save();
+                    c.translate(x, y);
+                    c.rotate(ang);
+                    // Single cable chain link profile
+                    c.fillStyle = '#1c1c1c';
+                    rrect(c, -this.linkLen / 2, -12, this.linkLen, 24, 3);
+                    c.fill();
+                    c.fillStyle = '#666'; // edge highlight
+                    c.fillRect(-this.linkLen / 2 + 1, -11, this.linkLen - 2, 2);
+                    c.fillStyle = '#0a0a0a'; // side details
+                    c.fillRect(-2, -6, 4, 12);
+                    c.restore();
+                }
+                c.restore();
+            }
+
+            drawLinearRail(c) {
+                const railW = window.innerWidth * 0.9;
+                const railH = 70;
+                const rx = window.innerWidth * 0.05;
+                const ry = this.by;
+
+                c.fillStyle = '#2d2f33'; 
+                c.fillRect(rx, ry, railW, railH);
+
+                c.fillStyle = '#a0a5ad';
+                c.fillRect(rx, ry + 15, railW, 8);
+                c.fillRect(rx, ry + 40, railW, 20);
+
+                c.fillStyle = '#444';
+                for (let i = rx + 20; i < rx + railW - 20; i += 40) {
+                    c.beginPath(); c.arc(i, ry + 50, 4, 0, Math.PI * 2); c.fill();
+                }
+            }
+
+            drawCarriage(c) {
+                const ry = this.by;
+                const carriageW = 160;
+                const cx = this.bx;
+
+                c.save();
+                
+                // Main dark sliding block
+                c.fillStyle = '#111';
+                c.fillRect(cx - (carriageW/2), ry - 15, carriageW, 35);
+                
+                // Orange matching left/right endplates
+                c.fillStyle = KUKA_ORANGE;
+                rrect(c, cx - (carriageW/2) - 10, ry - 15, 20, 35, 4); c.fill();
+                rrect(c, cx + (carriageW/2) - 10, ry - 15, 20, 35, 4); c.fill();
+                
+                // Front and Back connection housings
+                c.fillStyle = '#222';
+                c.fillRect(cx - (carriageW/2) - 10, ry - 5, 25, 20); 
+                c.fillRect(cx + (carriageW/2) - 15, ry - 5, 25, 20); 
+
+                // Dark Cylinder Turntable base extending slightly upward
+                c.fillStyle = KUKA_BLACK;
+                const turnRadius = carriageW * 0.28;
+                c.beginPath(); 
+                c.moveTo(cx - turnRadius, ry - 15);
+                c.lineTo(cx + turnRadius, ry - 15);
+                c.lineTo(cx + turnRadius - 10, ry - 100);
+                c.lineTo(cx - turnRadius + 10, ry - 100);
+                c.fill();
+
+                // Turntable shadowing
+                const grd = c.createLinearGradient(cx - turnRadius, 0, cx + turnRadius, 0);
+                grd.addColorStop(0, 'rgba(255,255,255,0.05)');
+                grd.addColorStop(0.3, 'rgba(255,255,255,0.15)');
+                grd.addColorStop(0.7, 'rgba(0,0,0,0.4)');
+                grd.addColorStop(1, 'rgba(0,0,0,0.8)');
+                c.fillStyle = grd;
+                c.fill();
+
+                // Small rotating orange shoulder mount offset to the right slightly
+                c.fillStyle = KUKA_ORANGE_DARK;
+                rrect(c, cx + 55 - 45, ry - 120, 90, 25, 6);
+                c.fill();
+                
+                c.restore();
+            }
+
+            drawElbowMotors(c, x, y, ang) {
+                c.save();
+                c.translate(x, y);
+                c.rotate(ang + Math.PI); 
+
+                // Backplate
+                c.fillStyle = KUKA_ORANGE_DARK;
+                c.fillRect(-15, -60, 40, 120);
+
+                // Extended black engine modules
+                c.fillStyle = '#151515';
+                for (let m = 0; m < 3; m++) {
+                    rrect(c, 25, -55 + m * 40, 75, 28, 4);
+                }
+                c.fill();
+
+                c.fillStyle = '#555';
+                for (let m = 0; m < 3; m++) {
+                    c.fillRect(98, -50 + m * 40, 12, 18);
+                }
+                c.restore();
+            }
+
+            drawArmQuad(c, x, y, len, ang, startW, endW, isL1) {
+                c.save();
+                c.translate(x, y); c.rotate(ang);
+
+                // Main Orange Center Trapezoid
+                c.beginPath();
+                c.moveTo(0, -startW / 2);
+                c.lineTo(len, -endW / 2);
+                c.lineTo(len, endW / 2);
+                c.lineTo(0, startW / 2);
+                c.closePath();
+                c.fillStyle = '#FF6600';
+                c.fill();
+                
+                // Highlight Trim (Top Edge Polygon)
+                c.beginPath();
+                c.moveTo(0, -startW / 2);
+                c.lineTo(len, -endW / 2);
+                c.lineTo(len, -endW / 2 + 8);
+                c.lineTo(0, -startW / 2 + 8);
+                c.closePath();
+                c.fillStyle = '#ff8833';
+                c.fill();
+
+                // Shadow Trim (Bottom Edge Polygon)
+                c.beginPath();
+                c.moveTo(0, startW / 2);
+                c.lineTo(len, endW / 2);
+                c.lineTo(len, endW / 2 - 12);
+                c.lineTo(0, startW / 2 - 12);
+                c.closePath();
+                c.fillStyle = '#cc4400';
+                c.fill();
+
+                c.strokeStyle = '#1a1a1a'; c.lineWidth = 2; c.stroke();
+
+                if (isL1) {
+                    // Recessed panel inside the Upper Arm
+                    c.fillStyle = '#1a1a1a';
+                    c.beginPath();
+                    c.moveTo(len * 0.1, -startW * 0.2);
+                    c.lineTo(len * 0.9, -endW * 0.2);
+                    c.lineTo(len * 0.9, endW * 0.2);
+                    c.lineTo(len * 0.1, startW * 0.2);
+                    c.closePath();
+                    c.fill();
+                } else {
+                    // ING.CESAR Logo migrated specifically to L2 (Thin Forearm tube)
+                    c.save();
+                    c.fillStyle = '#111';
+                    c.font = `900 ${endW * 0.45}px 'Orbitron', sans-serif`;
+                    c.textAlign = 'center'; c.textBaseline = 'middle';
+                    c.fillText("ING.CESAR", len * 0.5, 0);
+                    c.restore();
+                }
+
+                c.restore();
+            }
+
+            drawJoint(c, x, y, radius, ang = 0) {
+                c.save();
+                c.translate(x, y);
+
+                // Base shadow exterior ring
+                c.beginPath(); c.arc(0, 0, radius, 0, Math.PI * 2);
+                c.fillStyle = '#1a1a1a'; c.fill();
+
+                // Orange KUKA inset border
+                c.beginPath(); c.arc(0, 0, radius * 0.85, 0, Math.PI * 2);
+                c.fillStyle = '#FF6600'; c.fill();
+
+                // Inner core spinning motor plate
+                c.beginPath(); c.arc(0, 0, radius * 0.65, 0, Math.PI * 2);
+                c.fillStyle = '#1a1a1a'; c.fill();
+                c.strokeStyle = '#222'; c.lineWidth = 2; c.stroke();
+
+                // Apply current IK angle to bolts and marker telemetry
+                c.rotate(ang);
+                
+                // 6 bolt dots around joint 
+                c.fillStyle = '#444';
+                for (let i = 0; i < 6; i++) {
+                    const a = (i / 6) * Math.PI * 2;
+                    c.beginPath(); 
+                    c.arc(Math.cos(a) * radius * 0.72, Math.sin(a) * radius * 0.72, radius * 0.08, 0, Math.PI * 2); 
+                    c.fill();
+                }
+                
+                // Bright white rotation indicator strictly pointing at target IK angle
+                c.fillStyle = '#fff';
+                c.fillRect(0, -2, radius * 0.75, 4);
+
+                c.restore();
+            }
+
+            drawWristAndTorch(c, x, y, ang) {
+                c.save();
+                c.translate(x, y); c.rotate(ang); 
+
+                c.fillStyle = SILVER;
+                rrect(c, -5, -15, 30, 30, 4);
+                c.fill();
+
+                c.fillStyle = '#888';
+                rrect(c, 25, -10, 40, 20, 2);
+                c.fill();
+
+                c.fillStyle = '#444';
+                c.fillRect(30, -5, 30, 10);
+
+                c.fillStyle = '#222';
+                c.beginPath(); c.moveTo(65, -8); c.lineTo(85, -3); c.lineTo(85, 3); c.lineTo(65, 8); c.fill();
+
+                c.fillStyle = '#b87333';
+                c.fillRect(85, -2, 5, 4); 
+
+                c.restore();
+            }
+
+            drawDynamicCables(c, cx, cy, ex, ey, wx, wy, th1, th2) {
+                c.save();
+                c.lineCap = 'round';
+                c.lineJoin = 'round';
+
+                c.strokeStyle = '#151515';
+                c.lineWidth = 18;
+
+                c.beginPath();
+                const start1X = this.bx - 40;
+                const start1Y = this.by - 90;
+                const entry1X = cx + Math.cos(th1 - Math.PI) * 20;
+                const entry1Y = cy + Math.sin(th1 - Math.PI) * 20;
+
+                c.moveTo(start1X, start1Y);
+                c.quadraticCurveTo(cx - 50, cy, entry1X, entry1Y);
+                c.stroke();
+
+                c.beginPath();
+                const exit1X = ex - Math.cos(th1) * 30;
+                const exit1Y = ey - Math.sin(th1) * 30;
+                const end1X = ex + Math.cos(th1 + Math.PI - 0.2) * 50;
+                const end1Y = ey + Math.sin(th1 + Math.PI - 0.2) * 50;
+
+                c.moveTo(exit1X, exit1Y);
+                c.quadraticCurveTo(ex - Math.cos(th1) * 80, ey - Math.sin(th1) * 80, end1X, end1Y);
+                c.stroke();
+
+                // Detailed Corrugated Hosing Pass
+                c.strokeStyle = '#2a2a2a';
+                c.lineWidth = 18;
+                c.setLineDash([4, 6]);
+                c.beginPath(); c.moveTo(start1X, start1Y); c.quadraticCurveTo(cx - 50, cy, entry1X, entry1Y); c.stroke();
+                c.beginPath(); c.moveTo(exit1X, exit1Y); c.quadraticCurveTo(ex - Math.cos(th1) * 80, ey - Math.sin(th1) * 80, end1X, end1Y); c.stroke();
+
+                c.setLineDash([]);
+                c.strokeStyle = '#151515';
+                c.lineWidth = 14;
+                c.beginPath();
+
+                const end2X = wx - Math.cos(th1 + th2) * 30;
+                const end2Y = wy - Math.sin(th1 + th2) * 30;
+
+                const cp2_1X = ex + Math.cos(th1 + th2 - Math.PI / 2) * 80;
+                const cp2_1Y = ey + Math.sin(th1 + th2 - Math.PI / 2) * 80;
+
+                const cp2_2X = ex + (wx - ex) * 0.5 + Math.cos(th1 + th2 - Math.PI / 2) * 40;
+                const cp2_2Y = ey + (wy - ey) * 0.5 + Math.sin(th1 + th2 - Math.PI / 2) * 40;
+
+                c.moveTo(end1X, end1Y);
+                c.bezierCurveTo(cp2_1X, cp2_1Y, cp2_2X, cp2_2Y, end2X, end2Y);
+                c.stroke();
+
+                c.strokeStyle = '#2a2a2a';
+                c.setLineDash([3, 5]);
+                c.stroke();
+
+                c.restore();
+            }
+
+            drawControlCabinet(c) {
+                const boxW = 210;
+                const boxH = 150;
+                // Placed far right
+                const cabinetX = window.innerWidth * 0.9 - boxW + 40; 
+                const cabinetY = this.by + 65 - boxH;
+
+                c.save();
+                // Outer Shell (Dark Graphite)
+                c.fillStyle = '#2a2a2a';
+                rrect(c, cabinetX, cabinetY, boxW, boxH, 4);
+                c.fill();
+
+                // Bright Orange Door
+                c.fillStyle = '#FF6600';
+                const panelX = cabinetX + 40; 
+                const panelY = cabinetY + 5;
+                const panelW = boxW - 45;
+                const panelH = boxH - 20;
+                c.fillRect(panelX, panelY, panelW, panelH);
+
+                // LED Recess Plate
+                c.fillStyle = '#111';
+                c.fillRect(panelX + 20, panelY + 15, 60, 25);
+                c.fillStyle = '#ff3333'; c.beginPath(); c.arc(panelX + 30, panelY + 27, 3, 0, Math.PI*2); c.fill(); // Red LED
+                c.fillStyle = '#ffcc00'; c.beginPath(); c.arc(panelX + 45, panelY + 27, 3, 0, Math.PI*2); c.fill(); // Yellow LED
+                c.fillStyle = '#33cc33'; c.beginPath(); c.arc(panelX + 60, panelY + 27, 3, 0, Math.PI*2); c.fill(); // Green LED
+
+                // Switch Breaker Bar
+                c.fillStyle = '#111';
+                rrect(c, panelX + 15, panelY + 70, 12, 35, 2);
+                c.fill();
+
+                // KR C4 Plate Label (CE Marking zone)
+                c.fillStyle = '#fff';
+                c.strokeStyle = '#000'; c.lineWidth = 1;
+                c.fillRect(cabinetX + 8, cabinetY + 40, 24, 30);
+                c.strokeRect(cabinetX + 8, cabinetY + 40, 24, 30);
+                c.fillStyle = '#000';
+                c.font = 'bold 8px sans-serif'; c.textAlign = 'center'; c.textBaseline = 'alphabetic';
+                c.fillText("KUKA", cabinetX + 20, cabinetY + 52);
+                c.font = '6px sans-serif';
+                c.fillText("KR C4", cabinetX + 20, cabinetY + 62);
+
+                // Hazard Warning Triangle EXACT specs
+                const triX = panelX + 90;
+                const triY = panelY + 60;
+                c.fillStyle = '#FFD700';
+                c.strokeStyle = '#000'; c.lineWidth = 2; c.lineJoin = 'miter';
+                c.beginPath();
+                c.moveTo(triX, triY - 14);
+                c.lineTo(triX + 16, triY + 14);
+                c.lineTo(triX - 16, triY + 14);
+                c.closePath();
+                c.fill(); c.stroke();
+                c.fillStyle = '#000';
+                c.font = 'bold 18px sans-serif';
+                c.textAlign = 'center';
+                c.textBaseline = 'middle';
+                c.fillText("!", triX, triY + 2);
+                
+                // Extra sticker zones mapped adjacent
+                c.fillStyle = '#fff'; c.fillRect(triX + 25, triY - 14, 40, 24);
+                c.strokeRect(triX + 25, triY - 14, 40, 24);
+                c.fillStyle = 'red'; c.fillRect(triX + 27, triY - 12, 36, 4);
+                c.fillStyle = '#000'; c.fillRect(triX + 27, triY - 4, 20, 2); c.fillRect(triX + 27, triY + 1, 25, 2); c.fillRect(triX + 27, triY + 6, 15, 2);
+
+                // 'KUKA' Main Door Font Tracking Text
+                c.fillStyle = '#111';
+                c.font = '900 26px "Orbitron", sans-serif';
+                c.textAlign = 'left';
+                c.textBaseline = 'alphabetic';
+                c.fillText("KUKA", panelX + 35, panelY + panelH - 12);
+
+                // Hook Area Right Frame Add-on
+                c.fillStyle = '#111';
+                c.beginPath(); c.moveTo(panelX + panelW - 50, panelY - 5);
+                c.lineTo(panelX + panelW, panelY + 25);
+                c.lineTo(panelX + panelW - 10, panelY + 30);
+                c.lineTo(panelX + panelW - 50, panelY);
+                c.fill();
+
+                // Teach Pendant Overlay Details
+                c.translate(cabinetX + boxW - 20, cabinetY + 40);
+                c.rotate(Math.PI / 16);
+                c.fillStyle = '#333';
+                rrect(c, -20, 0, 50, 65, 8); c.fill();
+                c.fillStyle = '#222';
+                rrect(c, -18, 2, 46, 61, 6); c.fill();
+                c.fillStyle = KUKA_ORANGE;
+                c.fillRect(-16, 4, 42, 57);
+                c.fillStyle = '#eee';
+                c.fillRect(-12, 15, 34, 35);
+                c.fillStyle = '#111';
+                c.beginPath(); c.arc(15, 8, 5, 0, Math.PI*2); c.fill(); 
+                c.fillStyle = 'red';
+                c.beginPath(); c.arc(15, 8, 3.5, 0, Math.PI*2); c.fill();
+
+                c.restore();
+            }
+
+            draw(c) {
+                // FIXED Z-ORDER SEQUENCE 1 TO 9 
+                
+                // 1. Static base rail rendering
+                this.drawLinearRail(c);
+                
+                // 2. Base column / Turret
+                this.drawCarriage(c);
+
+                const cx = this.bx + 55;
+                const cy = this.by - 110; 
+                const ex = cx + Math.cos(this.th1) * this.L1;
+                const ey = cy + Math.sin(this.th1) * this.L1;
+                const wx = ex + Math.cos(this.th1 + this.th2) * this.L2;
+                const wy = ey + Math.sin(this.th1 + this.th2) * this.L2;
+                
+                const segW = 55; // Universal segment thickness variable
+
+                // 2B. J1: Shoulder Joint - Rendered BEHIND upper arm
+                this.drawJoint(c, cx, cy, segW * 1.1, this.th1);
+
+                // 3. Upper arm segment L1 (Thick solid orange trapezoid covering Elbow backplates)
+                this.drawElbowMotors(c, ex, ey, this.th1 + this.th2); // Motor protrusion
+                this.drawArmQuad(c, cx, cy, this.L1, this.th1, segW, segW * 0.8, true);
+
+                // 4. J2: Elbow Joint - ON TOP of L1, BEHIND L2 Forearm
+                this.drawJoint(c, ex, ey, segW * 0.95, this.th1 + this.th2);
+
+                // 5. Forearm segment (Thin L2 with logo migrated here per instructions)
+                this.drawArmQuad(c, ex, ey, this.L2, this.th1 + this.th2, segW * 0.75, segW * 0.45, false);
+
+                // 6. J3: Wrist Joint - ON TOP of Forearm 
+                this.drawJoint(c, wx, wy, segW * 0.75, this.th1 + this.th2);
+
+                // 7. Tool / end effector (Unobscured on top of wrist)
+                this.drawWristAndTorch(c, wx, wy, this.th1 + this.th2);
+
+                // 8. Corrugated cables mapped over the finished architecture layout
+                this.drawDynamicCables(c, cx, cy, ex, ey, wx, wy, this.th1, this.th2);
+                
+                // 8.5. Drag chain rendering strictly constrained to bottom rail bounds on the far right
+                this.drawDragChain(c);
+
+                // 9. KR C4 Control Cabinet foreground rendering absolute highest z-index priority
+                this.drawControlCabinet(c);
+            }
+        }"""
+
+content = re.sub(r'class RealisticKukaArm \{.*?(?=const arm = new RealisticKukaArm\(\);)', new_class + '\n\n        ', content, flags=re.DOTALL)
+
+with open(file_path, "w", encoding="utf-8") as f:
+    f.write(content)
+
+print("Layering Geometry Patch phase 5 pushed successfully.")

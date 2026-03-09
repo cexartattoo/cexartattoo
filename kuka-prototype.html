@@ -71,8 +71,8 @@
                 this.th3 = 0;
                 this.th4 = 0;
 
-                // Track chain variables
-                this.linkLen = 26; // Retaining thick Industrial Link Length
+                // Track chain variables - Scaled up size
+                this.linkLen = 36;
                 this.updateChainLength();
             }
 
@@ -85,7 +85,7 @@
                 const maxDist = Math.abs(maxCarX - anchorX);
 
                 // Semicircle arc loop length down to rail
-                const topY = this.by - 25;
+                const topY = this.by - 35; // Moved up slightly to accommodate larger chain height
                 const botY = this.by + 65;
                 const radius = (botY - topY) / 2;
                 const arcLen = Math.PI * radius;
@@ -150,7 +150,7 @@
                 const carriageW = 160;
                 const carX = this.bx + (carriageW / 2);
 
-                const topY = this.by - 25;
+                const topY = this.by - 35; // Match new topY
                 const botY = this.by + 65;
                 const radius = (botY - topY) / 2;
                 const cy = topY + radius;
@@ -193,17 +193,17 @@
                     c.translate(x, y);
                     c.rotate(ang);
 
-                    // Retained Industrial Thicker Aesthetics (26x16)
+                    // Scaled up Industrial Thicker Aesthetics (36x24 vs 26x16)
                     c.fillStyle = '#1a1a1a';
-                    rrect(c, -this.linkLen / 2, -8, this.linkLen, 16, 2.5);
+                    rrect(c, -this.linkLen / 2, -12, this.linkLen, 24, 3);
                     c.fill();
 
                     c.fillStyle = '#3a3a3a';
-                    c.fillRect(-this.linkLen / 2 + 1, -7, this.linkLen - 2, 2);
+                    c.fillRect(-this.linkLen / 2 + 1, -10, this.linkLen - 2, 3);
 
                     c.fillStyle = '#0f0f0f';
-                    c.fillRect(-4, -4, 3, 8);
-                    c.fillRect(2, -4, 3, 8);
+                    c.fillRect(-5, -6, 4, 12);
+                    c.fillRect(3, -6, 4, 12);
 
                     c.restore();
                 }
@@ -247,15 +247,16 @@
                 c.fillRect(cx + (carriageW / 2) - 15, ry - 5, 25, 20);
 
                 c.fillStyle = KUKA_BLACK;
-                const turnRadius = carriageW * 0.28;
+                const baseRad = carriageW * 0.35; // Wider base
                 c.beginPath();
-                c.moveTo(cx - turnRadius, ry - 15);
-                c.lineTo(cx + turnRadius, ry - 15);
-                c.lineTo(cx + turnRadius - 10, ry - 100);
-                c.lineTo(cx - turnRadius + 10, ry - 100);
+                // Pure straight cylinder instead of cone
+                c.moveTo(cx - baseRad, ry - 15);
+                c.lineTo(cx + baseRad, ry - 15);
+                c.lineTo(cx + baseRad, ry - 120);
+                c.lineTo(cx - baseRad, ry - 120);
                 c.fill();
 
-                const grd = c.createLinearGradient(cx - turnRadius, 0, cx + turnRadius, 0);
+                const grd = c.createLinearGradient(cx - baseRad, 0, cx + baseRad, 0);
                 grd.addColorStop(0, 'rgba(255,255,255,0.05)');
                 grd.addColorStop(0.3, 'rgba(255,255,255,0.15)');
                 grd.addColorStop(0.7, 'rgba(0,0,0,0.4)');
@@ -263,9 +264,23 @@
                 c.fillStyle = grd;
                 c.fill();
 
+                // Orange Top Flange of the cylinder
                 c.fillStyle = KUKA_ORANGE_DARK;
-                rrect(c, cx + 55 - 45, ry - 120, 90, 25, 6);
+                rrect(c, cx - baseRad - 5, ry - 125, baseRad * 2 + 10, 20, 3);
                 c.fill();
+
+                // Front Servomotor detail (black/silver box)
+                c.fillStyle = '#151515';
+                c.fillRect(cx - baseRad - 40, ry - 80, 50, 60);
+                c.strokeStyle = '#444'; c.lineWidth = 1;
+                c.strokeRect(cx - baseRad - 40, ry - 80, 50, 60);
+
+                // Silver components on servo box
+                c.fillStyle = '#999';
+                c.fillRect(cx - baseRad - 35, ry - 75, 40, 20);
+                c.fillStyle = '#bbb';
+                c.fillRect(cx - baseRad - 45, ry - 50, 15, 25); // Connector plug
+
                 c.restore();
             }
 
@@ -302,67 +317,145 @@
                 c.restore();
             }
 
-            drawArmQuad(c, x, y, len, ang, startW, endW, isL1, nextX, nextY) {
+            drawLowerArm(c, x, y, len, ang, startW, endW) {
                 if (x < -20 || x > window.innerWidth + 20 || y < -20 || y > window.innerHeight + 20) return;
                 c.save();
                 c.translate(x, y); c.rotate(ang);
 
+                // Main body casting - massively wider at the base to envelop the shoulder joint
                 c.beginPath();
-                c.moveTo(0, -startW / 2);
-                c.lineTo(len, -endW / 2);
-                c.lineTo(len, endW / 2);
-                c.lineTo(0, startW / 2);
+                c.moveTo(0, -startW * 0.7);      // Much wider top
+                c.lineTo(len * 0.2, -startW * 0.55);
+                c.lineTo(len * 0.8, -endW * 0.45);
+                c.lineTo(len, -endW * 0.4);
+                c.lineTo(len, endW * 0.5);
+                c.lineTo(len * 0.8, endW * 0.65);
+                c.lineTo(len * 0.2, startW * 0.8); // Much wider bottom
+                c.lineTo(0, startW * 0.7);
                 c.closePath();
+
+                // Base Orange
                 c.fillStyle = '#FF6600';
                 c.fill();
 
+                // Highlight/Core casting
                 c.beginPath();
-                c.moveTo(0, -startW / 2);
-                c.lineTo(len, -endW / 2);
-                c.lineTo(len, -endW / 2 + 8);
-                c.lineTo(0, -startW / 2 + 8);
+                c.moveTo(0, -startW * 0.7);
+                c.lineTo(len * 0.2, -startW * 0.55);
+                c.lineTo(len * 0.8, -endW * 0.45);
+                c.lineTo(len, -endW * 0.4);
+                c.lineTo(len, -endW * 0.4 + 10);
+                c.lineTo(len * 0.8, -endW * 0.45 + 10);
+                c.lineTo(len * 0.2, -startW * 0.55 + 10);
+                c.lineTo(0, -startW * 0.7 + 10);
                 c.closePath();
                 c.fillStyle = '#ff8833';
                 c.fill();
 
+                // Shadow casting
                 c.beginPath();
-                c.moveTo(0, startW / 2);
-                c.lineTo(len, endW / 2);
-                c.lineTo(len, endW / 2 - 12);
-                c.lineTo(0, startW / 2 - 12);
+                c.moveTo(0, startW * 0.7);
+                c.lineTo(len * 0.2, startW * 0.8);
+                c.lineTo(len * 0.8, endW * 0.65);
+                c.lineTo(len, endW * 0.5);
+                c.lineTo(len, endW * 0.5 - 15);
+                c.lineTo(len * 0.8, endW * 0.65 - 15);
+                c.lineTo(len * 0.2, startW * 0.8 - 15);
+                c.lineTo(0, startW * 0.7 - 15);
                 c.closePath();
                 c.fillStyle = '#cc4400';
                 c.fill();
 
+                // Outline
+                c.beginPath();
+                c.moveTo(0, -startW * 0.7);
+                c.lineTo(len * 0.2, -startW * 0.55);
+                c.lineTo(len * 0.8, -endW * 0.45);
+                c.lineTo(len, -endW * 0.4);
+                c.lineTo(len, endW * 0.5);
+                c.lineTo(len * 0.8, endW * 0.65);
+                c.lineTo(len * 0.2, startW * 0.8);
+                c.lineTo(0, startW * 0.7);
+                c.closePath();
                 c.strokeStyle = '#1a1a1a'; c.lineWidth = 2; c.stroke();
 
-                if (isL1) {
-                    c.fillStyle = '#1a1a1a';
-                    c.beginPath();
-                    c.moveTo(len * 0.1, -startW * 0.2);
-                    c.lineTo(len * 0.9, -endW * 0.2);
-                    c.lineTo(len * 0.9, endW * 0.2);
-                    c.lineTo(len * 0.1, startW * 0.2);
-                    c.closePath();
-                    c.fill();
-                } else {
-                    c.save();
-                    c.fillStyle = '#111';
-                    c.font = `900 ${endW * 0.45}px 'Orbitron', sans-serif`;
-                    c.textAlign = 'center'; c.textBaseline = 'middle';
+                // Structural Indentation web - adapted to new massive size
+                c.fillStyle = '#1a1a1a';
+                c.beginPath();
+                c.moveTo(len * 0.15, -startW * 0.3);
+                c.lineTo(len * 0.85, -endW * 0.2);
+                c.lineTo(len * 0.85, endW * 0.3);
+                c.lineTo(len * 0.15, startW * 0.4);
+                c.closePath();
+                c.fill();
 
-                    let rawAngle = Math.atan2(nextY - y, nextX - x);
-                    let displayAngle = 0;
-                    if (rawAngle > Math.PI / 2 || rawAngle < -Math.PI / 2) {
-                        displayAngle = Math.PI;
-                    }
+                c.restore();
+            }
 
-                    c.translate(len * 0.5, 0);
-                    c.rotate(-ang + rawAngle + displayAngle);
+            drawUpperArm(c, x, y, len, ang, startW, endW, nextX, nextY) {
+                if (x < -20 || x > window.innerWidth + 20 || y < -20 || y > window.innerHeight + 20) return;
+                c.save();
+                c.translate(x, y); c.rotate(ang);
 
-                    c.fillText("ING.CESAR", 0, 0);
-                    c.restore();
+                // Main Tapered Body
+                c.beginPath();
+                c.moveTo(0, -startW * 0.5);
+                c.lineTo(len, -endW * 0.4);
+                c.lineTo(len, endW * 0.4);
+                c.lineTo(0, startW * 0.5);
+                c.closePath();
+                c.fillStyle = '#FF6600';
+                c.fill();
+
+                // Highlight
+                c.beginPath();
+                c.moveTo(0, -startW * 0.5);
+                c.lineTo(len, -endW * 0.4);
+                c.lineTo(len, -endW * 0.4 + 8);
+                c.lineTo(0, -startW * 0.5 + 8);
+                c.closePath();
+                c.fillStyle = '#ff8833';
+                c.fill();
+
+                // Shadow
+                c.beginPath();
+                c.moveTo(0, startW * 0.5);
+                c.lineTo(len, endW * 0.4);
+                c.lineTo(len, endW * 0.4 - 12);
+                c.lineTo(0, startW * 0.5 - 12);
+                c.closePath();
+                c.fillStyle = '#cc4400';
+                c.fill();
+
+                // Outline
+                c.beginPath();
+                c.moveTo(0, -startW * 0.5);
+                c.lineTo(len, -endW * 0.4);
+                c.lineTo(len, endW * 0.4);
+                c.lineTo(0, startW * 0.5);
+                c.closePath();
+                c.strokeStyle = '#1a1a1a'; c.lineWidth = 2; c.stroke();
+
+                // Logo text ING.CESAR correctly aligned to taper
+                c.save();
+                c.fillStyle = '#111';
+                // Font size scales with the thinnest part
+                c.font = `900 ${endW * 0.4}px 'Orbitron', sans-serif`;
+                c.textAlign = 'center'; c.textBaseline = 'middle';
+
+                let rawAngle = Math.atan2(nextY - y, nextX - x);
+                let displayAngle = 0;
+                if (rawAngle > Math.PI / 2 || rawAngle < -Math.PI / 2) {
+                    displayAngle = Math.PI;
                 }
+
+                // Follow the center line
+                c.translate(len * 0.5, 0);
+                c.rotate(-ang + rawAngle + displayAngle);
+
+                // Add slight offset depending on where it's facing to stay vertically aligned visually
+                c.fillText("ING.CESAR", 0, 0);
+                c.restore();
 
                 c.restore();
             }
@@ -372,19 +465,65 @@
                 c.save();
                 c.translate(x, y); c.rotate(ang);
 
+                // --- Silver/Grey Cylindrical Wrist (Shortened) ---
+                c.fillStyle = '#b0b5bg'; // Base silver
+                c.strokeStyle = '#555';
+                c.lineWidth = 1;
+
+                // Base flange connected to arm
+                c.beginPath();
+                c.rect(-8, -25, 16, 50);
+                c.fill(); c.stroke();
+
+                // Cylindrical extension (Noticeably shorter now: 15px instead of 25px)
+                const grd = c.createLinearGradient(0, -20, 0, 20);
+                grd.addColorStop(0, '#888');
+                grd.addColorStop(0.5, '#ddd');
+                grd.addColorStop(1, '#666');
+                c.fillStyle = grd;
+
+                c.beginPath();
+                c.rect(8, -20, 15, 40);
+                c.fill(); c.stroke();
+
+                // New Grey Connector Block before the gripper
+                c.fillStyle = '#666';
+                c.beginPath();
+                c.rect(23, -22, 12, 44);
+                c.fill(); c.stroke();
+
+
+                // --- Industrial Gripper (based on reference) ---
+                // Orange base plate of the tool (Super wide now)
+                c.fillStyle = '#FF6600';
+                c.strokeStyle = '#111';
+                c.lineWidth = 2;
+                c.beginPath();
+                c.rect(35, -60, 20, 120); // Much taller to allow wider finger spread
+                c.fill(); c.stroke();
+
+                // 3 Black Gripper Fingers / Modules (Spaced further apart)
                 c.fillStyle = '#111';
-                rrect(c, -5, -15, 30, 30, 4);
-                c.fill();
+                c.strokeStyle = '#333';
+                c.lineWidth = 1;
 
-                c.fillStyle = '#888';
-                rrect(c, 25, -10, 25, 20, 2);
-                c.fill();
+                const fingerL = 65; // Longer jaws
+                const fingerW = 20; // Thicker jaws
+                const fingerGap = 20; // Massive gap between jaws
+                const startY = -60 + 8;
 
-                c.fillStyle = '#222';
-                c.beginPath(); c.moveTo(50, -8); c.lineTo(75, -3); c.lineTo(75, 3); c.lineTo(50, 8); c.fill();
+                for (let i = 0; i < 3; i++) {
+                    let fy = startY + i * (fingerW + fingerGap);
 
-                c.fillStyle = '#b87333';
-                c.fillRect(75, -2, 5, 4);
+                    // Main black block
+                    c.fillRect(55, fy, fingerL, fingerW);
+                    c.strokeRect(55, fy, fingerL, fingerW);
+
+                    // Inner metallic rail/detail
+                    c.fillStyle = '#555';
+                    c.fillRect(55, fy + 2, fingerL - 4, 3);
+                    c.fillRect(55, fy + fingerW - 5, fingerL - 4, 3);
+                }
 
                 c.restore();
             }
@@ -395,35 +534,61 @@
                 c.lineCap = 'round';
                 c.lineJoin = 'round';
 
-                const cableW = 14;
+                const cableW = 16; // Thicker cable
                 c.strokeStyle = '#151515';
                 c.lineWidth = cableW;
 
+                // 1. Lower cable (Base Carriage to Front of L1)
                 c.beginPath();
-                const start1X = this.bx - 40;
-                const start1Y = this.by - 90;
-                const entry1X = cx + Math.cos(th1 - Math.PI) * 20;
-                const entry1Y = cy + Math.sin(th1 - Math.PI) * 20;
+                // Lower origin from the front servo block area
+                const start1X = this.bx - 60; 
+                const start1Y = this.by - 60;
+                
+                // Enters L1 lower, snug against the front mass
+                const entry1X = cx + Math.cos(th1 - Math.PI/8) * 45; 
+                const entry1Y = cy + Math.sin(th1 - Math.PI/8) * 45;
 
                 c.moveTo(start1X, start1Y);
-                c.quadraticCurveTo(cx - 50, cy, entry1X, entry1Y);
+                // Loop drops slightly then tightly hugs the shoulder
+                c.bezierCurveTo(this.bx, this.by - 20, cx + 10, cy + 30, entry1X, entry1Y);
+                c.stroke();
+
+                // 2. The Pronounced ELBOW LOOP (From L1, over the elbow, into L2 rear)
+                c.beginPath();
+                
+                // Exit point on L1 - higher and deeper to match thick arm
+                const exit1X = ex - Math.cos(th1) * 80 - Math.cos(th1 - Math.PI/2) * 20;
+                const exit1Y = ey - Math.sin(th1) * 80 - Math.sin(th1 - Math.PI/2) * 20;
+
+                // Entry point on the back of L2 - tighter into the back orange casting
+                const end1X = ex + Math.cos(th1 + th2 + Math.PI) * 50 - Math.cos(th1 + th2 - Math.PI/2) * 15;
+                const end1Y = ey + Math.sin(th1 + th2 + Math.PI) * 50 - Math.sin(th1 + th2 - Math.PI/2) * 15;
+
+                // Tighter control points for a neat, industrial arc rather than a floppy loose hose
+                const cp1x = exit1X - Math.cos(th1 - Math.PI/2) * 60; 
+                const cp1y = exit1Y - Math.sin(th1 - Math.PI/2) * 60;
+                
+                const cp2x = end1X + Math.cos(th1 + th2 + Math.PI) * 60 - Math.cos(th1 + th2 - Math.PI/2) * 60;
+                const cp2y = end1Y + Math.sin(th1 + th2 + Math.PI) * 60 - Math.sin(th1 + th2 - Math.PI/2) * 60;
+
+                c.moveTo(exit1X, exit1Y);
+                c.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, end1X, end1Y);
+                c.stroke();
+
+                // Add corrugated texture
+                c.strokeStyle = '#2a2a2a';
+                c.lineWidth = cableW;
+                c.setLineDash([3, 5]);
+
+                c.beginPath(); 
+                c.moveTo(start1X, start1Y); 
+                c.bezierCurveTo(this.bx, this.by - 20, cx + 10, cy + 30, entry1X, entry1Y);
                 c.stroke();
 
                 c.beginPath();
-                const exit1X = ex - Math.cos(th1) * 30;
-                const exit1Y = ey - Math.sin(th1) * 30;
-                const end1X = ex + Math.cos(th1 + Math.PI - 0.2) * 50;
-                const end1Y = ey + Math.sin(th1 + Math.PI - 0.2) * 50;
-
                 c.moveTo(exit1X, exit1Y);
-                c.quadraticCurveTo(ex - Math.cos(th1) * 80, ey - Math.sin(th1) * 80, end1X, end1Y);
+                c.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, end1X, end1Y);
                 c.stroke();
-
-                c.strokeStyle = '#2a2a2a';
-                c.lineWidth = cableW;
-                c.setLineDash([4, 6]);
-                c.beginPath(); c.moveTo(start1X, start1Y); c.quadraticCurveTo(cx - 50, cy, entry1X, entry1Y); c.stroke();
-                c.beginPath(); c.moveTo(exit1X, exit1Y); c.quadraticCurveTo(ex - Math.cos(th1) * 80, ey - Math.sin(th1) * 80, end1X, end1Y); c.stroke();
 
                 c.restore();
             }
@@ -587,8 +752,45 @@
                 this.drawDragChain(c);
                 this.drawCarriage(c);
 
-                const cx = this.bx + 55;
-                const cy = this.by - 110;
+                // Shoulder Base Offset - True kinematics origin Shift
+                // The actual robot's shoulder is not dead center on the black drum.
+                // It mounts to a massive orange cast housing extending horizontally.
+                const baseRadius = 160 * 0.35; // This matches baseRad from drawCarriage
+                const shoulderOffsetX = 35; // Shift to the right (forward)
+
+                // Draw the orange offset casting rotating on top of the black drum
+                c.save();
+                c.fillStyle = '#FF6600';
+                c.strokeStyle = '#1a1a1a';
+                c.lineWidth = 2;
+                c.beginPath();
+
+                // Draw wide base on top of pedastal, tapering to the shoulder joint
+                const cx_base = this.bx;
+                const cy_base = this.by - 120; // Top of the black cylinder
+
+                c.moveTo(cx_base - baseRadius + 10, cy_base);
+                c.lineTo(cx_base + baseRadius - 10, cy_base);
+                // Curve up and forward to wrap around the shoulder joint
+                c.bezierCurveTo(cx_base + baseRadius, cy_base - 50, cx_base + shoulderOffsetX + 60, cy_base - 60, cx_base + shoulderOffsetX + 40, cy_base - 100);
+                c.lineTo(cx_base - 30, cy_base - 100);
+                c.bezierCurveTo(cx_base - baseRadius, cy_base - 60, cx_base - baseRadius + 5, cy_base - 20, cx_base - baseRadius + 10, cy_base);
+
+                c.fill(); c.stroke();
+
+                // Add shading to make it look cast
+                c.clip();
+                c.fillStyle = 'rgba(0,0,0,0.3)';
+                c.beginPath(); c.arc(cx_base - 20, cy_base - 100, 80, 0, Math.PI * 2); c.fill();
+                c.restore();
+
+                // Now redefine the IK base origin (cx, cy) to use this new offset position
+                // cy used to be this.by - 110. Now it's slightly higher and pushed right.
+                const cx = this.bx + shoulderOffsetX;
+                const cy = this.by - 130;  // Moved up 20px
+
+                // Since we shifted cx/cy, we need to completely recalculate the IK end points
+                // We're essentially resolving the forward kinematics here based on IK angles
                 const ex = cx + Math.cos(this.th1) * this.L1;
                 const ey = cy + Math.sin(this.th1) * this.L1;
                 const wx = ex + Math.cos(this.th1 + this.th2) * this.L2;
@@ -599,9 +801,9 @@
                 // --- 1. Draw Rear J2 (Shoulder Area) ---
                 this.drawMotorDisc(c, cx - 4, cy + 3, segW * 0.72, this.th1);
 
-                // --- 2. Orange base bracket embracing stack ---
+                // --- 2. Orange base bracket embracing stack (Now properly positioned) ---
                 c.save();
-                c.translate(cx - 2, cy + 1.5);
+                c.translate(cx, cy);
                 c.rotate(this.th1);
                 c.fillStyle = '#FF6600';
                 c.strokeStyle = '#1a1a1a'; c.lineWidth = 2;
@@ -609,8 +811,9 @@
                 c.beginPath(); c.roundRect(-segW * 0.6, segW * 0.55, segW * 1.2, segW * 0.2, 4); c.fill(); c.stroke();
                 c.restore();
 
-                // --- 3. Upper Arm L1 ---
-                this.drawArmQuad(c, cx, cy, this.L1, this.th1, segW * 1.0, segW * 1.0, true, 0, 0);
+                // --- 3. Lower Arm L1 ---
+                // Base is much wider (segW * 1.5) than the elbow (segW * 0.7)
+                this.drawLowerArm(c, cx, cy, this.L1, this.th1, segW * 1.5, segW * 0.7);
 
                 // --- 4. Middle J3 ---
                 this.drawMotorDisc(c, cx - 2, cy + 1, segW * 0.63, this.th1 + this.th2);
@@ -618,22 +821,66 @@
                 // --- 5. Front J4 ---
                 this.drawMotorDisc(c, cx, cy, segW * 0.54, this.th1 + this.th2 + this.th3);
 
-                // --- ELBOW JOINT 3-STACK REFACTOR ---
+                // --- ELBOW JOINT 3-STACK REFACTOR (Rear Extension & Motors) ---
                 this.drawMotorDisc(c, ex - 4, ey + 3, segW * 0.68, this.th1 + this.th2);
 
                 c.save();
                 c.translate(ex - 2, ey + 1);
                 c.rotate(this.th1 + this.th2);
+
+                // 1. Rear Orange Casting (extending behind the elbow)
                 c.fillStyle = '#FF6600';
                 c.strokeStyle = '#1a1a1a'; c.lineWidth = 2;
-                c.beginPath(); c.roundRect(-segW * 0.5, -segW * 0.70, segW, segW * 0.15, 3); c.fill(); c.stroke();
-                c.beginPath(); c.roundRect(-segW * 0.5, segW * 0.55, segW, segW * 0.15, 3); c.fill(); c.stroke();
+                c.beginPath();
+                // Draw a wedge/block extending to the left (negative X)
+                c.moveTo(0, -segW * 0.4);
+                c.lineTo(-segW * 1.5, -segW * 0.6);
+                c.lineTo(-segW * 1.5, segW * 0.7);
+                c.lineTo(0, segW * 0.5);
+                c.closePath();
+                c.fill(); c.stroke();
+
+                // 2. The 3 Black Motor/Counterweight Blocks
+                const motorW = segW * 1.8;
+                const motorH = segW * 0.35;
+                const gap = segW * 0.1;
+                const startY = -motorH * 1.5 - gap;
+                // Shifted even further right to sit completely flush against the back casting
+                const offsetX = -segW * 0.95;
+
+                c.fillStyle = '#111';
+                c.strokeStyle = '#333';
+                c.lineWidth = 1;
+
+                for (let i = 0; i < 3; i++) {
+                    let my = startY + i * (motorH + gap);
+                    // Base black block
+                    c.fillRect(offsetX - motorW, my, motorW, motorH);
+                    c.strokeRect(offsetX - motorW, my, motorW, motorH);
+
+                    // Ribbed details (horizontal lines)
+                    c.save();
+                    c.strokeStyle = '#222';
+                    c.beginPath();
+                    c.moveTo(offsetX - motorW + 5, my + motorH * 0.33);
+                    c.lineTo(offsetX - 5, my + motorH * 0.33);
+                    c.moveTo(offsetX - motorW + 5, my + motorH * 0.66);
+                    c.lineTo(offsetX - 5, my + motorH * 0.66);
+                    c.stroke();
+                    c.restore();
+
+                    // Front silver cap/screws
+                    c.fillStyle = '#888';
+                    c.fillRect(offsetX - 8, my + 4, 8, motorH - 8);
+                }
+
                 c.restore();
 
                 this.drawMotorDisc(c, ex - 2, ey + 1, segW * 0.60, this.th1 + this.th2 + this.th3);
 
-                // Forearm L2
-                this.drawArmQuad(c, ex, ey, this.L2, this.th1 + this.th2, segW * 0.8, segW * 0.55, false, wx, wy);
+                // Upper Arm L2 (Forearm)
+                // Note: starts thick at elbow (segW * 0.9), tapers to thin at wrist (segW * 0.45)
+                this.drawUpperArm(c, ex, ey, this.L2, this.th1 + this.th2, segW * 0.9, segW * 0.45, wx, wy);
 
                 // Harness
                 this.drawHarnessCablesL2(c, ex, ey, wx, wy, this.th1, this.th2, segW);
