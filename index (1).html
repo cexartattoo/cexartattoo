@@ -669,6 +669,19 @@
   </style>
     <style>
         /* ── ABOUT DESKTOP INTEGRATION ── */
+
+        /* ── MOBILE HERO FIXES ── */
+        @media (max-width: 768px) {
+            #kuka-hero-wrapper {
+                height: 100svh !important; /* usa svh para descontar barra del browser */
+                min-height: 500px;
+            }
+            /* Ocultar G-CODE en móvil — interfiere con scroll */
+            #gcode-toggle,
+            #gcode-panel {
+                display: none !important;
+            }
+        }
         @media (min-width: 993px) {
             body .about {
                 margin-top: -180px !important;
@@ -2007,8 +2020,9 @@ G2 X40 Y30 I40 J0"></textarea>
     let W, H;
 
     function resize() {
-      W = cv.width = cvO.width = innerWidth;
-      H = cv.height = cvO.height = innerHeight;
+      const _w = document.getElementById('kuka-hero-wrapper');
+      W = cv.width = cvO.width = _w ? _w.offsetWidth : innerWidth;
+      H = cv.height = cvO.height = _w ? _w.offsetHeight : innerHeight;
       // Solo rebuildar waypoints cuando la fuente ya está cargada.
       // Si se llama antes (ej. primer resize), document.fonts.ready lo hará.
       if (arm && document.fonts.status === 'loaded') arm.waypoints = [];
@@ -2022,18 +2036,21 @@ G2 X40 Y30 I40 J0"></textarea>
     document.addEventListener('mousedown', e => { pointer.down = true; });
     document.addEventListener('mouseup', e => { pointer.down = false; });
 
-    document.addEventListener('touchmove', e => {
+    // Touch: solo dentro del hero para no bloquear scroll del resto
+    const _heroW = document.getElementById('kuka-hero-wrapper');
+    const _touchEl = _heroW || document;
+    _touchEl.addEventListener('touchmove', e => {
       const t = e.touches[0];
       mouse.x = t.clientX; mouse.y = t.clientY;
       e.preventDefault();
     }, { passive: false });
-    document.addEventListener('touchstart', e => {
+    _touchEl.addEventListener('touchstart', e => {
       const t = e.touches[0];
       mouse.x = t.clientX; mouse.y = t.clientY;
       pointer.down = true;
       e.preventDefault();
     }, { passive: false });
-    document.addEventListener('touchend', e => { pointer.down = false; });
+    _touchEl.addEventListener('touchend', e => { pointer.down = false; });
 
     // ── Utilities ─────────────────────────────────
     const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
@@ -2304,8 +2321,8 @@ G2 X40 Y30 I40 J0"></textarea>
       constructor() {
         // bx/by se calculan correctamente en layout(), pero necesitan
         // valores seguros para el primer frame antes de que layout() corra.
-        this.by = innerHeight * 0.82;
-        this.bx = innerWidth * 0.55;
+        this.by = H * 0.82;
+        this.bx = W * 0.55;
         this.th1 = -Math.PI / 2; this.th2 = 0;
         this.svgScale = this.by / (SVG_BASE_Y - (-400));
         this.linkLen = 36; this.chainN = 20;
@@ -2317,7 +2334,7 @@ G2 X40 Y30 I40 J0"></textarea>
         this.weldT = 0;
         this.idleTmr = 0;
         // eeX/eeY seguros: centro de pantalla — evita NaN en drawWeldingMask primer frame
-        this.eeX = innerWidth * 0.5; this.eeY = innerHeight * 0.5;
+        this.eeX = W * 0.5; this.eeY = H * 0.5;
         this.weldFlicker = 0;
         this.maskAlpha = 0;
         this.gcodeFlicker = 0;
