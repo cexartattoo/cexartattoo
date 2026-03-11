@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <title>KUKA Arm - Kinematic SVG</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: #eaedf2;
+      font-family: 'Orbitron', sans-serif;
+    }
+
+    canvas {
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    #cv {
+      z-index: 1;
+    }
+
+    #cv-overlay {
+      z-index: 3;
+      pointer-events: none;
+    }
+
+    #robot-svg-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 2;
+      pointer-events: none;
+      transform-origin: top left;
+    }
+
+    #info {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      color: #333;
+      font-size: 14px;
+      pointer-events: none;
+      z-index: 10;
+    }
+  </style>
+</head>
+
+<body>
+
+  <canvas id="cv"></canvas>
+  <canvas id="cv-overlay"></canvas>
+
+  <!-- INLINE SVG DEL ROBOT (embebido desde kuka_robot.svg) -->
+  <div id="robot-svg-container">
+    <svg id="kuka-svg" xmlns="http://www.w3.org/2000/svg" viewBox="-300 -400 1160 1410" width="560" height="610"
+      overflow="visible">
+      <defs>
+        <linearGradient id="ogH" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#b83a00" />
+          <stop offset="28%" stop-color="#ff6000" />
+          <stop offset="62%" stop-color="#ff5000" />
+          <stop offset="100%" stop-color="#a83200" />
+        </linearGradient>
+        <linearGradient id="ogV" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#ff6e0e" />
+          <stop offset="42%" stop-color="#ff5800" />
+          <stop offset="100%" stop-color="#b83800" />
+        </linearGradient>
+        <linearGradient id="ogDR" x1="0%" y1="100%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#b63600" />
+          <stop offset="48%" stop-color="#ff5800" />
+          <stop offset="100%" stop-color="#ff6c0c" />
+        </linearGradient>
+        <linearGradient id="ogDL" x1="100%" y1="100%" x2="0%" y2="0%">
+          <stop offset="0%" stop-color="#b63600" />
+          <stop offset="48%" stop-color="#ff5200" />
+          <stop offset="100%" stop-color="#ff6808" />
+        </linearGradient>
+        <linearGradient id="cylG" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#050505" />
+          <stop offset="10%" stop-color="#1e1e1e" />
+          <stop offset="28%" stop-color="#383838" />
+          <stop offset="48%" stop-color="#464646" />
+          <stop offset="68%" stop-color="#2c2c2c" />
+          <stop offset="88%" stop-color="#121212" />
+          <stop offset="100%" stop-color="#040404" />
+        </linearGradient>
+        <radialGradient id="capG" cx="38%" cy="35%" r="62%">
+          <stop offset="0%" stop-color="#404040" />
+          <stop offset="55%" stop-color="#1c1c1c" />
+          <stop offset="100%" stop-color="#080808" />
+        </radialGradient>
+        <linearGradient id="nemaG" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#222" />
+          <stop offset="100%" stop-color="#060606" />
+        </linearGradient>
+        <linearGradient id="motorG" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#2a2a2a" />
+          <stop offset="20%" stop-color="#111" />
+          <stop offset="100%" stop-color="#000" />
+        </linearGradient>
+        <linearGradient id="silverG" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#f0f0f0" />
+          <stop offset="40%" stop-color="#c0c0c0" />
+          <stop offset="100%" stop-color="#707070" />
+        </linearGradient>
+        <filter id="sh">
+          <feDropShadow dx="2" dy="3" stdDeviation="4" flood-color="#00000065" />
+        </filter>
+        <filter id="shS">
+          <feDropShadow dx="1" dy="2" stdDeviation="2.5" flood-color="#00000052" />
+        </filter>
+      </defs>
+
+      <!-- ESLABON 0: BASE FIJA (no se mueve con cinematica, solo se traslada horizontal con el carriage) -->
+      <g id="eslabon0">
+        <!-- BASE PRINCIPAL OSCURA -->
+        <g filter="url(#sh)">
+          <rect x="118" y="556" width="120" height="30" fill="#a0a4a8" />
+          <rect x="118" y="583" width="120" height="3" fill="#808488" />
+          <rect x="90" y="556" width="28" height="34" rx="2" fill="#c44000" />
+          <rect x="90" y="586" width="28" height="4" rx="1" fill="#9e3000" />
+          <circle cx="104" cy="568" r="5" fill="#c0c0c0" fill-opacity="0.9" stroke="#777" stroke-width="1" />
+          <circle cx="104" cy="568" r="2" fill="#222" />
+          <rect x="238" y="556" width="28" height="34" rx="2" fill="#c44000" />
+          <rect x="238" y="586" width="28" height="4" rx="1" fill="#9e3000" />
+          <circle cx="252" cy="568" r="5" fill="#c0c0c0" fill-opacity="0.9" stroke="#777" stroke-width="1" />
+          <circle cx="252" cy="568" r="2" fill="#222" />
+        </g>
+
+        <!-- PATIN DESLIZANTE -->
+        <g filter="url(#sh)">
+          <rect x="43" y="534" width="270" height="28" rx="4" fill="#9e3000" />
+          <rect x="43" y="531" width="270" height="26" rx="4" fill="url(#ogH)" />
+          <rect x="43" y="546" width="113" height="15" rx="3" fill="#c44000" />
+          <rect x="43" y="550" width="113" height="7" rx="2" fill="#a03000" />
+          <rect x="200" y="546" width="113" height="15" rx="3" fill="#c44000" />
+          <rect x="200" y="550" width="113" height="7" rx="2" fill="#a03000" />
+          <rect x="15" y="540" width="28" height="24" rx="3" fill="#c44000" />
+          <rect x="15" y="542" width="28" height="6" fill="#f06010" opacity="0.4" />
+          <rect x="313" y="540" width="28" height="24" rx="3" fill="#c44000" />
+          <rect x="313" y="542" width="28" height="6" fill="#f06010" opacity="0.4" />
+        </g>
+
+        <!-- ESCUADRA METALICA NEGRA -->
+        <g filter="url(#sh)">
+          <rect x="157" y="540" width="42" height="55" rx="4" fill="#1c1c1c" />
+          <rect x="158" y="541" width="40" height="4" rx="2" fill="#3a3a3a" />
+        </g>
+        <circle cx="168" cy="548" r="3.2" fill="#c0c0c0" fill-opacity="0.9" stroke="#999" stroke-width="0.8" />
+        <circle cx="168" cy="548" r="1.5" fill="#111" />
+        <circle cx="188" cy="548" r="3.2" fill="#c0c0c0" fill-opacity="0.9" stroke="#999" stroke-width="0.8" />
+        <circle cx="188" cy="548" r="1.5" fill="#111" />
+        <circle cx="178" cy="582" r="5" fill="#c0c0c0" fill-opacity="0.9" stroke="#777" stroke-width="1.2" />
+        <circle cx="178" cy="582" r="2.5" fill="#222" />
+        <rect x="177" y="589" width="2" height="6" fill="#111" />
+        <circle cx="65" cy="554" r="6" fill="#141414" />
+        <circle cx="65" cy="554" r="4.5" fill="#c0c0c0" fill-opacity="0.8" stroke="#eeddcc" stroke-width="0.8" />
+        <circle cx="65" cy="554" r="2" fill="#111" />
+        <circle cx="95" cy="554" r="6" fill="#141414" />
+        <circle cx="95" cy="554" r="4.5" fill="#c0c0c0" fill-opacity="0.8" stroke="#eeddcc" stroke-width="0.8" />
+        <circle cx="95" cy="554" r="2" fill="#111" />
+        <circle cx="261" cy="554" r="6" fill="#141414" />
+        <circle cx="261" cy="554" r="4.5" fill="#c0c0c0" fill-opacity="0.8" stroke="#eeddcc" stroke-width="0.8" />
+        <circle cx="261" cy="554" r="2" fill="#111" />
+        <circle cx="291" cy="554" r="6" fill="#141414" />
+        <circle cx="291" cy="554" r="4.5" fill="#c0c0c0" fill-opacity="0.8" stroke="#eeddcc" stroke-width="0.8" />
+        <circle cx="291" cy="554" r="2" fill="#111" />
+        <circle cx="29" cy="552" r="6.5" fill="#e0e0e0" filter="url(#shS)" />
+        <circle cx="29" cy="552" r="4" fill="#a0a0a0" stroke="#707070" stroke-width="1" />
+        <circle cx="29" cy="552" r="2" fill="#333" />
+        <circle cx="327" cy="552" r="6.5" fill="#e0e0e0" filter="url(#shS)" />
+        <circle cx="327" cy="552" r="4" fill="#a0a0a0" stroke="#707070" stroke-width="1" />
+        <circle cx="327" cy="552" r="2" fill="#333" />
+
+        <!-- PLATO ROTATIVO -->
+        <ellipse cx="178" cy="555" rx="130" ry="13" fill="#00000040" />
+        <rect x="50" y="517" width="256" height="38" rx="6" fill="#982e00" filter="url(#sh)" />
+        <rect x="50" y="512" width="256" height="38" rx="6" fill="url(#ogH)" />
+        <rect x="44" y="541" width="268" height="14" rx="5" fill="#ae3c00" />
+        <rect x="44" y="538" width="268" height="14" rx="5" fill="#c44400" />
+        <line x1="50" y1="530" x2="306" y2="530" stroke="#7c2200" stroke-width="1.6" />
+        <circle cx="62" cy="522" r="3.5" fill="#7a2800" stroke="#ff5400" stroke-width="0.8" />
+        <circle cx="88" cy="515" r="3.5" fill="#7a2800" stroke="#ff5400" stroke-width="0.8" />
+        <circle cx="124" cy="512" r="3.5" fill="#7a2800" stroke="#ff5400" stroke-width="0.8" />
+        <circle cx="178" cy="511" r="3.5" fill="#7a2800" stroke="#ff5400" stroke-width="0.8" />
+        <circle cx="232" cy="512" r="3.5" fill="#7a2800" stroke="#ff5400" stroke-width="0.8" />
+        <circle cx="268" cy="515" r="3.5" fill="#7a2800" stroke="#ff5400" stroke-width="0.8" />
+        <circle cx="294" cy="522" r="3.5" fill="#7a2800" stroke="#ff5400" stroke-width="0.8" />
+        <circle cx="62" cy="540" r="3.5" fill="#7a2800" stroke="#ff5400" stroke-width="0.8" />
+        <circle cx="294" cy="540" r="3.5" fill="#7a2800" stroke="#ff5400" stroke-width="0.8" />
+
+        <!-- CILINDRO NEGRO -->
+        <rect x="88" y="497" width="180" height="18" rx="2" fill="#00000038" />
+        <rect x="88" y="506" width="180" height="8" rx="3" fill="#c44000" filter="url(#sh)" />
+        <rect x="88" y="505" width="180" height="4" rx="3" fill="url(#ogH)" />
+        <rect x="88" y="370" width="180" height="136" rx="5" fill="url(#cylG)" filter="url(#sh)" />
+        <rect x="88" y="370" width="22" height="136" rx="5" fill="#1c1c1c" opacity="0.85" />
+        <line x1="96" y1="378" x2="96" y2="480" stroke="#3c3c3c" stroke-width="1.5" opacity="0.6" />
+        <rect x="148" y="370" width="44" height="136" fill="#505050" opacity="0.22" />
+        <rect x="243" y="370" width="25" height="136" rx="5" fill="#0a0a0a" opacity="0.85" />
+        <circle cx="108" cy="518" r="3" fill="#0a0a0a" stroke="#505050" stroke-width="0.8" />
+        <circle cx="148" cy="518" r="3" fill="#0a0a0a" stroke="#505050" stroke-width="0.8" />
+        <circle cx="208" cy="518" r="3" fill="#0a0a0a" stroke="#505050" stroke-width="0.8" />
+        <circle cx="248" cy="518" r="3" fill="#0a0a0a" stroke="#505050" stroke-width="0.8" />
+        <rect x="88" y="365" width="180" height="10" rx="3" fill="#3c3c3c" />
+        <rect x="88" y="362" width="180" height="10" rx="3" fill="#2a2a2a" />
+        <circle cx="108" cy="372" r="4.5" fill="#b0b0b0" stroke="#777" stroke-width="1" />
+        <circle cx="108" cy="372" r="2" fill="#555" />
+        <circle cx="148" cy="372" r="4.5" fill="#b0b0b0" stroke="#777" stroke-width="1" />
+        <circle cx="148" cy="372" r="2" fill="#555" />
+        <circle cx="208" cy="372" r="4.5" fill="#b0b0b0" stroke="#777" stroke-width="1" />
+        <circle cx="208" cy="372" r="2" fill="#555" />
+        <circle cx="248" cy="372" r="4.5" fill="#b0b0b0" stroke="#777" stroke-width="1" />
+        <circle cx="248" cy="372" r="2" fill="#555" />
+
+        <!-- MOTOR DE TRACCION -->
+        <rect x="12" y="478" width="56" height="42" rx="3" fill="#141414" filter="url(#sh)" />
+        <rect x="-8" y="488" width="24" height="22" rx="2" fill="#202020" />
+        <rect x="-6" y="490" width="18" height="18" rx="1" fill="#080808" />
+        <g fill="#070707">
+          <rect x="18" y="482" width="4" height="34" />
+          <rect x="28" y="482" width="4" height="34" />
+          <rect x="38" y="482" width="4" height="34" />
+          <rect x="48" y="482" width="4" height="34" />
+          <rect x="58" y="482" width="4" height="34" />
+        </g>
+        <path d="M 68 492 L 86 492 L 86 544 L 68 544 Z" fill="#962a00" filter="url(#sh)" />
+        <path d="M 66 488 L 84 488 L 84 540 L 66 540 Z" fill="url(#ogV)" />
+        <circle cx="75" cy="497" r="3" fill="#222" stroke="#ff5a0a" stroke-width="0.7" />
+        <circle cx="75" cy="530" r="3" fill="#222" stroke="#ff5a0a" stroke-width="0.7" />
+        <rect x="22" y="520" width="34" height="20" rx="2" fill="#1a1a1a" filter="url(#shS)" />
+        <rect x="24" y="522" width="30" height="16" rx="1" fill="#0e0e0e" />
+        <circle cx="30" cy="526" r="1.5" fill="#333" />
+        <circle cx="48" cy="526" r="1.5" fill="#333" />
+        <rect x="56" y="528" width="16" height="4" fill="#666" />
+
+        <!-- TORSO DIAGONAL -->
+        <rect x="46" y="356" width="264" height="6" rx="2" fill="#9e3000" filter="url(#sh)" />
+        <rect x="48" y="354" width="260" height="4" fill="#fc7422" />
+        <circle cx="65" cy="358" r="2.5" fill="#444" stroke="#888" stroke-width="0.5" />
+        <circle cx="178" cy="358" r="2.5" fill="#444" stroke="#888" stroke-width="0.5" />
+        <circle cx="291" cy="358" r="2.5" fill="#444" stroke="#888" stroke-width="0.5" />
+
+        <!-- OREJA -->
+        <g id="oreja_posterior" filter="url(#sh)">
+          <path d="M 210,356 L 270,356 C 300,356 353,320 365,270 C 373,205 330,195 308,195 C 280,195 240,245 210,270 Z"
+            fill="#c44000" />
+          <path d="M 205,356 L 245,356 C 280,356 345,320 350,270 C 373,205 330,195 308,195 C 285,200 245,250 215,275 Z"
+            fill="url(#ogDR)" />
+        </g>
+
+        <!-- MOTOR INTERNO -->
+        <g id="motor_interno" filter="url(#sh)">
+          <rect x="147" y="240" width="62" height="116" rx="3" fill="#141414" />
+          <rect x="149" y="242" width="58" height="112" rx="2" fill="#0e0e0e" />
+          <rect x="149" y="242" width="10" height="112" fill="#2c2c2c" opacity="0.7" />
+          <line x1="154" y1="242" x2="154" y2="354" stroke="#4a4a4a" stroke-width="1" />
+          <rect x="149" y="260" width="58" height="3.5" fill="#080808" />
+          <rect x="149" y="280" width="58" height="3.5" fill="#080808" />
+          <rect x="149" y="300" width="58" height="3.5" fill="#080808" />
+          <rect x="149" y="320" width="58" height="3.5" fill="#080808" />
+        </g>
+        <g id="conectores_motor" filter="url(#shS)">
+          <rect x="126" y="255" width="22" height="20" rx="2" fill="#181818" />
+          <rect x="118" y="258" width="8" height="5" fill="#0b0b0b" rx="1" />
+          <rect x="118" y="267" width="8" height="5" fill="#0b0b0b" rx="1" />
+          <rect x="132" y="292" width="16" height="16" rx="2" fill="#181818" />
+          <rect x="124" y="297" width="8" height="5" fill="#0b0b0b" rx="1" />
+        </g>
+
+        <!-- CUERPO PRINCIPAL -->
+        <path d="M 102,356 L 210,356 C 210,310 215,285 220,265 C 190,295 140,320 102,320 Z" fill="#b03600"
+          filter="url(#sh)" />
+        <path d="M 102,356 L 205,356 C 205,310 210,290 215,270 C 190,295 140,320 102,320 Z" fill="url(#ogH)"
+          opacity="0.8" />
+        <path d="M 102,356 L 112,356 C 112,340 110,325 102,320 Z" fill="#ff7e28" opacity="0.25" />
+        <path d="M 102,320 C 140,320 190,290 220,265" stroke="#ff7010" stroke-width="3" fill="none"
+          stroke-linecap="round" />
+        <path d="M 102,322 C 140,322 190,292 218,267" stroke="#7a2800" stroke-width="1.5" fill="none"
+          stroke-linecap="round" />
+      </g>
+
+      <!-- ESLABON 2 (Brazo Superior + Muneca + Efector) -->
+      <g id="eslabon2" transform="translate(119, 93) rotate(-12) translate(-215, -300)">
+        <!-- MOTORES NEMA TRASEROS -->
+        <g filter="url(#sh)">
+          <path d="M 215,265 L 165,265 C 150,265 145,268 145,278 L 145,350 C 145,360 150,365 165,390 L 230,365 Z"
+            fill="url(#ogV)" />
+          <g transform="translate(86, 268)">
+            <rect x="0" y="0" width="70" height="34" rx="2" fill="url(#motorG)" stroke="#333" stroke-width="1" />
+            <rect x="60" y="2" width="6" height="20" fill="#181818" />
+            <line x1="12" y1="0" x2="12" y2="24" stroke="#000" stroke-width="2" />
+            <line x1="24" y1="0" x2="24" y2="24" stroke="#000" stroke-width="2" />
+            <line x1="36" y1="0" x2="36" y2="24" stroke="#000" stroke-width="2" />
+            <line x1="48" y1="0" x2="48" y2="24" stroke="#000" stroke-width="2" />
+            <rect x="5" y="8" width="50" height="8" rx="1" fill="#000" />
+            <rect x="10" y="10" width="4" height="4" fill="#0ca131" />
+          </g>
+          <g transform="translate(86, 312)">
+            <rect x="0" y="0" width="70" height="34" rx="2" fill="url(#motorG)" stroke="#333" stroke-width="1" />
+            <rect x="60" y="2" width="6" height="20" fill="#181818" />
+            <line x1="12" y1="0" x2="12" y2="24" stroke="#000" stroke-width="2" />
+            <line x1="24" y1="0" x2="24" y2="24" stroke="#000" stroke-width="2" />
+            <line x1="36" y1="0" x2="36" y2="24" stroke="#000" stroke-width="2" />
+            <line x1="48" y1="0" x2="48" y2="24" stroke="#000" stroke-width="2" />
+            <rect x="5" y="8" width="50" height="8" rx="1" fill="#000" />
+            <rect x="10" y="10" width="4" height="4" fill="#09f831" />
+          </g>
+          <g transform="translate(100, 357)">
+            <rect x="0" y="0" width="70" height="34" rx="2" fill="url(#motorG)" stroke="#333" stroke-width="1" />
+            <rect x="60" y="2" width="6" height="20" fill="#181818" />
+            <line x1="12" y1="0" x2="12" y2="24" stroke="#000" stroke-width="2" />
+            <line x1="24" y1="0" x2="24" y2="24" stroke="#000" stroke-width="2" />
+            <line x1="36" y1="0" x2="36" y2="24" stroke="#000" stroke-width="2" />
+            <line x1="48" y1="0" x2="48" y2="24" stroke="#000" stroke-width="2" />
+            <rect x="5" y="8" width="50" height="8" rx="1" fill="#000" />
+            <rect x="10" y="10" width="4" height="4" fill="#fa0606" />
+          </g>
+        </g>
+        <!-- CUERPO ESLABON 2 Y CODO -->
+        <g filter="url(#sh)">
+          <path d="M 215,257 C 250,257 265,280 344,280 L 344,320 C 265,320 250,343 215,343 A 43 43 0 0 1 215,257 Z"
+            fill="url(#ogV)" />
+          <path d="M 215,257 C 250,257 265,280 344,280 L 344,285 C 265,285 250,266 215,266 Z" fill="#ff7010"
+            opacity="0.4" />
+          <path d="M 344,312 L 344,320 C 265,320 250,343 215,343 C 250,343 265,312 344,312 Z" fill="#782400"
+            opacity="0.6" />
+          <path d="M 270,300 L 335,300" stroke="#a83000" stroke-width="4.5" fill="none" opacity="0.5" />
+          <path d="M 270,306 L 335,306" stroke="#a83000" stroke-width="2" fill="none" opacity="0.5" />
+          <circle cx="215" cy="300" r="43" fill="#c44000" />
+          <circle cx="215" cy="300" r="41" fill="url(#ogH)" opacity="0.8" />
+          <g transform="translate(215, 300)">
+            <circle cx="36" cy="0" r="2.5" fill="#e0e0e0" stroke="#777" />
+            <circle cx="31.2" cy="18" r="2.5" fill="#e0e0e0" stroke="#777" />
+            <circle cx="18" cy="31.2" r="2.5" fill="#e0e0e0" stroke="#777" />
+            <circle cx="0" cy="36" r="2.5" fill="#e0e0e0" stroke="#777" />
+            <circle cx="-18" cy="31.2" r="2.5" fill="#e0e0e0" stroke="#777" />
+            <circle cx="-31.2" cy="18" r="2.5" fill="#e0e0e0" stroke="#777" />
+            <circle cx="-36" cy="0" r="2.5" fill="#e0e0e0" stroke="#777" />
+            <circle cx="-31.2" cy="-18" r="2.5" fill="#e0e0e0" stroke="#777" />
+            <circle cx="-18" cy="-31.2" r="2.5" fill="#e0e0e0" stroke="#777" />
+            <circle cx="0" cy="-36" r="2.5" fill="#e0e0e0" stroke="#777" />
+            <circle cx="18" cy="-31.2" r="2.5" fill="#e0e0e0" stroke="#777" />
+            <circle cx="31.2" cy="-18" r="2.5" fill="#e0e0e0" stroke="#777" />
+          </g>
+          <circle cx="215" cy="300" r="28" fill="#a03000" stroke="#802000" stroke-width="1" />
+          <circle cx="215" cy="300" r="28" fill="#000" opacity="0.15" />
+          <circle cx="215" cy="300" r="14" fill="#a03000" />
+          <circle cx="215" cy="300" r="14" fill="#fff" opacity="0.1" />
+          <g transform="translate(265, 275) rotate(-10)">
+            <ellipse cx="0" cy="0" rx="14" ry="7" fill="none" stroke="#050505" stroke-width="4.5" />
+            <ellipse cx="0" cy="0" rx="12" ry="5" fill="#180400" />
+            <path d="M -12,0 A 12 5 0 0 1 12,0 A 10 3 0 0 0 -12,0 Z" fill="#000" opacity="0.8" />
+          </g>
+        </g>
+        <!-- MUNECA Y EFECTOR -->
+        <g filter="url(#sh)">
+          <path d="M 344,280 L 365,280 L 365,320 L 344,320 Z" fill="url(#silverG)" />
+          <rect x="344" y="280" width="6" height="40" fill="#ddd" />
+          <rect x="360" y="280" width="5" height="40" fill="#777" />
+          <line x1="352" y1="280" x2="352" y2="320" stroke="#999" stroke-width="1.5" />
+          <polygon points="365,280 380,285 380,315 365,320" fill="#a0a0a0" />
+          <polygon points="365,280 380,285 380,295 365,290" fill="#f0f0f0" />
+          <polygon points="365,320 380,315 380,305 365,310" fill="#555" />
+          <rect x="380" y="285" width="6" height="30" fill="#222" />
+          <path d="M 386,285 L 430,288 L 430,312 L 386,315 Z" fill="url(#silverG)" />
+          <polygon points="386,285 430,288 430,292 386,289" fill="#eee" />
+          <polygon points="386,315 430,312 430,306 386,309" fill="#666" />
+          <line x1="406" y1="287" x2="406" y2="313" stroke="#999" stroke-width="1.5" />
+          <polygon points="430,288 433,288 433,312 430,312" fill="#111" />
+          <path d="M 433,288 C 445,268 460,268 495,294 L 495,306 C 460,332 445,332 433,312 Z" fill="url(#silverG)" />
+          <path d="M 433,288 C 445,268 460,268 495,294 L 495,298 C 460,275 445,280 433,295 Z" fill="#fff"
+            opacity="0.8" />
+          <path d="M 434,312 C 445,332 460,332 495,306 L 495,302 C 460,324 445,316 434,304 Z" fill="#444"
+            opacity="0.25" />
+          <g transform="translate(460, 303)">
+            <text x="0" y="0" font-family="Arial Black, Impact, sans-serif" font-size="10" font-weight="900" fill="#111"
+              text-anchor="middle" letter-spacing="1">KUKA</text>
+          </g>
+          <rect x="495" y="294" width="4" height="12" fill="#000" />
+          <rect x="499" y="297" width="2" height="6" fill="#444" />
+        </g>
+      </g>
+
+      <!-- ESLABON 1 (Brazo Inferior) -->
+      <g id="eslabon1" transform="translate(308, 247) rotate(-140.826)">
+        <g filter="url(#sh)">
+          <!-- Sombra -->
+          <path
+            d="M 0,-50 C 40,-50 60,-36 90,-36 L 154,-36 C 184,-36 204,-40 244,-40 A 38 38 0 0 1 244,42 C 204,42 184,36 154,36 L 90,36 C 60,36 40,50 0,50 A 45 45 0 0 1 0,-50 Z"
+            fill="#782400" opacity="0.53" transform="translate(1, 4)" />
+          <!-- Cuerpo -->
+          <path
+            d="M 0,-45 C 40,-45 60,-25 90,-25 L 154,-25 C 184,-25 204,-38 244,-38 A 38 38 0 0 1 244,38 C 204,38 184,32 154,32 L 90,32 C 60,32 40,45 0,45 A 45 45 0 0 1 0,-45 Z"
+            fill="url(#ogV)" />
+          <!-- Brillo -->
+          <path
+            d="M 0,-45 C 40,-45 60,-25 90,-25 L 154,-25 C 184,-25 204,-38 244,-38 L 244,-34 C 204,-34 184,-28 154,-28 L 90,-28 C 60,-28 40,-40 0,-40 Z"
+            fill="#ff7010" opacity="0.4" />
+          <!-- Hub Hombro -->
+          <g>
+            <circle cx="0" cy="0" r="45" fill="#3c3c3c" stroke="#555" stroke-width="2" />
+            <circle cx="0" cy="0" r="34" fill="#2a2a2a" />
+            <circle cx="0" cy="0" r="18" fill="#1a1a1a" stroke="#444" stroke-width="1.5" />
+            <circle cx="0" cy="-35" r="3" fill="#a0a0a0" stroke="#707070" stroke-width="0.8" />
+            <circle cx="25" cy="-25" r="3" fill="#a0a0a0" stroke="#707070" stroke-width="0.8" />
+            <circle cx="35" cy="0" r="3" fill="#a0a0a0" stroke="#707070" stroke-width="0.8" />
+            <circle cx="25" cy="25" r="3" fill="#a0a0a0" stroke="#707070" stroke-width="0.8" />
+            <circle cx="0" cy="35" r="3" fill="#a0a0a0" stroke="#707070" stroke-width="0.8" />
+            <circle cx="-25" cy="25" r="3" fill="#a0a0a0" stroke="#707070" stroke-width="0.8" />
+            <circle cx="-35" cy="0" r="3" fill="#a0a0a0" stroke="#707070" stroke-width="0.8" />
+            <circle cx="-25" cy="-25" r="3" fill="#a0a0a0" stroke="#707070" stroke-width="0.8" />
+          </g>
+          <!-- Hub Codo -->
+          <g transform="translate(244, 0)">
+            <circle cx="0" cy="0" r="38" fill="#3c3c3c" stroke="#555" stroke-width="2" />
+            <circle cx="0" cy="0" r="30" fill="#2a2a2a" />
+            <circle cx="0" cy="0" r="14" fill="#1a1a1a" stroke="#444" stroke-width="1.5" />
+            <circle cx="0" cy="-30" r="2.5" fill="#a0a0a0" stroke="#707070" stroke-width="0.8" />
+            <circle cx="21" cy="-21" r="2.5" fill="#a0a0a0" stroke="#707070" stroke-width="0.8" />
+            <circle cx="30" cy="0" r="2.5" fill="#a0a0a0" stroke="#707070" stroke-width="0.8" />
+            <circle cx="21" cy="21" r="2.5" fill="#a0a0a0" stroke="#707070" stroke-width="0.8" />
+            <circle cx="0" cy="30" r="2.5" fill="#a0a0a0" stroke="#707070" stroke-width="0.8" />
+            <circle cx="-21" cy="21" r="2.5" fill="#a0a0a0" stroke="#707070" stroke-width="0.8" />
+            <circle cx="-30" cy="0" r="2.5" fill="#a0a0a0" stroke="#707070" stroke-width="0.8" />
+            <circle cx="-21" cy="-21" r="2.5" fill="#a0a0a0" stroke="#707070" stroke-width="0.8" />
+          </g>
+          <!-- Etiqueta KUKA -->
+          <g transform="translate(122, 0)">
+            <rect x="-35" y="-12" width="70" height="24" rx="3" fill="#111" stroke="#222" stroke-width="1" />
+            <text x="0" y="5" font-family="Arial Black, Impact, sans-serif" font-size="16" font-weight="900"
+              fill="#ff7010" text-anchor="middle" letter-spacing="2">KUKA</text>
+          </g>
+        </g>
+      </g>
+
+      <!-- CABLES -->
+      <g id="cables">
+        <path d="M 118,260 C 50,260 50,360 140,350 C 200,340 250,320 290,245" stroke="#0e0e0e" stroke-width="10"
+          fill="none" stroke-linecap="round" filter="url(#shS)" />
+        <path d="M 118,260 C 50,260 50,360 140,350 C 200,340 250,320 290,245" stroke="#1a1a1a" stroke-width="4"
+          fill="none" stroke-linecap="round" />
+        <path d="M 124,300 C 70,300 85,340 145,335 C 190,330 240,310 280,240" stroke="#121212" stroke-width="6.5"
+          fill="none" stroke-linecap="round" />
+        <path d="M 124,300 C 70,300 85,340 145,335 C 190,330 240,310 280,240" stroke="#1c1c1c" stroke-width="2"
+          fill="none" stroke-linecap="round" />
+        <path d="M 118,270 C 65,270 65,350 148,342 C 210,335 260,310 300,235" stroke="#2a2a2a" stroke-width="3.5"
+          fill="none" stroke-linecap="round" />
+        <rect x="145" y="338" width="22" height="7" rx="2" fill="#666" transform="rotate(-15, 156, 341)" />
+        <rect x="220" y="302" width="26" height="9" rx="2" fill="#666" transform="rotate(-40, 233, 306)" />
+        <rect x="222" y="304" width="22" height="5" rx="1" fill="#888" transform="rotate(-40, 233, 306)" />
+      </g>
+    </svg>
+  </div>
+
+  <script>
+    const cv = document.getElementById('cv');
+    const ctx = cv.getContext('2d');
+    const cvOverlay = document.getElementById('cv-overlay');
+    const ctxOverlay = cvOverlay.getContext('2d');
+    let W, H;
+    const mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+
+    window.addEventListener('resize', () => { W = cv.width = cvOverlay.width = innerWidth; H = cv.height = cvOverlay.height = innerHeight; });
+    window.dispatchEvent(new Event('resize'));
+    document.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+
+    const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
+    const rrect = (c, x, y, w, h, r) => {
+      c.beginPath(); c.moveTo(x + w - r, y); c.arcTo(x + w, y, x + w, y + h, r); c.arcTo(x + w, y + h, x, y + h, r);
+      c.arcTo(x, y + h, x, y, r); c.arcTo(x, y, x + w, y, r); c.closePath();
+    };
+
+    const KUKA_ORANGE = '#f56300';
+    const KUKA_BLACK = '#1a1a1a';
+
+    // SVG Elements
+    const svgContainer = document.getElementById('robot-svg-container');
+    const kukaSvg = document.getElementById('kuka-svg');
+    const eslabon1El = document.getElementById('eslabon1');
+    const eslabon2El = document.getElementById('eslabon2');
+
+    // SVG Reference Points (from viewBox coordinates)
+    const SVG_SHOULDER = { x: 308, y: 247 };
+    const SVG_ELBOW = { x: 119, y: 93 };
+    const SVG_BASE_Y = 562;
+    // L1 distance in SVG space
+    const SVG_L1 = Math.hypot(SVG_ELBOW.x - SVG_SHOULDER.x, SVG_ELBOW.y - SVG_SHOULDER.y); // ~244
+
+    class KukaKinematic {
+      constructor() {
+        this.by = 0;
+        this.bx = 0;
+        this.th1 = -Math.PI / 2;
+        this.th2 = 0;
+        this.svgScale = 1;
+        this.linkLen = 36;
+        this.chainN = 20;
+      }
+
+      updateLayout() {
+        this.by = window.innerHeight * 0.8;
+        // viewBox "-300 -400 1160 1410": base at SVG y=562 maps to screen y=this.by
+        // pxPerUnit = this.by / (562 - (-400)) = this.by / 962
+        const VB_Y = -400, VB_W = 1160;
+        this.svgScale = this.by / (SVG_BASE_Y - VB_Y);
+        this.updateChainLength();
+      }
+
+      updateChainLength() {
+        const maxCarX = (window.innerWidth * 0.9) + 80;
+        const anchorX = window.innerWidth * 0.05 + 210;
+        const maxDist = Math.abs(maxCarX - anchorX);
+        const topY = this.by - 35;
+        const botY = this.by + 65;
+        const radius = (botY - topY) / 2;
+        const arcLen = Math.PI * radius;
+        const requiredPx = maxDist + arcLen;
+        this.chainN = Math.ceil(requiredPx / this.linkLen);
+      }
+
+      ik(tx, ty) {
+        this.updateLayout();
+
+        // El hombro esta desplazado (308-178)*scale px a la derecha del centro del carriage.
+        // Posicionar el carriage para que el HOMBRO quede cerca del target X, no el carriage.
+        const shoulderOffX = (SVG_SHOULDER.x - 178) * this.svgScale;
+        const idealBx = clamp(tx - shoulderOffX, window.innerWidth * 0.1, window.innerWidth * 0.9);
+        this.bx += (idealBx - this.bx) * 0.12;
+
+        // Shoulder position in screen coords
+        const sX = this.bx + shoulderOffX;
+        const sY = this.by - (SVG_BASE_Y - SVG_SHOULDER.y) * this.svgScale;
+
+        // IK target relative to shoulder
+        const dx = tx - sX;
+        const dy = ty - sY;
+        const d = Math.hypot(dx, dy);
+
+        // Arm lengths in screen space
+        const L1_screen = SVG_L1 * this.svgScale;
+        // L2 effective = distance from elbow to end-effector in SVG space
+        // Elbow(215,300) to tool flange(499,300) = 284 SVG units in eslabon2 local
+        const SVG_L2_LOCAL = 284;
+        const L2_screen = SVG_L2_LOCAL * this.svgScale;
+
+        const mx = L1_screen + L2_screen - 2;
+        const mn = Math.abs(L1_screen - L2_screen) + 2;
+        const r = clamp(d, mn, mx);
+
+        const sx = d > 0 ? (dx / d) * r : 0;
+        const sy = d > 0 ? (dy / d) * r : -r;
+
+        const c2 = (r * r - L1_screen * L1_screen - L2_screen * L2_screen) / (2 * L1_screen * L2_screen);
+        // ELBOW LEFT: positive acos
+        const th2Target = Math.acos(clamp(c2, -1, 1));
+
+        const k1 = L1_screen + L2_screen * Math.cos(th2Target);
+        const k2 = L2_screen * Math.sin(th2Target);
+        let th1Clamped = Math.atan2(sy, sx) - Math.atan2(k2, k1);
+
+        // --- LIMITES DE ARTICULACIONES ---
+        // Hombro (A1): -185 a +10 grados (no puede apuntar hacia abajo ni girar de mas)
+        const TH1_MIN = -160 * Math.PI / 180;
+        const TH1_MAX = 10 * Math.PI / 180;
+        th1Clamped = clamp(th1Clamped, TH1_MIN, TH1_MAX);
+
+        // Codo (A2): 0 a 155 grados (solo se dobla hacia un lado)
+        const TH2_MIN = 0 * Math.PI / 180;
+        const TH2_MAX = 180 * Math.PI / 180;
+        const th2Clamped = clamp(th2Target, TH2_MIN, TH2_MAX);
+
+        this.th1 += (th1Clamped - this.th1) * 0.12;
+        this.th2 += (th2Clamped - this.th2) * 0.12;
+      }
+
+      updateSVGTransforms() {
+        // Eslabon 1: rotates around shoulder(308,247) in SVG space
+        // th1 is in radians from IK. Convert to degrees.
+        // The original angle for eslabon1 in the static SVG was -140.826 deg
+        // That corresponded to atan2(93-247, 119-308) = atan2(-154, -189) ~ -2.458 rad ~ -140.83 deg
+        // Now th1 is the new absolute angle from IK
+        const th1Deg = this.th1 * (180 / Math.PI);
+        eslabon1El.setAttribute('transform',
+          `translate(${SVG_SHOULDER.x}, ${SVG_SHOULDER.y}) rotate(${th1Deg})`);
+
+        // Eslabon 2: rotates around elbow
+        // Elbow position in SVG space:
+        const elbowSvgX = SVG_SHOULDER.x + Math.cos(this.th1) * SVG_L1;
+        const elbowSvgY = SVG_SHOULDER.y + Math.sin(this.th1) * SVG_L1;
+
+        // The angle of eslabon2 in world space = th1 + th2
+        // But eslabon2's local "forward" direction in its draft is along +X from (215,300)
+        // So we need: translate(elbowSvg) rotate(worldAngleDeg) translate(-215, -300)
+        const worldAngleDeg = (this.th1 + this.th2) * (180 / Math.PI);
+        eslabon2El.setAttribute('transform',
+          `translate(${elbowSvgX.toFixed(1)}, ${elbowSvgY.toFixed(1)}) rotate(${worldAngleDeg.toFixed(2)}) translate(-215, -300)`);
+      }
+
+      positionSVG() {
+        // viewBox is "-300 -400 1160 1410"
+        // This means SVG coordinate (0,0) is at pixel fraction (300/1160, 400/1410) inside the element
+        // And the total SVG coordinate range is 1160 wide x 1410 tall
+        const VB_X = -300, VB_Y = -400, VB_W = 1160, VB_H = 1410;
+
+        // We want SVG coordinate (178, SVG_BASE_Y=562) to land at screen (this.bx, this.by)
+        // pixelsPerSvgUnit = renderedWidth / VB_W  (uniform scaling)
+        // We solve for renderedWidth such that the base stays proportional:
+        // (SVG_BASE_Y - VB_Y) * scale_factor = this.by   (approximately)
+        // scale_factor = renderedWidth / VB_W
+        // renderedWidth = this.by * VB_W / (SVG_BASE_Y - VB_Y)
+        const renderedWidth = this.by * VB_W / (SVG_BASE_Y - VB_Y);
+        const renderedHeight = renderedWidth * VB_H / VB_W;
+        const pxPerUnit = renderedWidth / VB_W;
+
+        // SVG coord (178, 562) maps to pixel inside element:
+        // px_x = (178 - VB_X) * pxPerUnit
+        // px_y = (562 - VB_Y) * pxPerUnit
+        // We want that pixel to land at screen (this.bx, this.by):
+        const leftX = this.bx - (178 - VB_X) * pxPerUnit;
+        const topY = this.by - (SVG_BASE_Y - VB_Y) * pxPerUnit;
+
+        svgContainer.style.left = leftX + 'px';
+        svgContainer.style.top = topY + 'px';
+        kukaSvg.style.width = renderedWidth + 'px';
+        kukaSvg.style.height = renderedHeight + 'px';
+
+        // Also update svgScale for IK to use (pixels per SVG unit)
+        this.svgScale = pxPerUnit;
+      }
+
+      drawLinearRail(c) {
+        const railW = window.innerWidth * 0.9;
+        const railH = 70;
+        const rx = window.innerWidth * 0.05;
+        const ry = this.by;
+        c.fillStyle = '#2d2f33';
+        c.fillRect(rx, ry, railW, railH);
+        c.fillStyle = '#a0a5ad';
+        c.fillRect(rx, ry + 15, railW, 8);
+        c.fillRect(rx, ry + 40, railW, 20);
+        c.fillStyle = '#444';
+        for (let i = rx + 20; i < rx + railW - 20; i += 40) {
+          c.beginPath(); c.arc(i, ry + 50, 4, 0, Math.PI * 2); c.fill();
+        }
+      }
+
+      drawDragChain(c) {
+        c.save();
+        const anchorX = window.innerWidth * 0.05 + 210;
+        const carriageW = 160;
+        const carX = this.bx + (carriageW / 2);
+        const topY = this.by - 35;
+        const botY = this.by + 65;
+        const radius = (botY - topY) / 2;
+        const cy = topY + radius;
+        const L_geo = this.chainN * this.linkLen;
+        let loopCenterX = (carX + anchorX - Math.PI * radius + L_geo) / 2;
+        if (loopCenterX < carX + radius * 1.5) loopCenterX = carX + radius * 1.5;
+        const L1 = loopCenterX - carX;
+        const L2 = Math.PI * radius;
+        for (let i = 0; i < this.chainN; i++) {
+          const d = i * this.linkLen;
+          let x, y, ang;
+          if (d <= L1) { x = carX + d; y = topY; ang = 0; }
+          else if (d > L1 && d <= L1 + L2) {
+            const u = (d - L1) / L2;
+            const a = -Math.PI / 2 + u * Math.PI;
+            x = loopCenterX + Math.cos(a) * radius;
+            y = cy + Math.sin(a) * radius;
+            ang = a + Math.PI / 2;
+          } else { const d3 = d - (L1 + L2); x = loopCenterX - d3; y = botY; ang = Math.PI; }
+          c.save(); c.translate(x, y); c.rotate(ang);
+          c.fillStyle = '#1a1a1a';
+          rrect(c, -this.linkLen / 2, -12, this.linkLen, 24, 3); c.fill();
+          c.fillStyle = '#3a3a3a'; c.fillRect(-this.linkLen / 2 + 1, -10, this.linkLen - 2, 3);
+          c.fillStyle = '#0f0f0f'; c.fillRect(-5, -6, 4, 12); c.fillRect(3, -6, 4, 12);
+          c.restore();
+        }
+        c.restore();
+      }
+
+      drawControlCabinet(c) {
+        const boxW = 210; const boxH = 150;
+        const cabinetX = window.innerWidth * 0.05 + 10;
+        const cabinetY = this.by + 65 - boxH;
+        c.save();
+        c.fillStyle = '#2a2a2a';
+        rrect(c, cabinetX, cabinetY, boxW, boxH, 4); c.fill();
+        c.fillStyle = '#FF6600';
+        const panelX = cabinetX + 35; const panelY = cabinetY + 5;
+        const panelW = boxW - 40; const panelH = boxH - 20;
+        c.fillRect(panelX, panelY, panelW, panelH);
+        c.fillStyle = '#111'; c.fillRect(panelX + 20, panelY + 15, 60, 25);
+        c.fillStyle = '#ff3333'; c.beginPath(); c.arc(panelX + 30, panelY + 27, 3, 0, Math.PI * 2); c.fill();
+        c.fillStyle = '#ffcc00'; c.beginPath(); c.arc(panelX + 45, panelY + 27, 3, 0, Math.PI * 2); c.fill();
+        const pulse = (Math.sin(Date.now() * 0.005) + 1) / 2;
+        c.save();
+        c.fillStyle = `rgba(51, 255, 51, ${0.4 + pulse * 0.6})`;
+        c.shadowColor = '#33ff33'; c.shadowBlur = 4 + (pulse * 8);
+        c.beginPath(); c.arc(panelX + 60, panelY + 27, 3, 0, Math.PI * 2); c.fill();
+        c.restore();
+        c.fillStyle = '#111'; rrect(c, panelX + 7, panelY + 70, 12, 45, 2); c.fill();
+        c.fillStyle = '#111'; c.font = '900 30px "Orbitron", sans-serif';
+        c.textAlign = 'left'; c.textBaseline = 'alphabetic';
+        c.fillText("KUKA", panelX + 30, panelY + panelH - 15);
+        c.fillStyle = '#fff'; c.strokeStyle = '#000'; c.lineWidth = 1;
+        c.fillRect(panelX + 115, panelY + 68, 45, 25);
+        c.strokeRect(panelX + 115, panelY + 68, 45, 25);
+        c.fillStyle = '#000'; c.font = 'bold 9px sans-serif'; c.textAlign = 'center'; c.textBaseline = 'alphabetic';
+        c.fillText("KUKA", panelX + 137, panelY + 79);
+        c.font = '7px sans-serif'; c.fillText("KR C4", panelX + 137, panelY + 89);
+        const triX = panelX + 138; const triY = panelY + 38;
+        c.fillStyle = '#FFD700'; c.strokeStyle = '#000'; c.lineWidth = 2; c.lineJoin = 'miter';
+        c.beginPath(); c.moveTo(triX, triY - 18); c.lineTo(triX + 20, triY + 14); c.lineTo(triX - 20, triY + 14); c.closePath(); c.fill(); c.stroke();
+        c.fillStyle = '#000'; c.font = 'bold 22px sans-serif'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText("!", triX, triY + 4);
+        // SmartPAD
+        c.fillStyle = '#111';
+        c.beginPath(); c.moveTo(panelX + panelW - 5, panelY + panelH - 60);
+        c.lineTo(panelX + panelW + 15, panelY + panelH - 60);
+        c.lineTo(panelX + panelW + 15, panelY + panelH - 10);
+        c.lineTo(panelX + panelW - 5, panelY + panelH - 10); c.fill();
+        c.translate(cabinetX + boxW - 5, cabinetY + boxH - 60); c.rotate(Math.PI / 16);
+        c.fillStyle = '#333'; rrect(c, -20, 0, 50, 65, 8); c.fill();
+        c.fillStyle = '#222'; rrect(c, -18, 2, 46, 61, 6); c.fill();
+        c.fillStyle = KUKA_ORANGE; c.fillRect(-16, 4, 42, 57);
+        c.save(); c.beginPath(); c.rect(-12, 15, 34, 35); c.clip();
+        c.fillStyle = '#0a192f'; c.fillRect(-12, 15, 34, 35);
+        const t2 = Date.now() * 0.002;
+        c.fillStyle = 'rgba(0, 255, 204, 0.4)';
+        for (let i = 0; i < 3; i++) { let yOffset = ((t2 * 20 + i * 15) % 40); c.fillRect(-8, 50 - yOffset, 12, 4); }
+        c.strokeStyle = '#00ffcc'; c.lineWidth = 1; c.beginPath();
+        for (let lx = 0; lx < 34; lx += 2) {
+          let ly = 32 + Math.sin((lx * 0.2) - (t2 * 2)) * 6;
+          if (lx === 0) c.moveTo(-12 + lx, ly); else c.lineTo(-12 + lx, ly);
+        } c.stroke(); c.restore();
+        c.fillStyle = '#111'; c.beginPath(); c.arc(15, 8, 5, 0, Math.PI * 2); c.fill();
+        c.fillStyle = 'red'; c.beginPath(); c.arc(15, 8, 3.5, 0, Math.PI * 2); c.fill();
+        c.restore();
+      }
+
+      draw(c, cOverlay) {
+        this.drawLinearRail(c);
+        this.drawDragChain(c);
+        // SVG handles the robot visuals
+        this.positionSVG();
+        this.updateSVGTransforms();
+        // Gabinete se dibuja en el canvas overlay (z-index 3, encima del SVG)
+        this.drawControlCabinet(cOverlay);
+      }
+    }
+
+    const arm = new KukaKinematic();
+
+    function animate() {
+      ctx.clearRect(0, 0, W, H);
+      ctxOverlay.clearRect(0, 0, W, H);
+      // Grid background
+      ctx.strokeStyle = '#dae0e8'; ctx.lineWidth = 1;
+      for (let x = 0; x < W; x += 50) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke(); }
+      for (let y = 0; y < H; y += 50) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
+      arm.ik(mouse.x, mouse.y);
+      arm.draw(ctx, ctxOverlay);
+      requestAnimationFrame(animate);
+    }
+    animate();
+  </script>
+</body>
+
+</html>

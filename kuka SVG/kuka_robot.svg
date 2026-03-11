@@ -62,547 +62,598 @@
   <!--
     TODOS LOS PUNTOS MEDIDOS de imagen 620×633 y escalados con factor 1.183:
     torso_top/cx: (178, 377)    cil: 142×135
-    hombro:       (268, 247)    r=38
-    codo:         (119,  93)    r=28
-    mun_ini:      (339,  60)
-    mun_fin:      (496,  31)
-    nema1:        ( 64,  81)    50×40
-    plato_rot:    x=50 y=512  w=256 h=43
-    plato_fij:    x=60 y=554  w=237 h=20
+    hombro(308,247) → codo(119,93)    
   -->
 
-  <!-- ══════════════════════════════════════════════
-       CAPA 1 — BASE: plato fijo + rotativo + cilindro
-       ══════════════════════════════════════════════ -->
+<g id="eslabon0">
+    <!-- ══════════════════════════════════════════════
+        CAPA 1 — BASE: plato fijo + rotativo + cilindro
+        ══════════════════════════════════════════════ -->
+
+    <!-- ══════════════════════════════════════════════
+        BASE PRINCIPAL OSCURA (NIVEL INFERIOR)
+        ══════════════════════════════════════════════ -->
+    <g filter="url(#sh)">
+      <!-- Riel ( aquí va el riel )  -->
+      <rect x="-10" y="562" width="400" height="42" rx="2" fill="#2c2c2c"/>
+      <rect x="-10" y="562" width="400" height="3" fill="#444"/>
+      
+      <!-- Panel gris claro empotrado Central (más ancho para separar los bloques) -> ancho 120, centrado en 178 -> x=118 -->
+      <rect x="118" y="556" width="120" height="30" fill="#a0a4a8"/>
+      <rect x="118" y="583" width="120" height="3" fill="#808488"/>
+
+      <!-- Bloques verticales naranjas flanqueando lo gris (más largos y más separados) -->
+      <!-- Bloque Izquierdo (Ancho 28, x=90) -->
+      <rect x="90" y="556" width="28" height="34" rx="2" fill="#c44000"/>
+      <rect x="90" y="586" width="28" height="4" rx="1" fill="#9e3000"/>
+      <circle cx="104" cy="568" r="5" fill="#silver" fill-opacity="0.9" stroke="#777" stroke-width="1"/>
+      <circle cx="104" cy="568" r="2" fill="#222"/>
+      
+      <!-- Bloque Derecho (Ancho 28, x=238) -->
+      <rect x="238" y="556" width="28" height="34" rx="2" fill="#c44000"/>
+      <rect x="238" y="586" width="28" height="4" rx="1" fill="#9e3000"/>
+      <circle cx="252" cy="568" r="5" fill="#silver" fill-opacity="0.9" stroke="#777" stroke-width="1"/>
+      <circle cx="252" cy="568" r="2" fill="#222"/>
+    </g>
+
+    <!-- ══════════════════════════════════════════════
+        PATÍN DESLIZANTE (BASE NARANJA SUPERIOR)
+        Centrado absoluto bajo el cilindro rotativo (Centro = 178)
+        ══════════════════════════════════════════════ -->
+    <g filter="url(#sh)">
+      <!-- Cuerpo central del patín -->
+      <rect x="43" y="534" width="270" height="28" rx="4" fill="#9e3000"/>
+      <rect x="43" y="531" width="270" height="26" rx="4" fill="url(#ogH)"/>
+      
+      <!-- Reborde saliente grueso (frontal) con "hueco" de 44px en el medio (156 a 200) -->
+      <rect x="43" y="546" width="113" height="15" rx="3" fill="#c44000"/>
+      <rect x="43" y="550" width="113" height="7" rx="2" fill="#a03000"/>
+      
+      <rect x="200" y="546" width="113" height="15" rx="3" fill="#c44000"/>
+      <rect x="200" y="550" width="113" height="7" rx="2" fill="#a03000"/>
+
+      <!-- Orejas / Rectángulos naranjas laterales con ruedas grises -->
+      <rect x="15" y="540" width="28" height="24" rx="3" fill="#c44000"/>
+      <rect x="15" y="542" width="28" height="6" fill="#f06010" opacity="0.4"/>
+      
+      <rect x="313" y="540" width="28" height="24" rx="3" fill="#c44000"/>
+      <rect x="313" y="542" width="28" height="6" fill="#f06010" opacity="0.4"/>
+    </g>
+
+    <!-- ESCUADRA / CLAMP METÁLICO NEGRO MÁS LARGA -->
+    <g filter="url(#sh)">
+      <!-- Clamp negro más largo hacia abajo (altura 55) -->
+      <rect x="157" y="540" width="42" height="55" rx="4" fill="#1c1c1c"/>
+      <rect x="158" y="541" width="40" height="4" rx="2" fill="#3a3a3a"/>
+    </g>
+    <!-- Tornillos superiores (en la naranja) -->
+    <circle cx="168" cy="548" r="3.2" fill="#silver" fill-opacity="0.9" stroke="#999" stroke-width="0.8"/>
+    <circle cx="168" cy="548" r="1.5" fill="#111"/>
+    <circle cx="188" cy="548" r="3.2" fill="#silver" fill-opacity="0.9" stroke="#999" stroke-width="0.8"/>
+    <circle cx="188" cy="548" r="1.5" fill="#111"/>
+    
+    <!-- Tornillo inferior desplazado hacia abajo en la placa más larga -->
+    <circle cx="178" cy="582" r="5" fill="#silver" fill-opacity="0.9" stroke="#777" stroke-width="1.2"/>
+    <circle cx="178" cy="582" r="2.5" fill="#222"/>
+    <!-- Corte central/nervadura clásica en la parte inferior del clamp -->
+    <rect x="177" y="589" width="2" height="6" fill="#111"/>
+
+    <!-- Tornillería pesada negra con anillos plateados en los rebordes  -->
+    <circle cx="65" cy="554" r="6" fill="#141414"/>
+    <circle cx="65" cy="554" r="4.5" fill="#silver" fill-opacity="0.8" stroke="#eeddcc" stroke-width="0.8"/>
+    <circle cx="65" cy="554" r="2" fill="#111"/>
+    <circle cx="95" cy="554" r="6" fill="#141414"/>
+    <circle cx="95" cy="554" r="4.5" fill="#silver" fill-opacity="0.8" stroke="#eeddcc" stroke-width="0.8"/>
+    <circle cx="95" cy="554" r="2" fill="#111"/>
+    
+    <circle cx="261" cy="554" r="6" fill="#141414"/>
+    <circle cx="261" cy="554" r="4.5" fill="#silver" fill-opacity="0.8" stroke="#eeddcc" stroke-width="0.8"/>
+    <circle cx="261" cy="554" r="2" fill="#111"/>
+    <circle cx="291" cy="554" r="6" fill="#141414"/>
+    <circle cx="291" cy="554" r="4.5" fill="#silver" fill-opacity="0.8" stroke="#eeddcc" stroke-width="0.8"/>
+    <circle cx="291" cy="554" r="2" fill="#111"/>
+
+    <!-- Tornillos GRANDES plateados en las orejas laterales naranjas -->
+    <circle cx="29" cy="552" r="6.5" fill="#e0e0e0" filter="url(#shS)"/>
+    <circle cx="29" cy="552" r="4" fill="#a0a0a0" stroke="#707070" stroke-width="1"/>
+    <circle cx="29" cy="552" r="2" fill="#333"/>
+    
+    <circle cx="327" cy="552" r="6.5" fill="#e0e0e0" filter="url(#shS)"/>
+    <circle cx="327" cy="552" r="4" fill="#a0a0a0" stroke="#707070" stroke-width="1"/>
+    <circle cx="327" cy="552" r="2" fill="#333"/>
+
+    <!-- PLATO ROTATIVO  x=50 y=512 w=256 h=43 -->
+    <ellipse cx="178" cy="555" rx="130" ry="13" fill="#00000040"/>
+    <rect x="50"  y="517" width="256" height="38" rx="6" fill="#982e00" filter="url(#sh)"/>
+    <rect x="50"  y="512" width="256" height="38" rx="6" fill="url(#ogH)"/>
+    <!-- Labio reborde inferior pronunciado -->
+    <rect x="44"  y="541" width="268" height="14" rx="5" fill="#ae3c00"/>
+    <rect x="44"  y="538" width="268" height="14" rx="5" fill="#c44400"/>
+    <!-- Línea separación interior -->
+    <line x1="50" y1="530" x2="306" y2="530" stroke="#7c2200" stroke-width="1.6"/>
+    <!-- Tornillos perimetrales (10 tornillos) -->
+    <circle cx=" 62" cy="522" r="3.5" fill="#7a2800" stroke="#ff5400" stroke-width="0.8"/>
+    <circle cx=" 88" cy="515" r="3.5" fill="#7a2800" stroke="#ff5400" stroke-width="0.8"/>
+    <circle cx="124" cy="512" r="3.5" fill="#7a2800" stroke="#ff5400" stroke-width="0.8"/>
+    <circle cx="178" cy="511" r="3.5" fill="#7a2800" stroke="#ff5400" stroke-width="0.8"/>
+    <circle cx="232" cy="512" r="3.5" fill="#7a2800" stroke="#ff5400" stroke-width="0.8"/>
+    <circle cx="268" cy="515" r="3.5" fill="#7a2800" stroke="#ff5400" stroke-width="0.8"/>
+    <circle cx="294" cy="522" r="3.5" fill="#7a2800" stroke="#ff5400" stroke-width="0.8"/>
+    <circle cx=" 62" cy="540" r="3.5" fill="#7a2800" stroke="#ff5400" stroke-width="0.8"/>
+    <circle cx="294" cy="540" r="3.5" fill="#7a2800" stroke="#ff5400" stroke-width="0.8"/>
+
+    <!-- CILINDRO NEGRO — VISTA LATERAL = CUADRADO ANCHO -->
+    <!-- Más ancho que la base naranja. Centro en 178. Ancho 180 -> x=88 -->
+    
+    <!-- Sombra sobre el plato -->
+    <rect x="88" y="497" width="180" height="18" rx="2" fill="#00000038"/>
+    
+    <!-- FRANJA NARANJA EN EL PIE DEL CILINDRO (zona de acople al plato) -->
+    <rect x="88" y="506" width="180" height="8" rx="3" fill="#c44000" filter="url(#sh)"/>
+    <rect x="88" y="505" width="180" height="4" rx="3" fill="url(#ogH)"/>
+
+    <!-- CUERPO CUADRADO NEGRO PRINCIPAL (el cilindro visto de lado) -->
+    <rect x="88" y="370" width="180" height="136" rx="5" fill="url(#cylG)" filter="url(#sh)"/>
+    <!-- Highlight especular izquierdo -->
+    <rect x="88" y="370" width="22" height="136" rx="5" fill="#1c1c1c" opacity="0.85"/>
+    <line x1="96" y1="378" x2="96" y2="480" stroke="#3c3c3c" stroke-width="1.5" opacity="0.6"/>
+    <!-- Franja highlight central -->
+    <rect x="148" y="370" width="44" height="136" fill="#505050" opacity="0.22"/>
+    <!-- Franja oscura derecha -->
+    <rect x="243" y="370" width="25" height="136" rx="5" fill="#0a0a0a" opacity="0.85"/>
+      <!-- Tornillos naranjas del collarín pie -->
+    <circle cx="108" cy="518" r="3" fill="#0a0a0a" stroke="#505050" stroke-width="0.8"/>
+    <circle cx="148" cy="518" r="3" fill="#0a0a0a" stroke="#505050" stroke-width="0.8"/>
+    <circle cx="208" cy="518" r="3" fill="#0a0a0a" stroke="#505050" stroke-width="0.8"/>
+    <circle cx="248" cy="518" r="3" fill="#0a0a0a" stroke="#505050" stroke-width="0.8"/>
+    
+
+    <!-- Tapa superior plana (no elipse, cuadrada) -->
+    <rect x="88" y="365" width="180" height="10" rx="3" fill="#3c3c3c"/>
+    <rect x="88" y="362" width="180" height="10" rx="3" fill="#2a2a2a"/>
+    
+    <!-- UNIÓN CILINDRO-TORSO: Tuercas grises en la parte superior -->
+    <circle cx="108" cy="372" r="4.5" fill="#b0b0b0" stroke="#777" stroke-width="1"/>
+    <circle cx="108" cy="372" r="2" fill="#555"/>
+    <circle cx="148" cy="372" r="4.5" fill="#b0b0b0" stroke="#777" stroke-width="1"/>
+    <circle cx="148" cy="372" r="2" fill="#555"/>
+    <circle cx="208" cy="372" r="4.5" fill="#b0b0b0" stroke="#777" stroke-width="1"/>
+    <circle cx="208" cy="372" r="2" fill="#555"/>
+    <circle cx="248" cy="372" r="4.5" fill="#b0b0b0" stroke="#777" stroke-width="1"/>
+    <circle cx="248" cy="372" r="2" fill="#555"/>
+
+    <!-- ══════════════════════════════════════════════
+        MOTOR DE TRACCIÓN (DETRÁS PATÍN IZQUIERDA)
+        ══════════════════════════════════════════════ -->
+    <!-- Bloque / Caja de engranajes principal -->
+    <rect x="12" y="478" width="56" height="42" rx="3" fill="#141414" filter="url(#sh)"/>
+    <!-- Cilindro de motor asomando horizontalmente -->
+    <rect x="-8" y="488" width="24" height="22" rx="2" fill="#202020"/>
+    <rect x="-6" y="490" width="18" height="18" rx="1" fill="#080808"/>
+    
+    <!-- Disipadores verticales / ranuras -->
+    <g fill="#070707">
+      <rect x="18" y="482" width="4" height="34"/>
+      <rect x="28" y="482" width="4" height="34"/>
+      <rect x="38" y="482" width="4" height="34"/>
+      <rect x="48" y="482" width="4" height="34"/>
+      <rect x="58" y="482" width="4" height="34"/>
+    </g>
+
+    <!-- Brazo / Brida de acople acorazada a la base naranja -->
+    <path d="M 68 492 L 86 492 L 86 544 L 68 544 Z" fill="#962a00" filter="url(#sh)"/>
+    <path d="M 66 488 L 84 488 L 84 540 L 66 540 Z" fill="url(#ogV)"/>
+    <!-- Tornillos del acople -->
+    <circle cx="75" cy="497" r="3" fill="#222" stroke="#ff5a0a" stroke-width="0.7"/>
+    <circle cx="75" cy="530" r="3" fill="#222" stroke="#ff5a0a" stroke-width="0.7"/>
+    
+    <!-- Caja de conexiones eléctrica saliente inferior izquierda -->
+    <rect x="22" y="520" width="34" height="20" rx="2" fill="#1a1a1a" filter="url(#shS)"/>
+    <rect x="24" y="522" width="30" height="16" rx="1" fill="#0e0e0e"/>
+    <circle cx="30" cy="526" r="1.5" fill="#333"/>
+    <circle cx="48" cy="526" r="1.5" fill="#333"/>
+    
+    <!-- Tubo metálico pequeño o conector -->
+    <rect x="56" y="528" width="16" height="4" fill="#666"/>
+
+    <!-- ══════════════════════════════════════════════
+        CAPA 3 — TORSO DIAGONAL (MOTOR CENTRAL Y OREJA)
+        ══════════════════════════════════════════════ -->
+
+    <!-- BASE recta / trapezoidal que encaja sobre el cilindro negro -->
+    <!-- Ensanchada para sobresalir hasta la esquina de la oreja (aprox x=280) -->
+    <rect x="46" y="356" width="264" height="6" rx="2" fill="#9e3000" filter="url(#sh)"/>
+    <rect x="48" y="354" width="260" height="4" fill="#fc7422"/>
+    
+    <!-- Pernos de la base -->
+    <circle cx="65"  cy="358" r="2.5" fill="#444" stroke="#888" stroke-width="0.5"/>
+    <circle cx="178" cy="358" r="2.5" fill="#444" stroke="#888" stroke-width="0.5"/>
+    <circle cx="291" cy="358" r="2.5" fill="#444" stroke="#888" stroke-width="0.5"/>
+
+    <!-- "OREJA" - Conecta con el cuerpo tangente y soporta el gran eje del hombro -->
+    <g id="oreja_posterior" filter="url(#sh)">
+
+            
+      <path d="M 210,356 
+              L 270,356 
+              C 300,356 353,320 365,270
+              C 373,205 330,195 308,195
+              C 280,195 240,245 210,270
+              Z" 
+            fill="#c44000"/>
+
+      <path d="M 205,356 
+              L 245,356 
+              C 280,356 345,320 350,270
+              C 373,205 330,195 308,195
+              C 285,200 245,250 215,275
+              Z" 
+            fill="url(#ogDR)"/>
+  </g>
+
+    <!-- MOTOR INTERNO CENTRAL -->
+    <g id="motor_interno" filter="url(#sh)">
+      <rect x="147" y="240" width="62" height="116" rx="3" fill="#141414"/>
+      <rect x="149" y="242" width="58" height="112" rx="2" fill="#0e0e0e"/>
+      <!-- Highlight especular sobre cilindro del motor -->
+      <rect x="149" y="242" width="10" height="112" fill="#2c2c2c" opacity="0.7"/>
+      <line x1="154" y1="242" x2="154" y2="354" stroke="#4a4a4a" stroke-width="1"/>
+      <!-- Ranuras horizontales del bloque central (más compactas) -->
+      <rect x="149" y="260" width="58" height="3.5" fill="#080808"/>
+      <rect x="149" y="280" width="58" height="3.5" fill="#080808"/>
+      <rect x="149" y="300" width="58" height="3.5" fill="#080808"/>
+      <rect x="149" y="320" width="58" height="3.5" fill="#080808"/>
+    </g>
+
+    <!-- CONECTORES QUE SOBRESALEN DEL MOTOR POR LA IZQUIERDA -->
+    <g id="conectores_motor" filter="url(#shS)">
+      <rect x="126" y="255" width="22" height="20" rx="2" fill="#181818"/>
+      <rect x="118" y="258" width="8" height="5" fill="#0b0b0b" rx="1"/>
+      <rect x="118" y="267" width="8" height="5" fill="#0b0b0b" rx="1"/>
+      <rect x="132" y="292" width="16" height="16" rx="2" fill="#181818"/>
+      <rect x="124" y="297" width="8" height="5" fill="#0b0b0b" rx="1"/>
+    </g>
+
+    <!-- CUERPO PRINCIPAL — Perfil frontal redondeado (continuidad oreja-base) -->
+    <!-- Ancho reducido para no tapar el motor, borde tangencial a la oreja -->
+    <!-- D=102 a 210, curva suave cóncava superior -->
+    <path d="M 102,356 L 210,356 C 210,310 215,285 220,265 C 190,295 140,320 102,320 Z" fill="#b03600" filter="url(#sh)"/>
+    <path d="M 102,356 L 205,356 C 205,310 210,290 215,270 C 190,295 140,320 102,320 Z" fill="url(#ogH)" opacity="0.8"/>
+    
+    <!-- Highlight vertical izquierdo -->
+    <path d="M 102,356 L 112,356 C 112,340 110,325 102,320 Z" fill="#ff7e28" opacity="0.25"/>
+    
+    <!-- Borde superior curvo, tangente perfecta a la curva de la oreja superior que baja hasta (205,265) -->
+    <path d="M 102,320 C 140,320 190,290 220,265" stroke="#ff7010" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <path d="M 102,322 C 140,322 190,292 218,267" stroke="#7a2800" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+
+
+
+</g>
+  
+<!-- ══════════════════════════════════════════════
+     ESLABON 2 (Traído desde el draft)
+     Posicionado en nuestro codo real (119, 93)
+     ══════════════════════════════════════════════ -->
+<g id="eslabon2" transform="translate(119, 93) rotate( -12 ) translate(-215, -300)">
+  
+
+  <defs>
+    <!-- Gradients -->
+    <linearGradient id="ogV" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ff6000"/>
+      <stop offset="50%" stop-color="#dd4000"/>
+      <stop offset="100%" stop-color="#992000"/>
+    </linearGradient>
+    <linearGradient id="ogH" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ff7010"/>
+      <stop offset="50%" stop-color="#dd4000"/>
+      <stop offset="100%" stop-color="#992000"/>
+    </linearGradient>
+    <linearGradient id="motorG" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#2a2a2a"/>
+      <stop offset="20%" stop-color="#111"/>
+      <stop offset="100%" stop-color="#000"/>
+    </linearGradient>
+    <linearGradient id="silverG" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#f0f0f0"/>
+      <stop offset="40%" stop-color="#c0c0c0"/>
+      <stop offset="100%" stop-color="#707070"/>
+    </linearGradient>
+    <filter id="sh" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="2" dy="5" stdDeviation="4" flood-color="#000" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+
+  <!-- MOTORES NEMA TRASEROS (Ahora desplazados hacia ABAJO respecto al centro Y=300) -->
+  <g filter="url(#sh)">
+    <!-- Backplate union a motores -->
+    <!-- El centro de la articulacion es Y=300, pero los motores inician en 280 y bajan hasta 365 -->
+    <path d="M 215,265 
+             L 165,265 C 150,265 145,268 145,278
+             L 145,350 C 145,360 150,365 165,390
+             L 230,365
+             Z" fill="url(#ogV)"/>
+             
+
+    <!-- M1 (Top) -->
+    <!-- Bajamos el banco entero de Y=260 a Y=272 -->
+    <g transform="translate(86, 268)">
+      <rect x="0" y="0" width="70" height="34" rx="2" fill="url(#motorG)" stroke="#333" stroke-width="1"/>
+      <rect x="60" y="2" width="6" height="20" fill="#181818"/>
+      <line x1="12" y1="0" x2="12" y2="24" stroke="#000" stroke-width="2"/>
+      <line x1="24" y1="0" x2="24" y2="24" stroke="#000" stroke-width="2"/>
+      <line x1="36" y1="0" x2="36" y2="24" stroke="#000" stroke-width="2"/>
+      <line x1="48" y1="0" x2="48" y2="24" stroke="#000" stroke-width="2"/>
+      <rect x="5" y="8" width="50" height="8" rx="1" fill="#000"/>
+      <rect x="10" y="10" width="4" height="4" fill="#0ca131ff"/>
+    </g>
+    <!-- M2 (Middle) -->
+    <g transform="translate(86, 312)">
+      <rect x="0" y="0" width="70" height="34" rx="2" fill="url(#motorG)" stroke="#333" stroke-width="1"/>
+      <rect x="60" y="2" width="6" height="20" fill="#181818"/>
+      <line x1="12" y1="0" x2="12" y2="24" stroke="#000" stroke-width="2"/>
+      <line x1="24" y1="0" x2="24" y2="24" stroke="#000" stroke-width="2"/>
+      <line x1="36" y1="0" x2="36" y2="24" stroke="#000" stroke-width="2"/>
+      <line x1="48" y1="0" x2="48" y2="24" stroke="#000" stroke-width="2"/>
+      <rect x="5" y="8" width="50" height="8" rx="1" fill="#000"/>
+      <rect x="10" y="10" width="4" height="4" fill="#09f831ff"/>
+    </g>
+    <!-- M3 (Bottom) -->
+    <!-- Desplazado ligeramente a la derecha (x=102) como se ve en el robot -->
+    <g transform="translate(100, 357)">
+      <rect x="0" y="0" width="70" height="34" rx="2" fill="url(#motorG)" stroke="#333" stroke-width="1"/>
+      <rect x="60" y="2" width="6" height="20" fill="#181818"/>
+      <line x1="12" y1="0" x2="12" y2="24" stroke="#000" stroke-width="2"/>
+      <line x1="24" y1="0" x2="24" y2="24" stroke="#000" stroke-width="2"/>
+      <line x1="36" y1="0" x2="36" y2="24" stroke="#000" stroke-width="2"/>
+      <line x1="48" y1="0" x2="48" y2="24" stroke="#000" stroke-width="2"/>
+      <rect x="5" y="8" width="50" height="8" rx="1" fill="#000"/>
+      <rect x="10" y="10" width="4" height="4" fill="#fa0606ff"/>
+    </g>
+  </g>
+
+  <!-- CUERPO ESLABÓN 2 (BRAZO) Y ARTICULACIÓN CODO -->
+  <g filter="url(#sh)">
+    <!-- Perfil Orgánico Completo: Panzón atrás, estrecho en medio -->
+    <!-- El centro disminuye (afina) en vez de ser recio -->
+    <path d="M 215,257
+             C 250,257 265,280 344,280
+             L 344,320
+             C 265,320 250,343 215,343
+             A 43 43 0 0 1 215,257
+             Z" fill="url(#ogV)"/>
+             
+    <!-- Luz superior cóncava - afinando el medio -->
+    <path d="M 215,257 C 250,257 265,280 344,280 L 344,285 C 265,285 250,266 215,266 Z" fill="#ff7010" opacity="0.4"/>
+    
+    <!-- Sombra inferior -->
+    <path d="M 344,312 L 344,320 C 265,320 250,343 215,343 C 250,343 265,312 344,312 Z" fill="#782400" opacity="0.6"/>
+
+    <!-- Nervadura central también sigue el afinamiento -->
+    <path d="M 270,300 L 335,300" stroke="#a83000" stroke-width="4.5" fill="none" opacity="0.5"/>
+    <path d="M 270,306 L 335,306" stroke="#a83000" stroke-width="2" fill="none" opacity="0.5"/>
+
+    <!-- ARTICULACIÓN BASE JOINT (CODO - Radio exterior = 43) -->
+    <circle cx="215" cy="300" r="43" fill="#c44000"/>
+    <circle cx="215" cy="300" r="41" fill="url(#ogH)" opacity="0.8"/>
+
+    <!-- Tornillos periféricos del Codo -->
+    <g transform="translate(215, 300)">
+      <circle cx="36" cy="0" r="2.5" fill="#e0e0e0" stroke="#777"/>
+      <circle cx="31.2" cy="18" r="2.5" fill="#e0e0e0" stroke="#777"/>
+      <circle cx="18" cy="31.2" r="2.5" fill="#e0e0e0" stroke="#777"/>
+      <circle cx="0" cy="36" r="2.5" fill="#e0e0e0" stroke="#777"/>
+      <circle cx="-18" cy="31.2" r="2.5" fill="#e0e0e0" stroke="#777"/>
+      <circle cx="-31.2" cy="18" r="2.5" fill="#e0e0e0" stroke="#777"/>
+      <circle cx="-36" cy="0" r="2.5" fill="#e0e0e0" stroke="#777"/>
+      <circle cx="-31.2" cy="-18" r="2.5" fill="#e0e0e0" stroke="#777"/>
+      <circle cx="-18" cy="-31.2" r="2.5" fill="#e0e0e0" stroke="#777"/>
+      <circle cx="0" cy="-36" r="2.5" fill="#e0e0e0" stroke="#777"/>
+      <circle cx="18" cy="-31.2" r="2.5" fill="#e0e0e0" stroke="#777"/>
+      <circle cx="31.2" cy="-18" r="2.5" fill="#e0e0e0" stroke="#777"/>
+    </g>
+
+    <circle cx="215" cy="300" r="28" fill="#a03000" stroke="#802000" stroke-width="1"/>
+    <circle cx="215" cy="300" r="28" fill="#000" opacity="0.15"/>
+    <circle cx="215" cy="300" r="14" fill="#a03000"/>
+    <circle cx="215" cy="300" r="14" fill="#fff" opacity="0.1"/>
+
+    <!-- HUECO DE CABLES GROMMET (Col 3, movido mas al cuello) -->
+    <g transform="translate(265, 275) rotate(-10)">
+      <ellipse cx="0" cy="0" rx="14" ry="7" fill="none" stroke="#050505" stroke-width="4.5"/>
+      <ellipse cx="0" cy="0" rx="12" ry="5" fill="#180400"/>
+      <path d="M -12,0 A 12 5 0 0 1 12,0 A 10 3 0 0 0 -12,0 Z" fill="#000" opacity="0.8"/>
+    </g>
+  </g>
 
   <!-- ══════════════════════════════════════════════
-       BASE PRINCIPAL OSCURA (NIVEL INFERIOR)
+       MUÑECA (COL 4) y EFECTOR BLANCO (COL 5) Shrinked!
        ══════════════════════════════════════════════ -->
   <g filter="url(#sh)">
-    <!-- Base estructural gruesa gris oscura -->
-    <rect x="-10" y="562" width="400" height="42" rx="2" fill="#2c2c2c"/>
-    <rect x="-10" y="562" width="400" height="3" fill="#444"/>
-    
-    <!-- Panel gris claro empotrado Central (más ancho para separar los bloques) -> ancho 120, centrado en 178 -> x=118 -->
-    <rect x="118" y="556" width="120" height="30" fill="#a0a4a8"/>
-    <rect x="118" y="583" width="120" height="3" fill="#808488"/>
+    <!-- COL 4 [344 - 430] MUÑECA PLATEADA/GRIS -->
+    <!-- Como el brazo principal se achicó a 320, ajustamos estos conectores -->
+    <path d="M 344,280 L 365,280 L 365,320 L 344,320 Z" fill="url(#silverG)"/>
+    <rect x="344" y="280" width="6" height="40" fill="#ddd"/>
+    <rect x="360" y="280" width="5" height="40" fill="#777"/>
+    <line x1="352" y1="280" x2="352" y2="320" stroke="#999" stroke-width="1.5"/>
 
-    <!-- Bloques verticales naranjas flanqueando lo gris (más largos y más separados) -->
-    <!-- Bloque Izquierdo (Ancho 28, x=90) -->
-    <rect x="90" y="556" width="28" height="34" rx="2" fill="#c44000"/>
-    <rect x="90" y="586" width="28" height="4" rx="1" fill="#9e3000"/>
-    <circle cx="104" cy="568" r="5" fill="#silver" fill-opacity="0.9" stroke="#777" stroke-width="1"/>
-    <circle cx="104" cy="568" r="2" fill="#222"/>
-    
-    <!-- Bloque Derecho (Ancho 28, x=238) -->
-    <rect x="238" y="556" width="28" height="34" rx="2" fill="#c44000"/>
-    <rect x="238" y="586" width="28" height="4" rx="1" fill="#9e3000"/>
-    <circle cx="252" cy="568" r="5" fill="#silver" fill-opacity="0.9" stroke="#777" stroke-width="1"/>
-    <circle cx="252" cy="568" r="2" fill="#222"/>
+    <!-- Transición trapezoidal -->
+    <polygon points="365,280 380,285 380,315 365,320" fill="#a0a0a0"/>
+    <polygon points="365,280 380,285 380,295 365,290" fill="#f0f0f0"/>
+    <polygon points="365,320 380,315 380,305 365,310" fill="#555"/>
+
+    <rect x="380" y="285" width="6" height="30" fill="#222"/>
+
+    <!-- Silver Cylindrical Final Swivel -->
+    <path d="M 386,285 L 430,288 L 430,312 L 386,315 Z" fill="url(#silverG)"/>
+    <polygon points="386,285 430,288 430,292 386,289" fill="#eee"/>
+    <polygon points="386,315 430,312 430,306 386,309" fill="#666"/>
+    <line x1="406" y1="287" x2="406" y2="313" stroke="#999" stroke-width="1.5"/>
+
+    <!-- COL 5 [430 - 516] BULBO BLANCO (END EFFECTOR) -->
+    <!-- Anillo negro de acople base -->
+    <polygon points="430,288 433,288 433,312 430,312" fill="#111"/>
+
+    <!-- BULBO TEARDROP BLANCO SHRUNK -->
+    <!-- Lo encogemos achicando los controles del bezier -->
+    <path d="M 433,288 
+             C 445,268 460,268 495,294
+             L 495,306
+             C 460,332 445,332 433,312 Z" fill="url(#silverG)"/>
+             
+    <!-- Brillo superior central -->
+    <path d="M 433,288 
+             C 445,268 460,268 495,294
+             L 495,298
+             C 460,275 445,280 433,295 Z" fill="#fff" opacity="0.8"/>
+             
+    <!-- Sombra inferior curva -->
+    <path d="M 434,312 
+             C 445,332 460,332 495,306
+             L 495,302 
+             C 460,324 445,316 434,304 Z" fill="#444" opacity="0.25"/>
+             
+    <!-- Logo KUKA lateral de la herramienta final -->
+    <!-- Movido más a la izquierda para que quepa en el bulbo chico -->
+    <g transform="translate(460, 303)">
+      <text x="0" y="0" font-family="Arial Black, Impact, sans-serif" font-size="10" font-weight="900" fill="#111" text-anchor="middle" letter-spacing="1">KUKA</text>
+    </g>
+
+    <!-- TRIMMING FINAL (TOOL FLANGE NEGRO) -->
+    <rect x="495" y="294" width="4" height="12" fill="#000"/>
+    <rect x="499" y="297" width="2" height="6" fill="#444"/>
   </g>
 
-  <!-- ══════════════════════════════════════════════
-       PATÍN DESLIZANTE (BASE NARANJA SUPERIOR)
-       Centrado absoluto bajo el cilindro rotativo (Centro = 178)
-       ══════════════════════════════════════════════ -->
-  <g filter="url(#sh)">
-    <!-- Cuerpo central del patín -->
-    <rect x="43" y="534" width="270" height="28" rx="4" fill="#9e3000"/>
-    <rect x="43" y="531" width="270" height="26" rx="4" fill="url(#ogH)"/>
-    
-    <!-- Reborde saliente grueso (frontal) con "hueco" de 44px en el medio (156 a 200) -->
-    <rect x="43" y="546" width="113" height="15" rx="3" fill="#c44000"/>
-    <rect x="43" y="550" width="113" height="7" rx="2" fill="#a03000"/>
-    
-    <rect x="200" y="546" width="113" height="15" rx="3" fill="#c44000"/>
-    <rect x="200" y="550" width="113" height="7" rx="2" fill="#a03000"/>
 
-    <!-- Orejas / Rectángulos naranjas laterales con ruedas grises -->
-    <rect x="15" y="540" width="28" height="24" rx="3" fill="#c44000"/>
-    <rect x="15" y="542" width="28" height="6" fill="#f06010" opacity="0.4"/>
-    
-    <rect x="313" y="540" width="28" height="24" rx="3" fill="#c44000"/>
-    <rect x="313" y="542" width="28" height="6" fill="#f06010" opacity="0.4"/>
+</g>
+
+<!-- ══════════════════════════════════════════════
+    ESLABÓN 1 (DISEÑO ROBUSTO CON HUECOS)
+    hombro(308,247) → codo(119,93)
+    ══════════════════════════════════════════════ -->
+  <g id="eslabon1" transform="translate(308, 247) rotate(-140.826)">
+    <defs>
+      <!-- Gradients -->
+      <linearGradient id="ogV" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stop-color="#ff6000"/>
+        <stop offset="50%" stop-color="#dd4000"/>
+        <stop offset="100%" stop-color="#992000"/>
+      </linearGradient>
+      <filter id="sh" x="-10%" y="-10%" width="130%" height="130%">
+        <feDropShadow dx="2" dy="5" stdDeviation="4" flood-color="#000" flood-opacity="0.4"/>
+      </filter>
+    </defs>
+
+
+
+    <!-- ESLABON 1 HORIZONTAL (Construido desde X=0 hasta X=244) -->
+    <g filter="url(#sh)">
+      
+      <!-- Base Sombra -->
+      <!-- Controles de curva para lipo: Centro es recto en Y=±32, Extremos hacen curva hacia afuera -->
+      <path d="M 0,-50 
+              C 40,-50 60,-36 90,-36
+              L 154,-36
+              C 184,-36 204,-40 244,-40
+              A 38 38 0 0 1 244,42
+              C 204,42 184,36 154,36
+              L 90,36
+              C 60,36 40,50 0,50
+              A 45 45 0 0 1 0,-50 Z" fill="#782400" opacity="0.53" transform="translate(1, 4)"/>
+              
+      <!-- Cuerpo Principal Naranja -->
+      <path d="M 0,-45 
+              C 40,-45 60,-25 90,-25
+              L 154,-25
+              C 184,-25 204,-38 244,-38
+              A 38 38 0 0 1 244,38
+              C 204,38 184,32 154,32
+              L 90,32
+              C 60,32 40,45 0,45
+              A 45 45 0 0 1 0,-45 Z" fill="url(#ogV)"/>
+              
+      <!-- Luz superior (Brillo para volumen) -->
+      <path d="M 0,-45 
+              C 40,-45 60,-25 90,-25
+              L 154,-25
+              C 184,-25 204,-38 244,-38
+              L 244,-34
+              C 204,-34 184,-28 154,-28
+              L 90,-28
+              C 60,-28 40,-40 0,-40 Z" fill="#ff7010" opacity="0.4"/>
+
+
+
+      <!-- HUB DEL HOMBRO (Izquierda, r=45) -->
+      <g>
+        <circle cx="0" cy="0" r="45" fill="#3c3c3c" stroke="#555" stroke-width="2"/>
+        <circle cx="0" cy="0" r="34" fill="#2a2a2a"/>
+        <circle cx="0" cy="0" r="18" fill="#1a1a1a" stroke="#444" stroke-width="1.5"/>
+        <!-- Tornillos -->
+        <circle cx="0" cy="-35" r="3" fill="#a0a0a0" stroke="#707070" stroke-width="0.8"/>
+        <circle cx="25" cy="-25" r="3" fill="#a0a0a0" stroke="#707070" stroke-width="0.8"/>
+        <circle cx="35" cy="0" r="3" fill="#a0a0a0" stroke="#707070" stroke-width="0.8"/>
+        <circle cx="25" cy="25" r="3" fill="#a0a0a0" stroke="#707070" stroke-width="0.8"/>
+        <circle cx="0" cy="35" r="3" fill="#a0a0a0" stroke="#707070" stroke-width="0.8"/>
+        <circle cx="-25" cy="25" r="3" fill="#a0a0a0" stroke="#707070" stroke-width="0.8"/>
+        <circle cx="-35" cy="0" r="3" fill="#a0a0a0" stroke="#707070" stroke-width="0.8"/>
+        <circle cx="-25" cy="-25" r="3" fill="#a0a0a0" stroke="#707070" stroke-width="0.8"/>
+      </g>
+
+      <!-- HUB DEL CODO (Derecha, r=38) -->
+      <g transform="translate(244, 0)">
+        <circle cx="0" cy="0" r="38" fill="#3c3c3c" stroke="#555" stroke-width="2"/>
+        <circle cx="0" cy="0" r="30" fill="#2a2a2a"/>
+        <circle cx="0" cy="0" r="14" fill="#1a1a1a" stroke="#444" stroke-width="1.5"/>
+        <!-- Tornillos -->
+        <circle cx="0" cy="-30" r="2.5" fill="#a0a0a0" stroke="#707070" stroke-width="0.8"/>
+        <circle cx="21" cy="-21" r="2.5" fill="#a0a0a0" stroke="#707070" stroke-width="0.8"/>
+        <circle cx="30" cy="0" r="2.5" fill="#a0a0a0" stroke="#707070" stroke-width="0.8"/>
+        <circle cx="21" cy="21" r="2.5" fill="#a0a0a0" stroke="#707070" stroke-width="0.8"/>
+        <circle cx="0" cy="30" r="2.5" fill="#a0a0a0" stroke="#707070" stroke-width="0.8"/>
+        <circle cx="-21" cy="21" r="2.5" fill="#a0a0a0" stroke="#707070" stroke-width="0.8"/>
+        <circle cx="-30" cy="0" r="2.5" fill="#a0a0a0" stroke="#707070" stroke-width="0.8"/>
+        <circle cx="-21" cy="-21" r="2.5" fill="#a0a0a0" stroke="#707070" stroke-width="0.8"/>
+      </g>
+
+
+
+      <!-- ETIQUETA KUKA CENTRAL -->
+      <g transform="translate(122, 0)">
+        <rect x="-35" y="-12" width="70" height="24" rx="3" fill="#111" stroke="#222" stroke-width="1"/>
+        <text x="0" y="5" font-family="Arial Black, Impact, sans-serif" font-size="16" font-weight="900" fill="#ff7010" text-anchor="middle" letter-spacing="2">KUKA</text>
+      </g>
+      
+    </g>
   </g>
 
-  <!-- ESCUADRA / CLAMP METÁLICO NEGRO MÁS LARGA -->
-  <g filter="url(#sh)">
-    <!-- Clamp negro más largo hacia abajo (altura 55) -->
-    <rect x="157" y="540" width="42" height="55" rx="4" fill="#1c1c1c"/>
-    <rect x="158" y="541" width="40" height="4" rx="2" fill="#3a3a3a"/>
-  </g>
-  <!-- Tornillos superiores (en la naranja) -->
-  <circle cx="168" cy="548" r="3.2" fill="#silver" fill-opacity="0.9" stroke="#999" stroke-width="0.8"/>
-  <circle cx="168" cy="548" r="1.5" fill="#111"/>
-  <circle cx="188" cy="548" r="3.2" fill="#silver" fill-opacity="0.9" stroke="#999" stroke-width="0.8"/>
-  <circle cx="188" cy="548" r="1.5" fill="#111"/>
-  
-  <!-- Tornillo inferior desplazado hacia abajo en la placa más larga -->
-  <circle cx="178" cy="582" r="5" fill="#silver" fill-opacity="0.9" stroke="#777" stroke-width="1.2"/>
-  <circle cx="178" cy="582" r="2.5" fill="#222"/>
-  <!-- Corte central/nervadura clásica en la parte inferior del clamp -->
-  <rect x="177" y="589" width="2" height="6" fill="#111"/>
-
-  <!-- Tornillería pesada negra con anillos plateados en los rebordes  -->
-  <circle cx="65" cy="554" r="6" fill="#141414"/>
-  <circle cx="65" cy="554" r="4.5" fill="#silver" fill-opacity="0.8" stroke="#eeddcc" stroke-width="0.8"/>
-  <circle cx="65" cy="554" r="2" fill="#111"/>
-  <circle cx="95" cy="554" r="6" fill="#141414"/>
-  <circle cx="95" cy="554" r="4.5" fill="#silver" fill-opacity="0.8" stroke="#eeddcc" stroke-width="0.8"/>
-  <circle cx="95" cy="554" r="2" fill="#111"/>
-  
-  <circle cx="261" cy="554" r="6" fill="#141414"/>
-  <circle cx="261" cy="554" r="4.5" fill="#silver" fill-opacity="0.8" stroke="#eeddcc" stroke-width="0.8"/>
-  <circle cx="261" cy="554" r="2" fill="#111"/>
-  <circle cx="291" cy="554" r="6" fill="#141414"/>
-  <circle cx="291" cy="554" r="4.5" fill="#silver" fill-opacity="0.8" stroke="#eeddcc" stroke-width="0.8"/>
-  <circle cx="291" cy="554" r="2" fill="#111"/>
-
-  <!-- Tornillos GRANDES plateados en las orejas laterales naranjas -->
-  <circle cx="29" cy="552" r="6.5" fill="#e0e0e0" filter="url(#shS)"/>
-  <circle cx="29" cy="552" r="4" fill="#a0a0a0" stroke="#707070" stroke-width="1"/>
-  <circle cx="29" cy="552" r="2" fill="#333"/>
-  
-  <circle cx="327" cy="552" r="6.5" fill="#e0e0e0" filter="url(#shS)"/>
-  <circle cx="327" cy="552" r="4" fill="#a0a0a0" stroke="#707070" stroke-width="1"/>
-  <circle cx="327" cy="552" r="2" fill="#333"/>
-  <!-- Terminales/Cables saliendo de la esquina derecha de la base -->
-  <path d="M 312 552 C 322 552 334 565 330 575" stroke="#111" stroke-width="4.5" fill="none" stroke-linecap="round"/>
-  <path d="M 314 558 C 324 558 335 570 328 580" stroke="#050505" stroke-width="6" fill="none" stroke-linecap="round"/>
-
-  <!-- PLATO ROTATIVO  x=50 y=512 w=256 h=43 -->
-  <ellipse cx="178" cy="555" rx="130" ry="13" fill="#00000040"/>
-  <rect x="50"  y="517" width="256" height="38" rx="6" fill="#982e00" filter="url(#sh)"/>
-  <rect x="50"  y="512" width="256" height="38" rx="6" fill="url(#ogH)"/>
-  <!-- Labio reborde inferior pronunciado -->
-  <rect x="44"  y="541" width="268" height="14" rx="5" fill="#ae3c00"/>
-  <rect x="44"  y="538" width="268" height="14" rx="5" fill="#c44400"/>
-  <!-- Línea separación interior -->
-  <line x1="50" y1="530" x2="306" y2="530" stroke="#7c2200" stroke-width="1.6"/>
-  <!-- Tornillos perimetrales (10 tornillos) -->
-  <circle cx=" 62" cy="522" r="3.5" fill="#7a2800" stroke="#ff5400" stroke-width="0.8"/>
-  <circle cx=" 88" cy="515" r="3.5" fill="#7a2800" stroke="#ff5400" stroke-width="0.8"/>
-  <circle cx="124" cy="512" r="3.5" fill="#7a2800" stroke="#ff5400" stroke-width="0.8"/>
-  <circle cx="178" cy="511" r="3.5" fill="#7a2800" stroke="#ff5400" stroke-width="0.8"/>
-  <circle cx="232" cy="512" r="3.5" fill="#7a2800" stroke="#ff5400" stroke-width="0.8"/>
-  <circle cx="268" cy="515" r="3.5" fill="#7a2800" stroke="#ff5400" stroke-width="0.8"/>
-  <circle cx="294" cy="522" r="3.5" fill="#7a2800" stroke="#ff5400" stroke-width="0.8"/>
-  <circle cx=" 62" cy="540" r="3.5" fill="#7a2800" stroke="#ff5400" stroke-width="0.8"/>
-  <circle cx="294" cy="540" r="3.5" fill="#7a2800" stroke="#ff5400" stroke-width="0.8"/>
-  <!-- Cable entrando lateral derecho -->
-  <path d="M 306 522 C 320 520 328 511 330 496"
-        stroke="#090909" stroke-width="6.5" fill="none" stroke-linecap="round"/>
-  <path d="M 306 528 C 321 526 330 516 332 501"
-        stroke="#151515" stroke-width="4"   fill="none" stroke-linecap="round"/>
-
-  <!-- CILINDRO NEGRO — VISTA LATERAL = CUADRADO ANCHO -->
-  <!-- Más ancho que la base naranja. Centro en 178. Ancho 180 -> x=88 -->
-  
-  <!-- Sombra sobre el plato -->
-  <rect x="88" y="497" width="180" height="18" rx="2" fill="#00000038"/>
-  
-  <!-- FRANJA NARANJA EN EL PIE DEL CILINDRO (zona de acople al plato) -->
-  <rect x="88" y="486" width="180" height="28" rx="3" fill="#c44000" filter="url(#sh)"/>
-  <rect x="88" y="486" width="180" height="24" rx="3" fill="url(#ogH)"/>
-  <!-- Tornillos naranjas del collarín pie -->
-  <circle cx="108" cy="498" r="3" fill="#7a2800" stroke="#ff5400" stroke-width="0.8"/>
-  <circle cx="148" cy="498" r="3" fill="#7a2800" stroke="#ff5400" stroke-width="0.8"/>
-  <circle cx="208" cy="498" r="3" fill="#7a2800" stroke="#ff5400" stroke-width="0.8"/>
-  <circle cx="248" cy="498" r="3" fill="#7a2800" stroke="#ff5400" stroke-width="0.8"/>
-  
-  <!-- CUERPO CUADRADO NEGRO PRINCIPAL (el cilindro visto de lado) -->
-  <rect x="88" y="370" width="180" height="116" rx="5" fill="url(#cylG)" filter="url(#sh)"/>
-  <!-- Highlight especular izquierdo -->
-  <rect x="88" y="370" width="22" height="116" rx="5" fill="#1c1c1c" opacity="0.85"/>
-  <line x1="96" y1="378" x2="96" y2="480" stroke="#3c3c3c" stroke-width="1.5" opacity="0.6"/>
-  <!-- Franja highlight central -->
-  <rect x="148" y="370" width="44" height="116" fill="#505050" opacity="0.22"/>
-  <!-- Franja oscura derecha -->
-  <rect x="243" y="370" width="25" height="116" rx="5" fill="#0a0a0a" opacity="0.85"/>
-  
-  <!-- Ranuras horizontales de fundición -->
-  <rect x="88" y="410" width="180" height="4" fill="#0a0a0a" opacity="0.7"/>
-  <rect x="88" y="430" width="180" height="4" fill="#0a0a0a" opacity="0.7"/>
-  <rect x="88" y="450" width="180" height="4" fill="#0a0a0a" opacity="0.7"/>
-  <rect x="88" y="470" width="180" height="4" fill="#0a0a0a" opacity="0.7"/>
-  
-  <!-- Tapa superior plana (no elipse, cuadrada) -->
-  <rect x="88" y="365" width="180" height="10" rx="3" fill="#3c3c3c"/>
-  <rect x="88" y="362" width="180" height="10" rx="3" fill="#2a2a2a"/>
-  
-  <!-- UNIÓN CILINDRO-TORSO: Tuercas grises en la parte superior -->
-  <circle cx="108" cy="372" r="4.5" fill="#b0b0b0" stroke="#777" stroke-width="1"/>
-  <circle cx="108" cy="372" r="2" fill="#555"/>
-  <circle cx="148" cy="372" r="4.5" fill="#b0b0b0" stroke="#777" stroke-width="1"/>
-  <circle cx="148" cy="372" r="2" fill="#555"/>
-  <circle cx="208" cy="372" r="4.5" fill="#b0b0b0" stroke="#777" stroke-width="1"/>
-  <circle cx="208" cy="372" r="2" fill="#555"/>
-  <circle cx="248" cy="372" r="4.5" fill="#b0b0b0" stroke="#777" stroke-width="1"/>
-  <circle cx="248" cy="372" r="2" fill="#555"/>
-
-  <!-- ══════════════════════════════════════════════
-       MOTOR DE TRACCIÓN (DETRÁS PATÍN IZQUIERDA)
-       ══════════════════════════════════════════════ -->
-  <!-- Bloque / Caja de engranajes principal -->
-  <rect x="12" y="478" width="56" height="42" rx="3" fill="#141414" filter="url(#sh)"/>
-  <!-- Cilindro de motor asomando horizontalmente -->
-  <rect x="-8" y="488" width="24" height="22" rx="2" fill="#202020"/>
-  <rect x="-6" y="490" width="18" height="18" rx="1" fill="#080808"/>
-  
-  <!-- Disipadores verticales / ranuras -->
-  <g fill="#070707">
-    <rect x="18" y="482" width="4" height="34"/>
-    <rect x="28" y="482" width="4" height="34"/>
-    <rect x="38" y="482" width="4" height="34"/>
-    <rect x="48" y="482" width="4" height="34"/>
-    <rect x="58" y="482" width="4" height="34"/>
+     
+<g id="cables y abrazaderas">
+  <!-- CABLES / MANGUERAS NATURALES Y CURVAS -->
+  <!-- Bucle colgante, subiendo por la oreja tangencial y conectando hacia el hombro derecho -->
+  <g>
+    <path d="M 118,260 C 50,260 50,360 140,350 C 200,340 250,320 290,245"
+          stroke="#0e0e0e" stroke-width="10" fill="none" stroke-linecap="round" filter="url(#shS)"/>
+    <path d="M 118,260 C 50,260 50,360 140,350 C 200,340 250,320 290,245"
+          stroke="#1a1a1a" stroke-width="4" fill="none" stroke-linecap="round"/>
+          
+    <path d="M 124,300 C 70,300 85,340 145,335 C 190,330 240,310 280,240"
+          stroke="#121212" stroke-width="6.5" fill="none" stroke-linecap="round"/>
+    <path d="M 124,300 C 70,300 85,340 145,335 C 190,330 240,310 280,240"
+          stroke="#1c1c1c" stroke-width="2" fill="none" stroke-linecap="round"/>
+          
+    <path d="M 118,270 C 65,270 65,350 148,342 C 210,335 260,310 300,235"
+          stroke="#2a2a2a" stroke-width="3.5" fill="none" stroke-linecap="round"/>
   </g>
 
-  <!-- Brazo / Brida de acople acorazada a la base naranja -->
-  <path d="M 68 492 L 86 492 L 86 544 L 68 544 Z" fill="#962a00" filter="url(#sh)"/>
-  <path d="M 66 488 L 84 488 L 84 540 L 66 540 Z" fill="url(#ogV)"/>
-  <!-- Tornillos del acople -->
-  <circle cx="75" cy="497" r="3" fill="#222" stroke="#ff5a0a" stroke-width="0.7"/>
-  <circle cx="75" cy="530" r="3" fill="#222" stroke="#ff5a0a" stroke-width="0.7"/>
-  
-  <!-- Caja de conexiones eléctrica saliente inferior izquierda -->
-  <rect x="22" y="520" width="34" height="20" rx="2" fill="#1a1a1a" filter="url(#shS)"/>
-  <rect x="24" y="522" width="30" height="16" rx="1" fill="#0e0e0e"/>
-  <circle cx="30" cy="526" r="1.5" fill="#333"/>
-  <circle cx="48" cy="526" r="1.5" fill="#333"/>
-  
-  <!-- Tubo metálico pequeño o conector -->
-  <rect x="56" y="528" width="16" height="4" fill="#666"/>
+  <!-- Abrazaderas de cables -->
+  <rect x="145" y="338" width="22" height="7" rx="2" fill="#666" transform="rotate(-15, 156, 341)"/>
+  <rect x="220" y="302" width="26" height="9" rx="2" fill="#666" transform="rotate(-40, 233, 306)"/>
+  <rect x="222" y="304" width="22" height="5" rx="1" fill="#888" transform="rotate(-40, 233, 306)"/>
 
-  <!-- ══════════════════════════════════════════════
-       CAPA 3 — TORSO DIAGONAL + DISPOSITIVO NEGRO
-       ══════════════════════════════════════════════ -->
 
-  <!-- DISPOSITIVO / CAJA NEGRA DETRÁS DEL TORSO (visible a la izquierda) -->
-  <!-- Es el bloque compacto negro que se ve asomando entre el cilindro y el torso -->
-  <g filter="url(#sh)">
-    <rect x="88" y="310" width="50" height="55" rx="4" fill="#141414"/>
-    <rect x="90" y="312" width="46" height="51" rx="3" fill="#0e0e0e"/>
-    <!-- Ranuras / disipadores -->
-    <rect x="92" y="318" width="42" height="3" fill="#222"/>
-    <rect x="92" y="328" width="42" height="3" fill="#222"/>
-    <rect x="92" y="338" width="42" height="3" fill="#222"/>
-    <rect x="92" y="348" width="42" height="3" fill="#222"/>
-    <!-- Conector superior -->
-    <rect x="103" y="305" width="22" height="10" rx="2" fill="#1a1a1a"/>
-    <circle cx="110" cy="310" r="2" fill="#333"/>
-    <circle cx="120" cy="310" r="2" fill="#333"/>
-  </g>
+</g>
 
-  <!-- === TORSO DIAGONAL ORGÁNICO === -->
-  <!-- Base circular del torso que asienta sobre la tapa del cilindro negro (y=362) -->
-  <!-- La pieza naranja tiene una base circular que abraza la tapa plana del cilindro -->
-  
-  <!-- Base circular naranja (el pie sentado sobre el cilindro negro) -->
-  <ellipse cx="178" cy="365" rx="65" ry="14" fill="#9e3000" filter="url(#sh)"/>
-  <ellipse cx="178" cy="362" rx="65" ry="14" fill="#c44000"/>
-  <ellipse cx="178" cy="362" rx="65" ry="7" fill="#e85800" opacity="0.5"/>
-
-  <!-- Sombra trasera global del cuerpo diagonal -->
-  <path d="M 228,362 C 258,344 322,288 318,228 L 250,202 C 230,260 172,325 128,348 Z"
-        fill="#4e1400" opacity="0.50"/>
-
-  <!-- CUERPO PRINCIPAL del torso -->
-  <path d="M 225,360 C 254,342 318,286 315,226 L 245,200 C 228,258 168,322 125,346 Z"
-        fill="#c83e00" filter="url(#sh)"/>
-
-  <!-- Lóbulo derecho iluminado -->
-  <path d="M 225,360 C 254,342 318,286 315,226 L 285,213
-           C 278,270 230,330 172,350 Z"
-        fill="url(#ogDR)"/>
-  <path d="M 225,360 C 220,340 280,286 315,226 L 320,234
-           C 288,294 234,346 228,363 Z"
-        fill="#ff7e28" opacity="0.22"/>
-
-  <!-- Canal / Ranura Central Quantec -->
-  <path d="M 175,353 C 208,334 256,276 272,222"
-        stroke="#5a1800" stroke-width="11" fill="none" stroke-linecap="round" opacity="0.78"/>
-  <path d="M 175,353 C 208,334 256,276 272,222"
-        stroke="#3a1000" stroke-width="7" fill="none" stroke-linecap="round" opacity="0.83"/>
-  <path d="M 175,353 C 208,334 256,276 272,222"
-        stroke="#7a3000" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.32"/>
-
-  <!-- Lóbulo izquierdo (en sombra) -->
-  <path d="M 125,346 C 168,324 228,258 245,200 L 272,222
-           C 256,276 208,334 175,353 Z"
-        fill="#d04200" opacity="0.86"/>
-  <path d="M 125,346 C 150,336 198,290 224,242 L 230,250
-           C 204,298 158,340 130,351 Z"
-        fill="#ff7010" opacity="0.15"/>
-  <path d="M 125,346 C 138,340 152,328 165,318 L 169,324
-           C 156,334 142,344 128,351 Z"
-        fill="#5a1800" opacity="0.45"/>
-
-  <!-- Nervaduras transversales -->
-  <line x1="192" y1="342" x2="240" y2="324" stroke="#7a2800" stroke-width="1.8" opacity="0.38"/>
-  <line x1="204" y1="322" x2="252" y2="304" stroke="#7a2800" stroke-width="1.8" opacity="0.38"/>
-  <line x1="218" y1="300" x2="264" y2="282" stroke="#7a2800" stroke-width="1.8" opacity="0.38"/>
-  <line x1="232" y1="278" x2="276" y2="260" stroke="#7a2800" stroke-width="1.8" opacity="0.38"/>
-
-  <!-- Tuercas de anclaje base torso-cilindro (sobre la elipse base) -->
-  <circle cx="128" cy="358" r="4.5" fill="#b0b0b0" stroke="#777" stroke-width="1"/>
-  <circle cx="128" cy="358" r="2" fill="#444"/>
-  <circle cx="178" cy="352" r="4.5" fill="#b0b0b0" stroke="#777" stroke-width="1"/>
-  <circle cx="178" cy="352" r="2" fill="#444"/>
-  <circle cx="228" cy="358" r="4.5" fill="#b0b0b0" stroke="#777" stroke-width="1"/>
-  <circle cx="228" cy="358" r="2" fill="#444"/>
-
-  <!-- === CABLES / MANGUERAS SOBRE la superficie diagonal del torso === -->
-  <!-- Las mangueras pasan POR ENCIMA del torso diagonal, -->
-  <!-- siguiendo la pendiente naranja desde la base hasta el hombro -->
-  
-  <!-- Manguera 1 — la más gruesa, pasa por encima de la superficie -->
-  <path d="M 175,360 C 190,348 210,326 230,306
-           C 248,288 262,268 278,248
-           C 290,234 298,224 308,218"
-        stroke="#0e0e0e" stroke-width="10" fill="none" stroke-linecap="round"/>
-  <!-- Manguera 2 — mediana, paralela -->
-  <path d="M 168,358 C 184,346 204,324 224,304
-           C 242,286 256,266 272,246
-           C 284,232 292,222 302,216"
-        stroke="#1a1a1a" stroke-width="6.5" fill="none" stroke-linecap="round"/>
-  <!-- Cable 3 — fino/eléctrico -->
-  <path d="M 162,355 C 178,344 198,322 218,302
-           C 236,284 250,264 266,244
-           C 278,230 286,220 296,214"
-        stroke="#2a2a2a" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-
-  <!-- Abrazaderas metálicas (clamps encima del torso sujetando cables) -->
-  <rect x="200" y="322" width="24" height="8" rx="2" fill="#666" transform="rotate(-42, 212, 326)"/>
-  <rect x="232" y="290" width="24" height="8" rx="2" fill="#666" transform="rotate(-42, 244, 294)"/>
-  <rect x="260" y="260" width="24" height="8" rx="2" fill="#666" transform="rotate(-42, 272, 264)"/>
-
-  <!-- === OREJA / HUB DEL HOMBRO === -->
-  <g filter="url(#sh)">
-    <!-- Protuberancia naranja orgánica que sale del torso -->
-    <path d="M 280,210 C 312,213 340,228 340,252
-             C 340,278 312,298 286,302 Z" fill="#b03600"/>
-    <path d="M 283,215 C 310,217 332,230 332,250
-             C 332,272 310,288 286,294 Z" fill="#c44000"/>
-    <!-- Disco gris gigante del eje del hombro -->
-    <circle cx="308" cy="250" r="28" fill="#3c3c3c" stroke="#555" stroke-width="2"/>
-    <circle cx="308" cy="250" r="20" fill="#2a2a2a"/>
-    <circle cx="308" cy="250" r="9" fill="#1a1a1a" stroke="#444" stroke-width="1.5"/>
-    <!-- Tornillos perimetrales -->
-    <circle cx="286" cy="230" r="3.5" fill="#b0b0b0" stroke="#777" stroke-width="1"/>
-    <circle cx="330" cy="230" r="3.5" fill="#b0b0b0" stroke="#777" stroke-width="1"/>
-    <circle cx="286" cy="270" r="3.5" fill="#b0b0b0" stroke="#777" stroke-width="1"/>
-    <circle cx="330" cy="270" r="3.5" fill="#b0b0b0" stroke="#777" stroke-width="1"/>
-    <circle cx="280" cy="250" r="3.5" fill="#b0b0b0" stroke="#777" stroke-width="1"/>
-    <circle cx="336" cy="250" r="3.5" fill="#b0b0b0" stroke="#777" stroke-width="1"/>
-  </g>
-
-  <!-- ══════════════════════════════════════════════
-       CAPA 4 — 3 MOTORES NEMA (50×40 cada uno)
-       Detrás del codo, izquierda
-       nema1(64,81) nema2(64,126) nema3(64,171)
-       ══════════════════════════════════════════════ -->
-  <!-- Placa conectora posterior -->
-  <rect x="108" y="74" width="14" height="136" rx="4" fill="#101010" filter="url(#shS)"/>
-  <line x1="115" y1="80" x2="115" y2="204" stroke="#202020" stroke-width="1.2" opacity="0.7"/>
-
-  <!-- NEMA 1 — centro(64,81) → rect desde (39,61) w=50 h=40 -->
-  <g filter="url(#shS)">
-    <rect x="39" y="61" width="50" height="40" rx="3" fill="url(#nemaG)"/>
-    <rect x="45" y="67" width="38" height="28" rx="2" fill="#0c0c0c"/>
-    <circle cx="64" cy="81" r="11"  fill="#070707" stroke="#1c1c1c" stroke-width="1.8"/>
-    <circle cx="64" cy="81" r="4.8" fill="#101010" stroke="#242424" stroke-width="1"/>
-    <circle cx="42" cy="64" r="2.5" fill="#1a1a1a"/>
-    <circle cx="86" cy="64" r="2.5" fill="#1a1a1a"/>
-    <circle cx="42" cy="98" r="2.5" fill="#1a1a1a"/>
-    <circle cx="86" cy="98" r="2.5" fill="#1a1a1a"/>
-  </g>
-  <!-- NEMA 2 — centro(64,126) -->
-  <g filter="url(#shS)">
-    <rect x="39" y="106" width="50" height="40" rx="3" fill="url(#nemaG)"/>
-    <rect x="45" y="112" width="38" height="28" rx="2" fill="#0c0c0c"/>
-    <circle cx="64" cy="126" r="11"  fill="#070707" stroke="#1c1c1c" stroke-width="1.8"/>
-    <circle cx="64" cy="126" r="4.8" fill="#101010" stroke="#242424" stroke-width="1"/>
-    <circle cx="42" cy="109" r="2.5" fill="#1a1a1a"/>
-    <circle cx="86" cy="109" r="2.5" fill="#1a1a1a"/>
-    <circle cx="42" cy="143" r="2.5" fill="#1a1a1a"/>
-    <circle cx="86" cy="143" r="2.5" fill="#1a1a1a"/>
-  </g>
-  <!-- NEMA 3 — centro(64,171) -->
-  <g filter="url(#shS)">
-    <rect x="39" y="151" width="50" height="40" rx="3" fill="url(#nemaG)"/>
-    <rect x="45" y="157" width="38" height="28" rx="2" fill="#0c0c0c"/>
-    <circle cx="64" cy="171" r="11"  fill="#070707" stroke="#1c1c1c" stroke-width="1.8"/>
-    <circle cx="64" cy="171" r="4.8" fill="#101010" stroke="#242424" stroke-width="1"/>
-    <circle cx="42" cy="154" r="2.5" fill="#1a1a1a"/>
-    <circle cx="86" cy="154" r="2.5" fill="#1a1a1a"/>
-    <circle cx="42" cy="188" r="2.5" fill="#1a1a1a"/>
-    <circle cx="86" cy="188" r="2.5" fill="#1a1a1a"/>
-  </g>
-
-  <!-- ══════════════════════════════════════════════
-       CAPA 5a — ESLABÓN 1
-       hombro(268,247) → codo(119,93)
-       Vértices: A(287,229) B(249,265) → C(105,107) D(133,79)
-       grosor: 52px (hw=26)
-       ══════════════════════════════════════════════ -->
-  <!-- Sombra -->
-  <polygon points="289,232 251,268 107,110 135,82" fill="#782400" opacity="0.53"/>
-  <!-- Cuerpo eslabón 1 -->
-  <polygon points="287,229 249,265 105,107 133,79"  fill="url(#ogV)" filter="url(#sh)"/>
-  <!-- Highlight borde derecho iluminado -->
-  <polygon points="287,229 300,224 146,72 133,79"   fill="#ff7010" opacity="0.14"/>
-  <!-- Sombra borde izquierdo oscuro -->
-  <polygon points="249,265 260,260 106,110 105,107" fill="#903000" opacity="0.25"/>
-  <!-- Nervaduras transversales (5) -->
-  <line x1="272" y1="216" x2="241" y2="254" stroke="#a83000" stroke-width="1.4" opacity="0.5"/>
-  <line x1="252" y1="191" x2="221" y2="229" stroke="#a83000" stroke-width="1.4" opacity="0.5"/>
-  <line x1="232" y1="166" x2="201" y2="204" stroke="#a83000" stroke-width="1.4" opacity="0.5"/>
-  <line x1="212" y1="141" x2="181" y2="179" stroke="#a83000" stroke-width="1.4" opacity="0.5"/>
-  <line x1="192" y1="116" x2="161" y2="154" stroke="#a83000" stroke-width="1.4" opacity="0.5"/>
-
-  <!-- ══════════════════════════════════════════════
-       CAPA 5b — CABLES sobre eslabón 1
-       ══════════════════════════════════════════════ -->
-  <path d="M 273 243 C 242 204 204 161 122 100"
-        stroke="#0b0b0b" stroke-width="6"   fill="none" stroke-linecap="round"/>
-  <path d="M 278 241 C 247 202 209 159 127 98"
-        stroke="#151515" stroke-width="3.8" fill="none" stroke-linecap="round"/>
-  <path d="M 283 239 C 252 200 214 157 132 96"
-        stroke="#1d1d1d" stroke-width="2.4" fill="none" stroke-linecap="round"/>
-  <!-- Abrazaderas -->
-  <rect x="256" y="221" width="24" height="7" rx="3.5" fill="#090909" transform="rotate(47,268,224)"/>
-  <rect x="228" y="186" width="24" height="7" rx="3.5" fill="#090909" transform="rotate(47,240,189)"/>
-  <rect x="200" y="151" width="24" height="7" rx="3.5" fill="#090909" transform="rotate(47,212,154)"/>
-
-  <!-- ══════════════════════════════════════════════
-       CAPA 6 — ARTICULACIÓN CODO
-       codo(119,93)  r=28
-       ══════════════════════════════════════════════ -->
-  <circle cx="121" cy="96"  r="29" fill="#782400" opacity="0.44"/>
-  <circle cx="119" cy="93"  r="29" fill="url(#ogH)" filter="url(#sh)"/>
-  <!-- Anillo intermedio -->
-  <circle cx="119" cy="93"  r="18" fill="#d04000"/>
-  <!-- Centro -->
-  <circle cx="119" cy="93"  r="8"  fill="#a83000"/>
-  <!-- Tornillos (4) -->
-  <circle cx="98"  cy="83"  r="3"   fill="#862c00" stroke="#ff5400" stroke-width="0.9"/>
-  <circle cx="140" cy="83"  r="3"   fill="#862c00" stroke="#ff5400" stroke-width="0.9"/>
-  <circle cx="98"  cy="103" r="3"   fill="#862c00" stroke="#ff5400" stroke-width="0.9"/>
-  <circle cx="140" cy="103" r="3"   fill="#862c00" stroke="#ff5400" stroke-width="0.9"/>
-
-  <!-- ══════════════════════════════════════════════
-       CAPA 7 — ESLABÓN 2 ANTEBRAZO
-       codo(119,93) → mun_ini(339,60)
-       Vértices: A(122,112) B(116,74) → C(337,46) D(341,74)
-       Forma orgánica en unión con codo
-       ══════════════════════════════════════════════ -->
-  <!-- Sombra -->
-  <path d="M 107,115 C 100,109 97,83 106,78 C 112,70 122,67 150,62
-           L 340,29 L 344,72 L 152,91 C 124,96 115,122 107,115 Z"
-        fill="#782400" opacity="0.48"/>
-  <!-- Cuerpo orgánico eslabón 2 -->
-  <path d="M 105,113 C 98,107 95,81 104,76 C 110,68 120,65 148,60
-           L 338,27 L 342,70 L 150,89 C 122,94 113,120 105,113 Z"
-        fill="url(#ogDL)" filter="url(#sh)"/>
-  <!-- Highlight borde superior -->
-  <path d="M 105,113 C 98,107 104,76 148,60 L 153,68 C 111,84 106,109 108,114 Z"
-        fill="#ff7010" opacity="0.13"/>
-  <!-- Sombra borde inferior -->
-  <path d="M 105,113 C 113,120 150,89 338,70 L 342,70 L 338,27 L 148,60 C 122,94 113,120 105,113 Z"
-        fill="#903000" opacity="0.10"/>
-  <!-- Nervaduras -->
-  <line x1="186" y1="72" x2="186" y2="88" stroke="#a83000" stroke-width="1.3" opacity="0.45"/>
-  <line x1="236" y1="63" x2="236" y2="79" stroke="#a83000" stroke-width="1.3" opacity="0.45"/>
-  <line x1="286" y1="55" x2="286" y2="71" stroke="#a83000" stroke-width="1.3" opacity="0.45"/>
-  <!-- Cables eslabón 2 -->
-  <path d="M 125 93 Q 228 72 330 57"
-        stroke="#0b0b0b" stroke-width="4.8" fill="none" stroke-linecap="round"/>
-  <path d="M 129 91 Q 232 70 334 55"
-        stroke="#171717" stroke-width="3"   fill="none" stroke-linecap="round"/>
-  <rect x="220" y="69" width="18" height="6" rx="3" fill="#090909" transform="rotate(-9,229,72)"/>
-
-  <!-- ══════════════════════════════════════════════
-       CAPA 8 — MUÑECA GRIS
-       mun_ini(339,60) → mun_fin(496,31)
-       longitud≈160px, h=34
-       ══════════════════════════════════════════════ -->
-  <!-- Conector naranja→gris -->
-  <rect x="325" y="48" width="30" height="24" rx="7" fill="url(#ogH)" filter="url(#shS)"/>
-  <!-- Cuerpo muñeca principal -->
-  <rect x="340" y="42" width="138" height="32" rx="9" fill="url(#wG1)" filter="url(#sh)"/>
-  <rect x="349" y="47" width="122" height="22" rx="6" fill="#a6a6a6"/>
-  <!-- Articulación central muñeca -->
-  <circle cx="406" cy="58" r="13"  fill="#8c8c8c" stroke="#686868" stroke-width="1.8"/>
-  <circle cx="406" cy="58" r="8"   fill="#7e7e7e" stroke="#585858" stroke-width="1.2"/>
-  <circle cx="406" cy="58" r="3.2" fill="#6c6c6c"/>
-  <!-- Tornillos -->
-  <circle cx="350" cy="46" r="2.5" fill="#7c7c7c"/>
-  <circle cx="472" cy="46" r="2.5" fill="#7c7c7c"/>
-  <circle cx="350" cy="66" r="2.5" fill="#7c7c7c"/>
-  <circle cx="472" cy="66" r="2.5" fill="#7c7c7c"/>
-  <!-- Extensión final flange -->
-  <rect x="474" y="45" width="48" height="28" rx="8" fill="url(#wG2)" filter="url(#shS)"/>
-  <rect x="480" y="49" width="36" height="20" rx="5" fill="#bababa"/>
-  <!-- Punta end-effector -->
-  <rect x="510" y="47" width="28" height="24" rx="7" fill="#a6a6a6" filter="url(#shS)"/>
-  <circle cx="524" cy="59" r="8"   fill="#949494" stroke="#808080" stroke-width="1.2"/>
-  <circle cx="524" cy="59" r="3.2" fill="#828282"/>
-  <!-- KUKA label -->
-  <text x="356" y="62" font-family="Arial" font-size="7" font-weight="bold"
-        fill="#525252" letter-spacing="1.6">KUKA</text>
-
-  <!-- ══════════════════════════════════════════════
-       CAPA 9 — ARTICULACIÓN HOMBRO
-       hombro(268,247)  r=38
-       ══════════════════════════════════════════════ -->
-  <circle cx="270" cy="250" r="39" fill="#782400" opacity="0.42"/>
-  <circle cx="268" cy="247" r="39" fill="url(#ogH)" filter="url(#sh)"/>
-  <!-- Anillo intermedio -->
-  <circle cx="268" cy="247" r="24" fill="#d04000"/>
-  <!-- Centro -->
-  <circle cx="268" cy="247" r="10" fill="#a83000"/>
-  <!-- Tornillos (4) -->
-  <circle cx="244" cy="236" r="3.2" fill="#862c00" stroke="#ff5400" stroke-width="0.9"/>
-  <circle cx="292" cy="236" r="3.2" fill="#862c00" stroke="#ff5400" stroke-width="0.9"/>
-  <circle cx="244" cy="258" r="3.2" fill="#862c00" stroke="#ff5400" stroke-width="0.9"/>
-  <circle cx="292" cy="258" r="3.2" fill="#862c00" stroke="#ff5400" stroke-width="0.9"/>
-
-  <!-- ══════════════════════════════════════════════
-       CAPA 10 — PASACABLES HOMBRO (TOP)
-       r=22 sobre articulación hombro
-       ══════════════════════════════════════════════ -->
-  <circle cx="268" cy="243" r="22"  fill="#0c0c0c" stroke="#2a2a2a" stroke-width="2.8" filter="url(#sh)"/>
-  <circle cx="268" cy="243" r="14"  fill="#151515" stroke="#2c2c2c" stroke-width="1.5"/>
-  <!-- Guías de cable (4 agujeros) -->
-  <circle cx="255" cy="234" r="3"   fill="#050505" stroke="#343434" stroke-width="1.1"/>
-  <circle cx="281" cy="234" r="3"   fill="#050505" stroke="#343434" stroke-width="1.1"/>
-  <circle cx="255" cy="252" r="3"   fill="#050505" stroke="#343434" stroke-width="1.1"/>
-  <circle cx="281" cy="252" r="3"   fill="#050505" stroke="#343434" stroke-width="1.1"/>
-  <circle cx="268" cy="243" r="6"   fill="#181818" stroke="#2c2c2c" stroke-width="1"/>
-  <!-- Cables saliendo hacia eslabón 1 -->
-  <path d="M 261 230 C 264 210 268 188 272 166"
-        stroke="#090909" stroke-width="5.5" fill="none" stroke-linecap="round"/>
-  <path d="M 268 229 C 271 209 274 187 278 165"
-        stroke="#151515" stroke-width="3.4" fill="none" stroke-linecap="round"/>
-  <path d="M 275 230 C 277 210 280 188 283 166"
-        stroke="#1c1c1c" stroke-width="2.2" fill="none" stroke-linecap="round"/>
-
-  <!-- ══════════════════════════════════════════════
-       ETIQUETAS IDENTIFICATIVAS DE PARTES
-       ══════════════════════════════════════════════ -->
-  <g font-family="Arial" font-size="13" font-weight="bold" fill="#00ffcc" 
-     paint-order="stroke" stroke="#000000" stroke-width="4">
-    <text x="110" y="605">1. BASE (PLATO FIJO/ROTATIVO)</text>
-    <text x="30"  y="445">2. CILINDRO NEGRO</text>
-    <text x="240" y="350">3. TORSO DIAGONAL</text>
-    <text x="315" y="255">4. HOMBRO</text>
-    <text x="180" y="175">5. ESLABÓN 1 (BRAZO INFERIOR)</text>
-    <text x="10"  y="35">6. MOTORES / CAJAS FLOTANTES</text>
-    <text x="105" y="145">7. CODO</text>
-    <text x="190" y="32">8. ESLABÓN 2 (BRAZO SUPERIOR)</text>
-    <text x="380" y="25">9. MUÑECA</text>
-    <text x="485" y="90">10. EFECTOR / PINZA</text>
-  </g>
 
 </svg>

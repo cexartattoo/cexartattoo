@@ -1,0 +1,143 @@
+width = 600
+height = 400
+
+# Distance between Shoulder(308,247) and Elbow(119,93) is ~244px
+L = 244 
+
+svg_content = f"""<svg width="{width}" height="{height}" viewBox="-100 -200 {width} {height}" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Gradients -->
+    <linearGradient id="ogV" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ff6000"/>
+      <stop offset="50%" stop-color="#dd4000"/>
+      <stop offset="100%" stop-color="#992000"/>
+    </linearGradient>
+    <filter id="sh" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="2" dy="5" stdDeviation="4" flood-color="#000" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+
+  <rect x="-100" y="-200" width="100%" height="100%" fill="#fff"/>
+
+  <!-- GUIDELINES -->
+  <g stroke="#2db84c" stroke-width="1" fill="none" opacity="0.5" stroke-dasharray="5,5">
+    <!-- Centro X axis -->
+    <line x1="-100" y1="0" x2="400" y2="0"/>
+    <!-- Shoulder Center -->
+    <line x1="0" y1="-100" x2="0" y2="100"/>
+    <!-- Elbow Center -->
+    <line x1="{L}" y1="-100" x2="{L}" y2="100"/>
+    <circle cx="0" cy="0" r="45"/>
+    <circle cx="{L}" cy="0" r="38"/>
+  </g>
+
+  <!-- ESLABON 1 HORIZONTAL (Construido desde X=0 hasta X=244) -->
+  <g filter="url(#sh)">
+    
+    <!-- Base Sombra -->
+    <!-- Controles de curva para lipo: Centro es recto en Y=±32, Extremos hacen curva hacia afuera -->
+    <path d="M 0,-50 
+             C 40,-50 60,-36 90,-36
+             L 154,-36
+             C 184,-36 204,-40 {L},-40
+             A 38 38 0 0 1 {L},42
+             C 204,42 184,36 154,36
+             L 90,36
+             C 60,36 40,50 0,50
+             A 45 45 0 0 1 0,-50 Z" fill="#782400" opacity="0.53" transform="translate(1, 4)"/>
+             
+    <!-- Cuerpo Principal Naranja -->
+    <path d="M 0,-45 
+             C 40,-45 60,-32 90,-32
+             L 154,-32
+             C 184,-32 204,-38 {L},-38
+             A 38 38 0 0 1 {L},38
+             C 204,38 184,32 154,32
+             L 90,32
+             C 60,32 40,45 0,45
+             A 45 45 0 0 1 0,-45 Z" fill="url(#ogV)"/>
+             
+    <!-- Luz superior (Brillo para volumen) -->
+    <path d="M 0,-45 
+             C 40,-45 60,-32 90,-32
+             L 154,-32
+             C 184,-32 204,-38 {L},-38
+             L {L},-34
+             C 204,-34 184,-28 154,-28
+             L 90,-28
+             C 60,-28 40,-40 0,-40 Z" fill="#ff7010" opacity="0.4"/>
+
+    <!-- Sombra inferior interna -->
+    <path d="M {L},38 
+             C 204,38 184,32 154,32
+             L 90,32
+             C 60,32 40,45 0,45
+             L 0,35
+             C 40,35 60,24 90,24
+             L 154,24
+             C 184,24 204,30 {L},30 Z" fill="#782400" opacity="0.6"/>
+
+    <!-- HUB DEL HOMBRO (Izquierda, r=45) -->
+    <g>
+      <circle cx="0" cy="0" r="45" fill="#3c3c3c" stroke="#555" stroke-width="2"/>
+      <circle cx="0" cy="0" r="34" fill="#2a2a2a"/>
+      <circle cx="0" cy="0" r="18" fill="#1a1a1a" stroke="#444" stroke-width="1.5"/>
+      <!-- Tornillos -->
+      <circle cx="0" cy="-35" r="3" fill="#a0a0a0" stroke="#707070" stroke-width="0.8"/>
+      <circle cx="25" cy="-25" r="3" fill="#a0a0a0" stroke="#707070" stroke-width="0.8"/>
+      <circle cx="35" cy="0" r="3" fill="#a0a0a0" stroke="#707070" stroke-width="0.8"/>
+      <circle cx="25" cy="25" r="3" fill="#a0a0a0" stroke="#707070" stroke-width="0.8"/>
+      <circle cx="0" cy="35" r="3" fill="#a0a0a0" stroke="#707070" stroke-width="0.8"/>
+      <circle cx="-25" cy="25" r="3" fill="#a0a0a0" stroke="#707070" stroke-width="0.8"/>
+      <circle cx="-35" cy="0" r="3" fill="#a0a0a0" stroke="#707070" stroke-width="0.8"/>
+      <circle cx="-25" cy="-25" r="3" fill="#a0a0a0" stroke="#707070" stroke-width="0.8"/>
+    </g>
+
+    <!-- HUB DEL CODO (Derecha, r=38) -->
+    <g transform="translate({L}, 0)">
+      <circle cx="0" cy="0" r="38" fill="#3c3c3c" stroke="#555" stroke-width="2"/>
+      <circle cx="0" cy="0" r="30" fill="#2a2a2a"/>
+      <circle cx="0" cy="0" r="14" fill="#1a1a1a" stroke="#444" stroke-width="1.5"/>
+      <!-- Tornillos -->
+      <circle cx="0" cy="-30" r="2.5" fill="#a0a0a0" stroke="#707070" stroke-width="0.8"/>
+      <circle cx="21" cy="-21" r="2.5" fill="#a0a0a0" stroke="#707070" stroke-width="0.8"/>
+      <circle cx="30" cy="0" r="2.5" fill="#a0a0a0" stroke="#707070" stroke-width="0.8"/>
+      <circle cx="21" cy="21" r="2.5" fill="#a0a0a0" stroke="#707070" stroke-width="0.8"/>
+      <circle cx="0" cy="30" r="2.5" fill="#a0a0a0" stroke="#707070" stroke-width="0.8"/>
+      <circle cx="-21" cy="21" r="2.5" fill="#a0a0a0" stroke="#707070" stroke-width="0.8"/>
+      <circle cx="-30" cy="0" r="2.5" fill="#a0a0a0" stroke="#707070" stroke-width="0.8"/>
+      <circle cx="-21" cy="-21" r="2.5" fill="#a0a0a0" stroke="#707070" stroke-width="0.8"/>
+    </g>
+
+    <!-- HUECOS (RECESOS) PARA CÁBLES -->
+    
+    <!-- Hueco inferior (Cerca al hombro) -->
+    <!-- "Aquí entrarían los cables desde la base para subir por el interior" -->
+    <g transform="translate(60, 20) rotate(-5)">
+      <ellipse cx="0" cy="0" rx="42" ry="12" fill="#180400" stroke="#000" stroke-width="2"/>
+      <!-- Sombra interna de profundidad -->
+      <path d="M -42,0 A 42 12 0 0 1 42,0 A 38 6 0 0 0 -42,0 Z" fill="#000" opacity="0.8"/>
+    </g>
+
+    <!-- Hueco superior (Cerca al codo) -->
+    <!-- "Aquí saldrían los cables hacia la manguera exterior del eslabón 2" -->
+    <g transform="translate(180, -15) rotate(5)">
+      <ellipse cx="0" cy="0" rx="34" ry="10" fill="#180400" stroke="#000" stroke-width="2"/>
+      <path d="M -34,0 A 34 10 0 0 1 34,0 A 30 5 0 0 0 -34,0 Z" fill="#000" opacity="0.8"/>
+    </g>
+
+
+    <!-- ETIQUETA KUKA CENTRAL -->
+    <g transform="translate(122, 0)">
+      <rect x="-35" y="-12" width="70" height="24" rx="3" fill="#111" stroke="#222" stroke-width="1"/>
+      <text x="0" y="5" font-family="Arial Black, Impact, sans-serif" font-size="16" font-weight="900" fill="#ff7010" text-anchor="middle" letter-spacing="2">KUKA</text>
+    </g>
+    
+  </g>
+</svg>
+"""
+
+with open("eslabon1_draft.svg", "w", encoding="utf-8") as f:
+    f.write(svg_content)
+
+print("eslabon1_draft.svg has been successfully mapped horizontally from 0 to L with straight center!")

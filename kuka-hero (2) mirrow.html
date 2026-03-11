@@ -2,35 +2,9 @@
 <html lang="es">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- SEO básico -->
-    <meta name="description"
-        content="César Javier Ramírez Hormaza – Ingeniero Mecatrónico especializado en robótica, automatización industrial y visión artificial. Creador del Robot Tatuador 360. Bogotá, Colombia.">
-    <meta name="keywords"
-        content="ingeniero mecatrónico Colombia, robótica, automatización industrial, visión artificial, OpenCV, PLC Siemens, robot tatuador">
-    <meta name="author" content="César Javier Ramírez Hormaza">
-    <meta name="google-site-verification" content="5mxPMNXdQG5ojcV9rxyK0txiAHAnLicHlCnZQPf3-z0" />
-
-    <!-- Open Graph (para que se vea bien al compartir en LinkedIn, WhatsApp, etc.) -->
-    <meta property="og:title" content="César Ramírez – Ingeniero Mecatrónico | Robótica & Automatización">
-    <meta property="og:description"
-        content="Portafolio de César Ramírez. Proyectos de robótica, visión artificial y automatización industrial.">
-    <meta property="og:url" content="https://cexartattoo.github.io/cexartattoo/">
-    <meta property="og:type" content="website">
-
-    <!-- Título optimizado -->
-    <title>César Ramírez | Ingeniero Mecatrónico – Robótica y Automatización Colombia</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="projects-styles.css">
-
-  <!-- Kuka Hero Styles -->
-  <style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>César Ramírez – Ingeniero Mecatrónico</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap');
 
@@ -46,8 +20,7 @@
     body {
       width: 100%;
       height: 100%;
-      overflow-x: hidden;
-      overflow-y: auto;
+      overflow: hidden;
     }
 
     body {
@@ -56,7 +29,7 @@
       cursor: crosshair;
     }
 
-    #kuka-hero-wrapper canvas {
+    canvas {
       position: absolute;
       top: 0;
       left: 0;
@@ -94,11 +67,6 @@
       flex-direction: column;
       justify-content: flex-start;
       padding: 15vh 4vw 0 5.5vw;
-    }
-
-    /* En desktop/móvil: el wrapper es invisible, no altera el layout */
-    #hero-text-col {
-      display: contents;
     }
 
     .hero-status {
@@ -609,97 +577,44 @@
       }
     }
 
-    /* Landscape mobile — texto izquierda, botones derecha */
+    /* Landscape mobile */
     @media (max-width: 900px) and (orientation: landscape) {
       #hero-content {
-        width: 100%;
-        padding: 0;               /* el padding lo pone cada columna */
-        flex-direction: row;
-        align-items: stretch;
-        gap: 0;
-      }
-
-      /* Columna izquierda: todo el texto, 50% */
-      #hero-text-col {
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-        width: 50%;
-        flex-shrink: 0;
-        padding: 6vh 2vw 0 4vw;
-        pointer-events: none;
+        width: 40%;
+        padding: 0 3vw 0 4vw;
       }
 
       .hero-name {
         font-size: clamp(20px, 4.5vw, 38px);
-        line-height: 0.95;
       }
 
-      .hero-title { font-size: 8px; }
-      .hero-tags  { gap: 5px; margin-top: 8px; }
+      .hero-title {
+        font-size: 8px;
+      }
 
       .tag {
         font-size: 6.5px;
         padding: 3px 6px;
       }
 
-      /* Columna derecha: solo botones, 50%, centrados verticalmente */
-      .hero-ctas {
-        width: 50%;
-        flex-shrink: 0;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: flex-start;
-        gap: 12px;
-        margin-top: 0;
-        padding-left: 4vw;
-        pointer-events: all;
-      }
-
       .btn-p,
       .btn-o {
         padding: 8px 14px;
         font-size: 7.5px;
-        white-space: nowrap;
+      }
+
+      #badge {
+        bottom: 44px;
+      }
+
+      #hint {
+        bottom: 44px;
       }
     }
-  </style>
-
   </style>
 </head>
 
 <body>
-    <!-- Navigation -->
-    <nav class="navbar" id="navbar">
-        <div class="nav-container">
-            <a href="#hero" class="nav-logo">
-                <span class="logo-text">CR</span>
-                <span class="logo-dot"></span>
-            </a>
-            <ul class="nav-menu" id="nav-menu">
-                <li><a href="#hero" class="nav-link">Inicio</a></li>
-                <li><a href="#about" class="nav-link">Sobre Mí</a></li>
-                <li><a href="#experience" class="nav-link">Experiencia</a></li>
-                <li><a href="#projects" class="nav-link">Proyectos</a></li>
-                <li><a href="#skills" class="nav-link">Habilidades</a></li>
-                <li><a href="#education" class="nav-link">Educación</a></li>
-                <li><a href="#contact" class="nav-link nav-cta">Contacto</a></li>
-                <li><a href="CV_Visual_César.pdf" download class="nav-link nav-cta"
-                        style="background:linear-gradient(135deg,#00ff88,#0088ff);margin-left:5px;">📄 CV</a></li>
-            </ul>
-            <div class="hamburger" id="hamburger">
-                <span class="bar"></span>
-                <span class="bar"></span>
-                <span class="bar"></span>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Hero Section -->
-
-  <!-- ═══════════ KUKA HERO ═══════════ -->
-  <div id="kuka-hero-wrapper" style="position:relative;width:100%;height:100vh;overflow:hidden;">
 
   <canvas id="cv"></canvas>
 
@@ -1087,20 +1002,18 @@
        HERO TEXT
   ══════════════════════════════════════════════ -->
   <div id="hero-content">
-    <div id="hero-text-col">
-      <div class="hero-status">
-        <div class="pulse-dot"></div>
-        <span>// SISTEMA ACTIVO — KUKA KR C4</span>
-      </div>
-      <div class="hero-name">CÉSAR<br><span class="accent">RAMÍREZ</span></div>
-      <div class="rule"></div>
-      <div class="hero-title">Ingeniero Mecatrónico</div>
-      <div class="hero-tags">
-        <span class="tag">Robótica</span>
-        <span class="tag">Automatización</span>
-        <span class="tag">Visión Artificial</span>
-        <span class="tag">PLCs Siemens</span>
-      </div>
+    <div class="hero-status">
+      <div class="pulse-dot"></div>
+      <span>// SISTEMA ACTIVO — KUKA KR C4</span>
+    </div>
+    <div class="hero-name">CÉSAR<br><span class="accent">RAMÍREZ</span></div>
+    <div class="rule"></div>
+    <div class="hero-title">Ingeniero Mecatrónico</div>
+    <div class="hero-tags">
+      <span class="tag">Robótica</span>
+      <span class="tag">Automatización</span>
+      <span class="tag">Visión Artificial</span>
+      <span class="tag">PLCs Siemens</span>
     </div>
     <div class="hero-ctas">
       <a href="#projects" class="btn-p">Ver Proyectos</a>
@@ -1139,736 +1052,9 @@ G2 X40 Y30 I40 J0"></textarea>
     <div id="gcode-status">// listo para ejecutar</div>
   </div>
 
-
-  </div><!-- end kuka-hero-wrapper -->
-  <!-- ═══════════ END KUKA HERO ═══════════ -->
-
-    <!-- About Section -->
-    <section class="about" id="about">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-tag">01</span>
-                <h2 class="section-title">Sobre Mí</h2>
-                <div class="section-line"></div>
-            </div>
-            <div class="about-content">
-                <div class="about-image">
-                    <div class="image-frame">
-                        <img src="perfil.jpeg" alt="César Javier Ramírez Hormaza - Ingeniero Mecatrónico"
-                            class="profile-photo">
-                        <div class="frame-corner frame-tl"></div>
-                        <div class="frame-corner frame-tr"></div>
-                        <div class="frame-corner frame-bl"></div>
-                        <div class="frame-corner frame-br"></div>
-                    </div>
-                </div>
-                <div class="about-text">
-                    <h3 class="about-subtitle">Ingeniero Mecatrónico con visión de futuro</h3>
-                    <p>
-                        Soy un Ingeniero Mecatrónico egresado de la Universidad de Pamplona, con una pasión
-                        profunda por la robótica y la automatización. Mi enfoque combina la creatividad
-                        con la precisión técnica para desarrollar soluciones que transforman procesos industriales.
-                    </p>
-                    <p>
-                        Soy el creador del <strong>Robot Tatuador 360</strong>, logrando precisiones de ±80 nanómetros,
-                        primer sistema robótico de tatuaje con precisión nanométrica en Latinoamérica. Especializado en
-                        visión artificial (OpenCV, YOLO), PLCs Siemens y programación de cinemática robótica. Más de 3
-                        años asesorando más de 20 proyectos internacionales de automatización con enfoque en manufactura
-                        inteligente.
-                    </p>
-                    <div class="about-highlights">
-                        <div class="highlight">
-                            <span class="highlight-icon">🤖</span>
-                            <span>Robótica Avanzada</span>
-                        </div>
-                        <div class="highlight">
-                            <span class="highlight-icon">👁️</span>
-                            <span>Visión Artificial</span>
-                        </div>
-                        <div class="highlight">
-                            <span class="highlight-icon">⚙️</span>
-                            <span>PLCs Siemens</span>
-                        </div>
-                        <div class="highlight">
-                            <span class="highlight-icon">🐍</span>
-                            <span>Python & C++</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Experience Section -->
-    <section class="experience" id="experience">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-tag">02</span>
-                <h2 class="section-title">Experiencia Profesional</h2>
-                <div class="section-line"></div>
-            </div>
-            <div class="timeline">
-                <div class="timeline-item">
-                    <div class="timeline-marker">
-                        <div class="marker-dot"></div>
-                        <div class="marker-line"></div>
-                    </div>
-                    <div class="timeline-content">
-                        <div class="timeline-header">
-                            <h3 class="timeline-title">Asesor Técnico Online</h3>
-                            <span class="timeline-company">TusClases</span>
-                        </div>
-                        <span class="timeline-date">2022 - Presente</span>
-                        <span class="timeline-location">🌍 Internacional / Remoto</span>
-                        <ul class="timeline-list">
-                            <li>Diseño e implementación de robot delta para clasificación y empaque</li>
-                            <li>Implementación de visión artificial con OpenCV y YOLO</li>
-                            <li>Programación de cinemática inversa y control de trayectorias</li>
-                            <li>Desarrollo de interfaces web para monitoreo de sensores</li>
-                            <li>Integración de LLM en procesos industriales</li>
-                            <li>Asesoría en comunicaciones WiFi, Bluetooth y LORA</li>
-                        </ul>
-                        <div class="timeline-tags">
-                            <span class="tag">Python</span>
-                            <span class="tag">OpenCV</span>
-                            <span class="tag">Arduino</span>
-                            <span class="tag">YOLO</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-marker">
-                        <div class="marker-dot"></div>
-                    </div>
-                    <div class="timeline-content">
-                        <div class="timeline-header">
-                            <h3 class="timeline-title">Ingeniero de Desarrollo (Tesista)</h3>
-                            <span class="timeline-company">Pasteles donde Don Pedro</span>
-                        </div>
-                        <span class="timeline-date">2024</span>
-                        <span class="timeline-location">📍 Cúcuta, Colombia</span>
-                        <ul class="timeline-list">
-                            <li>Diseño de soluciones de automatización para procesos de manufactura</li>
-                            <li>Programación de PLC Siemens S7-1200 para control de procesos</li>
-                            <li>Reducción del 25% en tiempos de ciclo mediante optimización</li>
-                            <li>Reducción de riesgo de túnel carpiano en operarios</li>
-                            <li>Mantenimiento preventivo y correctivo de sistemas robóticos</li>
-                        </ul>
-                        <div class="timeline-tags">
-                            <span class="tag">PLC Siemens</span>
-                            <span class="tag">Automatización</span>
-                            <span class="tag">Manufactura</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Projects Section -->
-    <section class="projects" id="projects">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-tag">03</span>
-                <h2 class="section-title">Proyectos Destacados</h2>
-                <div class="section-line"></div>
-            </div>
-            <div class="projects-grid">
-                <!-- Project 1: Robot Tatuador -->
-                <article class="project-card">
-                    <div class="project-media">
-                        <!-- Canvas para el video vertical de YouTube -->
-                        <div class="project-canvas">
-                            <iframe src="https://www.youtube-nocookie.com/embed/SfXVfhMWj6g" title="Robot Tatuador 360"
-                                frameborder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowfullscreen>
-                            </iframe>
-                        </div>
-                        <div class="project-overlay">
-                            <span class="project-year">2022 - 2025</span>
-                        </div>
-                    </div>
-                    <div class="project-content">
-                        <div class="project-badge">🏆 Primer Puesto - Competencia de Robótica</div>
-
-                        <h3 class="project-title">Robot Tatuador 360</h3>
-                        <div class="project-links">
-                            <a href="https://github.com/cexartattoo" target="_blank" class="project-link">
-                                <svg viewBox="0 0 24 24" fill="currentColor">
-                                    <path
-                                        d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
-                                </svg>
-                                <span>GitHub</span>
-                            </a>
-
-                            <a href="https://www.youtube.com/watch?v=SfXVfhMWj6g" target="_blank" class="project-link">
-                                <svg viewBox="0 0 24 24" fill="currentColor">
-                                    <path
-                                        d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
-                                </svg>
-                                <span>Ver en YouTube</span>
-                            </a>
-
-                        </div>
-                        <p class="project-description">
-                            Robot tatuador único en el mundo con arquitectura CoreXY paralela y capacidad
-                            de tatuar sobre superficies cilíndricas. Sistema completo de escaneo 3D,
-                            planificación de trayectorias y control de profundidad con precisión
-                            submicrométrica de <strong>±80 nanómetros</strong>.
-                        </p>
-                        <div class="project-features">
-                            <div class="feature">
-                                <span class="feature-icon">⚙️</span>
-                                <span>Cinemática CoreXY Paralela</span>
-                            </div>
-                            <div class="feature">
-                                <span class="feature-icon">🎯</span>
-                                <span>Control PID con Precisión ±80nm</span>
-                            </div>
-                            <div class="feature">
-                                <span class="feature-icon">📸</span>
-                                <span>Fotogrametría y Reconstrucción 3D</span>
-                            </div>
-                            <div class="feature">
-                                <span class="feature-icon">🔄</span>
-                                <span>Rotación Continua 360°</span>
-                            </div>
-                            <div class="feature">
-                                <span class="feature-icon">🎚️</span>
-                                <span>Sistema de Reducción para Alta Precisión</span>
-                            </div>
-                            <div class="feature">
-                                <span class="feature-icon">📡</span>
-                                <span>Comunicación WiFi TCP/IP</span>
-                            </div>
-                            <div class="feature">
-                                <span class="feature-icon">🧮</span>
-                                <span>Algoritmos Propios de Trayectorias</span>
-                            </div>
-                            <div class="feature">
-                                <span class="feature-icon">👁️</span>
-                                <span>Previsualización en Tiempo Real</span>
-                            </div>
-                        </div>
-                        <div class="project-tech">
-                            <span class="tech-tag">Python</span>
-                            <span class="tech-tag">C++</span>
-                            <span class="tech-tag">OpenCV</span>
-                            <span class="tech-tag">Raspberry Pi 4</span>
-                            <span class="tech-tag">ESP32</span>
-                            <span class="tech-tag">SolidWorks</span>
-                        </div>
-
-                    </div>
-                </article>
-
-                <!-- Project 2: Robot Delta - Con galería de canvas -->
-                <article class="project-card">
-                    <div class="project-media">
-                        <div class="project-canvas-gallery">
-                            <!-- Canvas 1: Imagen -->
-                            <div class="canvas-item active" data-type="image">
-                                <img src="media/inicios.jpg" alt="Robot Delta - Vista 1">
-                            </div>
-                            <!-- Canvas 2: Otra imagen -->
-                            <div class="canvas-item" data-type="image">
-                                <img src="media/dibujo estructura MDF.jpg" alt="Robot Delta - Vista 2">
-                            </div>
-                            <!-- Canvas 2: Otra imagen -->
-                            <div class="canvas-item" data-type="image">
-                                <img src="media/robot fisico.jpeg" alt="Robot Delta - Vista 3">
-                            </div>
-                            <!-- Canvas 3: Video de YouTube -->
-                            <div class="canvas-item" data-type="youtube">
-                                <iframe data-src="https://www.youtube-nocookie.com/embed/fGaD3QNsEJI"
-                                    title="Robot Delta en acción" frameborder="0"
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                    allowfullscreen>
-                                </iframe>
-                            </div>
-                            <!-- Botones de navegación -->
-                            <button class="canvas-nav prev" aria-label="Anterior">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <polyline points="15 18 9 12 15 6"></polyline>
-                                </svg>
-                            </button>
-                            <button class="canvas-nav next" aria-label="Siguiente">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <polyline points="9 18 15 12 9 6"></polyline>
-                                </svg>
-                            </button>
-                            <!-- Indicadores -->
-                            <div class="canvas-indicators">
-                                <span class="indicator active"></span>
-                                <span class="indicator"></span>
-                                <span class="indicator"></span>
-                                <span class="indicator"></span>
-                            </div>
-                        </div>
-                        <div class="project-overlay">
-                            <span class="project-year">2025</span>
-                        </div>
-                    </div>
-                    <div class="project-content">
-                        <div class="project-badge">👨‍💻🌎 Asesoría Internacional</div>
-                        <h3 class="project-title">Robot Delta Ventosa - Sistema de Clasificación</h3>
-                        <div class="project-links">
-                            <a href="https://github.com/cexartattoo" target="_blank" class="project-link">
-                                <svg viewBox="0 0 24 24" fill="currentColor">
-                                    <path
-                                        d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
-                                </svg>
-                                <span>GitHub</span>
-                            </a>
-
-                            <a href="https://www.youtube.com/watch?v=fGaD3QNsEJI" target="_blank" class="project-link">
-                                <svg viewBox="0 0 24 24" fill="currentColor">
-                                    <path
-                                        d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
-                                </svg>
-                                <span>Ver en YouTube</span>
-                            </a>
-
-                        </div>
-                        <p class="project-description">
-                            Robot delta con sensores angulares de alta resolución y ventosa de efecto Venturi
-                            para clasificar productos en banda transportadora. Sistema de visión artificial
-                            para detección y clasificación automática, con auto-calibración y comunicación
-                            Modbus con PLC.
-                        </p>
-                        <div class="project-features">
-                            <div class="feature">
-                                <span class="feature-icon">🎯</span>
-                                <span>Sensores Angulares Alta Resolución</span>
-                            </div>
-                            <div class="feature">
-                                <span class="feature-icon">💨</span>
-                                <span>Ventosa Efecto Venturi</span>
-                            </div>
-                            <div class="feature">
-                                <span class="feature-icon">📦</span>
-                                <span>Banda Transportadora</span>
-                            </div>
-                            <div class="feature">
-                                <span class="feature-icon">🤖</span>
-                                <span>Clasificación Automática</span>
-                            </div>
-                            <div class="feature">
-                                <span class="feature-icon">🔧</span>
-                                <span>Auto-calibración</span>
-                            </div>
-                            <div class="feature">
-                                <span class="feature-icon">📡</span>
-                                <span>Comunicación Modbus</span>
-                            </div>
-                        </div>
-                        <div class="project-tech">
-                            <span class="tech-tag">Python</span>
-                            <span class="tech-tag">PLC Siemens S7-1200</span>
-                            <span class="tech-tag">OpenCV</span>
-                            <span class="tech-tag">Modbus</span>
-                            <span class="tech-tag">Arduino</span>
-                        </div>
-
-                    </div>
-                </article>
-
-                <!-- Project 3: Router CNC - Con placeholder -->
-                <article class="project-card">
-                    <div class="project-media">
-                        <div class="project-canvas">
-                            <div class="image-placeholder-project">
-                                <span>🔧</span>
-                                <p>Router CNC</p>
-                            </div>
-                        </div>
-                        <div class="project-overlay">
-                            <span class="project-year">En Desarrollo</span>
-                        </div>
-                    </div>
-                    <div class="project-content">
-                        <div class="project-badge wip">🚧 En Desarrollo</div>
-                        <h3 class="project-title">Router CNC Match3 500W</h3>
-                        <p class="project-description">
-                            Router CNC de alta precisión con tecnología Match3 y motor spindle de 500W.
-                            Diseñado para mecanizado de múltiples materiales con control numérico avanzado.
-                        </p>
-                        <div class="project-tech">
-                            <span class="tech-tag">Match3</span>
-                            <span class="tech-tag">CNC</span>
-                            <span class="tech-tag">500W Spindle</span>
-                            <span class="tech-tag">G-Code</span>
-                        </div>
-                    </div>
-                </article>
-            </div>
-        </div>
-    </section>
-
-    <!-- Skills Section -->
-    <section class="skills" id="skills">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-tag">04</span>
-                <h2 class="section-title">Habilidades Técnicas</h2>
-                <div class="section-line"></div>
-            </div>
-            <div class="skills-grid">
-                <!-- Programming Languages -->
-                <div class="skill-category">
-                    <div class="category-header">
-                        <span class="category-icon">💻</span>
-                        <h3>Lenguajes de Programación</h3>
-                    </div>
-                    <div class="skill-items">
-                        <div class="skill-item">
-                            <span class="skill-name">Python</span>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-level="90"></div>
-                            </div>
-                            <span class="skill-level">Avanzado</span>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">MATLAB</span>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-level="90"></div>
-                            </div>
-                            <span class="skill-level">Avanzado</span>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">C/C++</span>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-level="65"></div>
-                            </div>
-                            <span class="skill-level">Intermedio</span>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">JavaScript</span>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-level="40"></div>
-                            </div>
-                            <span class="skill-level">Básico</span>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">Ladder Logic / Modbus</span>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-level="40"></div>
-                            </div>
-                            <span class="skill-level">Básico</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- CAD Design -->
-                <div class="skill-category">
-                    <div class="category-header">
-                        <span class="category-icon">📐</span>
-                        <h3>Diseño CAD</h3>
-                    </div>
-                    <div class="skill-items">
-                        <div class="skill-item">
-                            <span class="skill-name">SolidWorks</span>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-level="90"></div>
-                            </div>
-                            <span class="skill-level">Avanzado</span>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">Fusion 360</span>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-level="65"></div>
-                            </div>
-                            <span class="skill-level">Intermedio</span>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">AutoCAD</span>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-level="65"></div>
-                            </div>
-                            <span class="skill-level">Intermedio</span>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">OnShape</span>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-level="65"></div>
-                            </div>
-                            <span class="skill-level">Intermedio</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Robotics -->
-                <div class="skill-category">
-                    <div class="category-header">
-                        <span class="category-icon">🤖</span>
-                        <h3>Robótica y Automatización</h3>
-                    </div>
-                    <div class="skill-items">
-                        <div class="skill-item">
-                            <span class="skill-name">Cinemática y Dinámica</span>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-level="90"></div>
-                            </div>
-                            <span class="skill-level">Avanzado</span>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">ROS</span>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-level="65"></div>
-                            </div>
-                            <span class="skill-level">Intermedio</span>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">PLC Siemens</span>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-level="65"></div>
-                            </div>
-                            <span class="skill-level">Intermedio</span>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">SCADA / HMI</span>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-level="65"></div>
-                            </div>
-                            <span class="skill-level">Intermedio</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Computer Vision -->
-                <div class="skill-category">
-                    <div class="category-header">
-                        <span class="category-icon">👁️</span>
-                        <h3>Visión Artificial</h3>
-                    </div>
-                    <div class="skill-items">
-                        <div class="skill-item">
-                            <span class="skill-name">OpenCV</span>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-level="90"></div>
-                            </div>
-                            <span class="skill-level">Avanzado</span>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">Fotogrametría</span>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-level="90"></div>
-                            </div>
-                            <span class="skill-level">Avanzado</span>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">Machine Learning Visión</span>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-level="90"></div>
-                            </div>
-                            <span class="skill-level">Avanzado</span>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">YOLO</span>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-level="65"></div>
-                            </div>
-                            <span class="skill-level">Intermedio</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Hardware -->
-                <div class="skill-category">
-                    <div class="category-header">
-                        <span class="category-icon">🔌</span>
-                        <h3>Hardware y Electrónica</h3>
-                    </div>
-                    <div class="skill-items">
-                        <div class="skill-item">
-                            <span class="skill-name">Arduino</span>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-level="95"></div>
-                            </div>
-                            <span class="skill-level">Experto</span>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">Raspberry Pi</span>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-level="90"></div>
-                            </div>
-                            <span class="skill-level">Avanzado</span>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">ESP32</span>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-level="90"></div>
-                            </div>
-                            <span class="skill-level">Avanzado</span>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">WiFi / Bluetooth / LORA</span>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-level="85"></div>
-                            </div>
-                            <span class="skill-level">Avanzado</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Tools -->
-                <div class="skill-category">
-                    <div class="category-header">
-                        <span class="category-icon">🛠️</span>
-                        <h3>Herramientas y Manufactura</h3>
-                    </div>
-                    <div class="skill-items">
-                        <div class="skill-item">
-                            <span class="skill-name">Git / GitHub</span>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-level="95"></div>
-                            </div>
-                            <span class="skill-level">Experto</span>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">Linux</span>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-level="90"></div>
-                            </div>
-                            <span class="skill-level">Avanzado</span>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">Impresión 3D / CNC</span>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-level="65"></div>
-                            </div>
-                            <span class="skill-level">Intermedio</span>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">Docker</span>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-level="65"></div>
-                            </div>
-                            <span class="skill-level">Intermedio</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Education Section -->
-    <section class="education" id="education">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-tag">05</span>
-                <h2 class="section-title">Educación</h2>
-                <div class="section-line"></div>
-            </div>
-            <div class="education-grid">
-                <div class="education-card">
-                    <div class="edu-icon">🎓</div>
-                    <div class="edu-content">
-                        <h3>Ingeniería Mecatrónica</h3>
-                        <p class="edu-institution">Universidad de Pamplona</p>
-                        <p class="edu-location">📍 Pamplona, Colombia</p>
-                        <p class="edu-date">2019 - 2024</p>
-                        <div class="edu-highlights">
-                            <span class="edu-badge">GPA: 4.06</span>
-                            <span class="edu-badge gold">Tesis: 5.0 ⭐</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="education-card">
-                    <div class="edu-icon">🔧</div>
-                    <div class="edu-content">
-                        <h3>Mantenimiento de Motores 2 y 4 Tiempos</h3>
-                        <p class="edu-institution">SENA</p>
-                        <p class="edu-location">📍 Chinacota, Colombia</p>
-                        <p class="edu-date">Mayo 2016</p>
-                        <div class="edu-highlights">
-                            <span class="edu-badge">Calificación: 5.0</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section class="contact" id="contact">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-tag">06</span>
-                <h2 class="section-title">Contacto</h2>
-                <div class="section-line"></div>
-            </div>
-            <div class="contact-content">
-                <div class="contact-info">
-                    <h3>¿Tienes un proyecto en mente?</h3>
-                    <p>
-                        Estoy disponible para proyectos de robótica, automatización industrial,
-                        visión artificial y desarrollo de software. ¡Hablemos!
-                    </p>
-                    <div class="contact-methods">
-                        <a href="https://wa.me/573219121216" target="_blank" class="contact-card whatsapp">
-                            <div class="contact-icon">
-                                <svg viewBox="0 0 24 24" fill="currentColor">
-                                    <path
-                                        d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
-                                </svg>
-                            </div>
-                            <div class="contact-text">
-                                <span class="contact-label">WhatsApp</span>
-                                <span class="contact-value">+57 321 9121216</span>
-                            </div>
-                        </a>
-                        <a href="/cdn-cgi/l/email-protection#0250636f6b706778616771637068363442656f636b6e2c616d6f" class="contact-card email">
-                            <div class="contact-icon">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path
-                                        d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                                    <polyline points="22,6 12,13 2,6" />
-                                </svg>
-                            </div>
-                            <div class="contact-text">
-                                <span class="contact-label">Email</span>
-                                <span class="contact-value"><span class="__cf_email__" data-cfemail="f6a4979b9f84938c95938597849cc2c0b6919b979f9ad895999b">[email&#160;protected]</span></span>
-                            </div>
-                        </a>
-                        <a href="https://github.com/cexartattoo" target="_blank" class="contact-card github">
-                            <div class="contact-icon">
-                                <svg viewBox="0 0 24 24" fill="currentColor">
-                                    <path
-                                        d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
-                                </svg>
-                            </div>
-                            <div class="contact-text">
-                                <span class="contact-label">GitHub</span>
-                                <span class="contact-value">github.com/cexartattoo</span>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="contact-location">
-                        <span class="location-icon">📍</span>
-                        <span>Bogotá, Colombia</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <p class="footer-text">
-                    © 2026 César Javier Ramírez Hormaza. Todos los derechos reservados.
-                </p>
-                <p class="footer-tagline">
-                    Diseñado con <span class="heart">❤️</span> y mucha ingeniería
-                </p>
-            </div>
-        </div>
-    </footer>
-
-
+  <!-- ══════════════════════════════════════════════
+       JAVASCRIPT — STATE MACHINE + KINEMATICS
+  ══════════════════════════════════════════════ -->
   <script>
     'use strict';
 
@@ -1882,9 +1068,7 @@ G2 X40 Y30 I40 J0"></textarea>
     function resize() {
       W = cv.width = cvO.width = innerWidth;
       H = cv.height = cvO.height = innerHeight;
-      // Solo rebuildar waypoints cuando la fuente ya está cargada.
-      // Si se llama antes (ej. primer resize), document.fonts.ready lo hará.
-      if (arm && document.fonts.status === 'loaded') arm.waypoints = [];
+      if (arm) arm.waypoints = []; // rebuild on resize
     }
     window.addEventListener('resize', resize);
 
@@ -1920,8 +1104,7 @@ G2 X40 Y30 I40 J0"></textarea>
 
     // ── Letter path definitions removed — now using canvas pixel extraction ──
 
-    const isMobile = () => W < 600;
-    const isSmall  = () => W < 900;
+    const isMobile = () => W < 620 || (W < 900 && H > W);
 
     // ── Font-pixel path builder ─────────────────────
     // Renders real Orbitron glyphs to an offscreen canvas, extracts the
@@ -1929,85 +1112,118 @@ G2 X40 Y30 I40 J0"></textarea>
     // greedy nearest-neighbour walk — giving the robot a continuous
     // outline to trace regardless of screen size.
     function buildWaypoints() {
+      const mob = isMobile();
+
+      // ── Use exact DOM position of the hero-name element ──────
+      // This guarantees the robot traces exactly over the visible text,
+      // regardless of flex layout, viewport size or robot position.
       const nameEl = document.querySelector('.hero-name');
-      if (!nameEl) return [{ x: W * 0.3, y: H * 0.3, penDown: false }];
+      const spanEl = nameEl && nameEl.querySelector('.accent');
+      const domRect = nameEl ? nameEl.getBoundingClientRect() : null;
 
-      const domRect = nameEl.getBoundingClientRect();
-      if (!domRect || domRect.width < 10 || domRect.height < 10)
-        return [{ x: W * 0.3, y: H * 0.3, penDown: false }];
+      let zX, zY, zW, zH;
+      if (domRect && domRect.width > 40 && domRect.height > 20) {
+        // Use actual DOM bounding box with small padding
+        zX = domRect.left - 4;
+        zY = domRect.top - 4;
+        zW = domRect.width + 8;
+        zH = domRect.height + 8;
+      } else {
+        // Fallback for first frame before layout is ready
+        zW = mob ? W * 0.82 : W * 0.42;
+        zH = mob ? H * 0.22 : H * 0.20;
+        zX = mob ? W * 0.09 : W * 0.03;
+        zY = mob ? H * 0.50 : H * 0.30;
+      }
 
-      const style1 = window.getComputedStyle(nameEl);
-      const fontSize = parseFloat(style1.fontSize);
-      const fontDef  = `${style1.fontWeight} ${fontSize}px ${style1.fontFamily}`;
-
-      // ── Canvas offscreen del mismo tamaño que el DOM rect ──
-      // Sin multiplicadores de escala — coordenadas directamente en px de pantalla.
-      // SC solo para anti-aliasing en detección de borde, luego se divide.
-      const SC = 2;
-      const cW = Math.ceil(domRect.width)  * SC;
-      const cH = Math.ceil(domRect.height) * SC;
+      // Offscreen at 3× for crisp edge detection
+      const SC = 3;
+      const ocW = Math.max(4, Math.round(zW * SC));
+      const ocH = Math.max(4, Math.round(zH * SC));
       const oc = document.createElement('canvas');
-      oc.width = cW; oc.height = cH;
+      oc.width = ocW; oc.height = ocH;
       const ox = oc.getContext('2d');
 
-      // Renderizar el texto con la misma fuente y tamaño que el DOM
+      // ── Use exact font styles from DOM to guarantee a 1:1 pixel match ──
+      const style1 = window.getComputedStyle(nameEl);
+      const style2 = spanEl ? window.getComputedStyle(spanEl) : style1;
+
+      // Ensure the font scales with the offscreen canvas (SC multiplier)
+      const fs1 = parseFloat(style1.fontSize) * SC;
+      const fs2 = parseFloat(style2.fontSize) * SC;
+      const font1 = `${style1.fontWeight} ${fs1}px ${style1.fontFamily}`;
+      const font2 = `${style2.fontWeight} ${fs2}px ${style2.fontFamily}`;
+
+      // To get a perfect 1:1 text match without invisible CSS line-height padding shifting it:
+      // We read the actual unpadded height of the text element.
+      // And we use alphabetic baseline to anchor the font to its natural bottom rim.
+      const cssLh = parseFloat(style1.lineHeight) || (domRect ? domRect.height : H * 0.15);
+
       ox.fillStyle = '#fff';
-      ox.textBaseline = 'top';
-      ox.textAlign    = 'left';
-      ox.font = `${style1.fontWeight} ${fontSize * SC}px ${style1.fontFamily}`;
+      ox.textBaseline = 'alphabetic';
+      ox.textAlign = 'left';
 
-      // line-height: .hero-name usa line-height: 0.95
-      const lh = fontSize * 0.95 * SC;
-      ox.fillText('CÉSAR',   0, 0);
-      ox.fillText('RAMÍREZ', 0, lh);
+      // 'Orbitron' hanging baseline offset estimation (approx 85% of font size is above baseline)
+      const base1 = fs1 * 0.85;
+      const base2 = cssLh * SC + fs2 * 0.85;
 
-      // ── Extracción de borde (edge pixels) ──
-      const img  = ox.getImageData(0, 0, cW, cH).data;
-      const ink  = (x, y) => {
-        if (x < 0 || x >= cW || y < 0 || y >= cH) return false;
-        return img[(y * cW + x) * 4 + 3] > 40;
+      // Draw "CÉSAR"
+      ox.font = font1;
+      ox.fillText('CÉSAR', 0, base1);
+
+      // (User request: omit RAMÍREZ)
+      // ox.font = font2;
+      // ox.fillText('RAMÍREZ', 0, base2);
+
+      // ── Edge-pixel extraction ──
+      const img = ox.getImageData(0, 0, ocW, ocH).data;
+      const ink = (x, y) => {
+        if (x < 0 || x >= ocW || y < 0 || y >= ocH) return false;
+        return img[(y * ocW + x) * 4 + 3] > 60;
       };
 
-      const SAMP = 3;
-      const pts  = [];
-      for (let y = SAMP; y < cH - SAMP; y += SAMP) {
-        for (let x = SAMP; x < cW - SAMP; x += SAMP) {
+      const SAMP = 4;
+      const pts1 = [], pts2 = [];
+      const splitPx = Math.round(cssLh * SC); // Points below this go to second line
+
+      for (let y = SAMP; y < ocH - SAMP; y += SAMP) {
+        for (let x = SAMP; x < ocW - SAMP; x += SAMP) {
           if (!ink(x, y)) continue;
-          // Solo píxeles de borde
-          if (!ink(x - SAMP, y) || !ink(x + SAMP, y) ||
-              !ink(x, y - SAMP) || !ink(x, y + SAMP)) {
-            pts.push([x, y]);
+          if (!ink(x - SAMP, y) || !ink(x + SAMP, y) || !ink(x, y - SAMP) || !ink(x, y + SAMP)) {
+            (y < splitPx ? pts1 : pts2).push([x, y]);
           }
         }
       }
 
-      if (!pts.length) return [{ x: domRect.left + domRect.width / 2, y: domRect.top + domRect.height / 2, penDown: false }];
+      if (!pts1.length && !pts2.length) {
+        return [{ x: zX + zW / 2, y: zY + zH / 2, penDown: false }];
+      }
 
-      // ── Greedy nearest-neighbour ──
-      const PEN_SQ = (SAMP * 3) ** 2;
-      const CELL   = 14;
-      const cols   = Math.ceil(cW / CELL);
-      const grid   = new Map();
-      pts.forEach((p, i) => {
-        const k = Math.floor(p[0] / CELL) + Math.floor(p[1] / CELL) * cols;
-        if (!grid.has(k)) grid.set(k, []);
-        grid.get(k).push(i);
-      });
+      // ── Greedy nearest-neighbour per line ──
+      // PEN_SQ: max squared distance still considered same stroke (no jump line)
+      const PEN_SQ = (SAMP * 3.5) ** 2;
 
-      const vis = new Uint8Array(pts.length);
-      const out = [];
-      let ci = 0, minS = Infinity;
-      pts.forEach((p, i) => { const s = p[0] + p[1] * 0.3; if (s < minS) { minS = s; ci = i; } });
-      vis[ci] = 1;
-      out.push({ p: pts[ci], penDown: false });
+      function greedyOrder(pts) {
+        if (!pts.length) return [];
+        const CELL = 16, cols = Math.ceil(ocW / CELL);
+        const grid = new Map();
+        pts.forEach((p, i) => {
+          const k = Math.floor(p[0] / CELL) + Math.floor(p[1] / CELL) * cols;
+          if (!grid.has(k)) grid.set(k, []);
+          grid.get(k).push(i);
+        });
+        const vis = new Uint8Array(pts.length);
+        const out = [];
+        let ci = 0, minS = Infinity;
+        pts.forEach((p, i) => { const s = p[0] + p[1] * 0.3; if (s < minS) { minS = s; ci = i; } });
+        vis[ci] = 1; out.push({ p: pts[ci], penDown: false });
 
-      for (let iter = 1; iter < pts.length; iter++) {
-        const cp = pts[ci];
-        const cx = Math.floor(cp[0] / CELL), cy2 = Math.floor(cp[1] / CELL);
-        let bestD = Infinity, bestI = -1;
-        for (let R = 1; R <= 6 && bestI === -1; R++) {
-          for (let dy = -R; dy <= R; dy++) {
-            for (let dx = -R; dx <= R; dx++) {
+        for (let iter = 1; iter < pts.length; iter++) {
+          const cp = pts[ci];
+          const cx = Math.floor(cp[0] / CELL), cy2 = Math.floor(cp[1] / CELL);
+          let bestD = Infinity, bestI = -1;
+          for (let R = 1; R <= 6 && bestI === -1; R++) {
+            for (let dy = -R; dy <= R; dy++) for (let dx = -R; dx <= R; dx++) {
               const cell = grid.get((cx + dx) + (cy2 + dy) * cols);
               if (!cell) continue;
               for (const i of cell) {
@@ -2017,27 +1233,57 @@ G2 X40 Y30 I40 J0"></textarea>
               }
             }
           }
-        }
-        if (bestI === -1) {
-          for (let i = 0; i < pts.length; i++) {
-            if (vis[i]) continue;
-            const d = (pts[i][0] - cp[0]) ** 2 + (pts[i][1] - cp[1]) ** 2;
-            if (d < bestD) { bestD = d; bestI = i; }
+          if (bestI === -1) {
+            for (let i = 0; i < pts.length; i++) {
+              if (vis[i]) continue;
+              const d = (pts[i][0] - cp[0]) ** 2 + (pts[i][1] - cp[1]) ** 2;
+              if (d < bestD) { bestD = d; bestI = i; }
+            }
           }
+          if (bestI === -1) break;
+          vis[bestI] = 1;
+          out.push({ p: pts[bestI], penDown: bestD < PEN_SQ });
+          ci = bestI;
         }
-        if (bestI === -1) break;
-        vis[bestI] = 1;
-        out.push({ p: pts[bestI], penDown: bestD < PEN_SQ });
-        ci = bestI;
+        return out;
       }
 
-      // ── Mapear canvas px → coordenadas de pantalla ──
-      // Dividir por SC y sumar la posición DOM — alineación perfecta siempre.
-      return out.map(o => ({
-        x: domRect.left + o.p[0] / SC,
-        y: domRect.top  + o.p[1] / SC,
+      const ord1 = greedyOrder(pts1);
+      const ord2 = greedyOrder(pts2);
+      // Always lift pen at start of each line
+      if (ord1.length) ord1[0].penDown = false;
+      if (ord2.length) ord2[0].penDown = false;
+      const ordered = [...ord1, ...ord2];
+
+      // ── Map offscreen px → screen coords aligned to DOM rect ──
+      const raw = ordered.map(o => ({
+        x: zX + o.p[0] / SC,
+        y: zY + o.p[1] / SC,
         penDown: o.penDown
       }));
+
+      // SEG=1: sin interpolacion extra, trazos angulares y precisos (como un robot real)
+      const SEG = 1;
+      const smooth = [];
+      for (let i = 0; i < raw.length; i++) {
+        const p0 = raw[Math.max(0, i - 1)];
+        const p1 = raw[i];
+        const p2 = raw[Math.min(raw.length - 1, i + 1)];
+        const p3 = raw[Math.min(raw.length - 1, i + 2)];
+        smooth.push(p1);
+        // Only interpolate when BOTH consecutive points are pen-down
+        // This prevents smoothing across letter-jump gaps
+        if (!p1.penDown || !p2.penDown) continue;
+        for (let t = 1; t < SEG; t++) {
+          const s = t / SEG, s2 = s * s, s3 = s2 * s;
+          smooth.push({
+            x: 0.5 * ((2 * p1.x) + (-p0.x + p2.x) * s + (2 * p0.x - 5 * p1.x + 4 * p2.x - p3.x) * s2 + (-p0.x + 3 * p1.x - 3 * p2.x + p3.x) * s3),
+            y: 0.5 * ((2 * p1.y) + (-p0.y + p2.y) * s + (2 * p0.y - 5 * p1.y + 4 * p2.y - p3.y) * s2 + (-p0.y + 3 * p1.y - 3 * p2.y + p3.y) * s3),
+            penDown: true
+          });
+        }
+      }
+      return smooth;
     }
 
     // ── Spark particles ────────────────────────────
@@ -2175,12 +1421,9 @@ G2 X40 Y30 I40 J0"></textarea>
     // ── KukaKinematic class ────────────────────────
     class KukaKinematic {
       constructor() {
-        // bx/by se calculan correctamente en layout(), pero necesitan
-        // valores seguros para el primer frame antes de que layout() corra.
-        this.by = innerHeight * 0.82;
-        this.bx = innerWidth * 0.55;
+        this.by = 0; this.bx = 0;
         this.th1 = -Math.PI / 2; this.th2 = 0;
-        this.svgScale = this.by / (SVG_BASE_Y - (-400));
+        this.svgScale = 1;
         this.linkLen = 36; this.chainN = 20;
 
         this.state = ST.WRITING;
@@ -2189,8 +1432,8 @@ G2 X40 Y30 I40 J0"></textarea>
 
         this.weldT = 0;
         this.idleTmr = 0;
-        // eeX/eeY seguros: centro de pantalla — evita NaN en drawWeldingMask primer frame
-        this.eeX = innerWidth * 0.5; this.eeY = innerHeight * 0.5;
+        this.eeX = 0;
+        this.eeY = 0;
         this.weldFlicker = 0;
         this.maskAlpha = 0;
         this.gcodeFlicker = 0;
@@ -2216,37 +1459,19 @@ G2 X40 Y30 I40 J0"></textarea>
 
       // Rebuild layout
       layout() {
-        // Altura de la base: pantallas chicas → más abajo para no tapar el texto
-        this.by = H * 0.82;
+        // Mobile: robot base lower, stays in bottom portion
+        // Desktop: base at 82% height
+        this.by = isMobile() ? H * 0.88 : H * 0.82;
         this.svgScale = this.by / (SVG_BASE_Y - (-400));
         // Chain length
         const railW = W * 0.9;
         const maxCarX = W * 0.05 + railW + 80;
-        const anchorX = W * 0.05 -510;
+        const anchorX = W * 0.05 + 210;
         const radius = 50;
         this.chainN = Math.ceil((Math.abs(maxCarX - anchorX) + Math.PI * radius) / this.linkLen);
-
-        // ── Rail limits ──
-        // En landscape: libre (el texto está a la izquierda, botones a la derecha)
-        // En desktop/móvil: mínimo calculado desde el botón "Ver Proyectos"
-        const SVG_CAR_ANCHOR = 178;
-        const offX = (SVG_SH.x -SVG_CAR_ANCHOR) * this.svgScale;
-        const isLandscape = W >= 600 && W < 900 && W > H;
-        if (isLandscape) {
-          this._bxMin = W * 0.25;
-        } else {
-          const btnP = document.querySelector('.btn-p');
-          if (btnP) {
-            const r = btnP.getBoundingClientRect();
-            this._bxMin = r.right + offX - 20;
-          } else {
-            this._bxMin = W * 0.25;
-          }
-        }
-        this._bxMax = W *2 ;
         // Init waypoints first time or after resize
         if (!this.waypoints.length) {
-          // bx inicial: tablet/cuadrado arranca más a la derecha para no tapar texto
+          // Start robot centered on mobile, right-side on desktop
           this.bx = isMobile() ? W * 0.40 : W * 0.55;
           this.waypoints = buildWaypoints();
           this.wpIdx = 0;
@@ -2279,20 +1504,21 @@ G2 X40 Y30 I40 J0"></textarea>
       }
 
       mouseNear() {
-        if (isSmall()) return mouse.x > -1000;
+        if (isMobile()) return mouse.x > -1000;
         const sh = this.shoulder();
         return Math.hypot(mouse.x - sh.x, mouse.y - sh.y) < 320
           && mouse.x < W * 0.62;   // left half reachable (robot points left)
       }
 
-      ikTo(tx, ty, speed = 0.07) {
+      ikTo(tx, ty, bxOverride = null, speed = 0.07) {
         this.layout();
-        const offX = (SVG_SH.x ) * this.svgScale;
-        const bxMin = this._bxMin !== undefined ? this._bxMin : W * 0.25;
-        const bxMax = this._bxMax !== undefined ? this._bxMax : W * 1.1;
-        // Fórmula unificada en todos los modos: bx = tx + offX
-        const iBx = clamp(tx + offX, bxMin, bxMax);
-        this.bx += (iBx - this.bx) * speed;
+        const offX = (SVG_SH.x - 1780) * this.svgScale;
+        const bxMin = isMobile() ? W * 0.15 : W * 0.25;
+        const bxMax = isMobile() ? W * 0.95 : W * 0.95;
+        // bx tracks target but shoulder is LEFT of bx, so bx = tx + offX
+        const iBx = bxOverride !== null ? bxOverride
+          : clamp(tx + offX, bxMin, bxMax);
+        this.bx += (iBx - this.bx) * 0.15;
 
         const sh = this.shoulder();
         const dx = sh.x - tx;  // MIRRORED: positive dx when target is to the left
@@ -2369,7 +1595,9 @@ G2 X40 Y30 I40 J0"></textarea>
           return;
         }
         const wp = this.gcWaypoints[this.gcIdx];
-        this.ikTo(wp.x, wp.y, wp.rapid ? 0.15 : 0.10);
+        const offX = (SVG_SH.x - 178) * this.svgScale;
+        const iBx = clamp(wp.x - offX, W * 0.12, W * 0.88);
+        this.ikTo(wp.x, wp.y, iBx, wp.rapid ? 0.15 : 0.10);
         const ee = this.endEffector();
         const dist = Math.hypot(ee.x - wp.x, ee.y - wp.y);
 
@@ -2421,8 +1649,14 @@ G2 X40 Y30 I40 J0"></textarea>
           return;
         }
         // wp already declared above — reuse it (points to current waypoint)
-        // X10 Faster bx + IK: track targets aggressively and immediately
-        this.ikTo(wp.x, wp.y, 0.95);
+        const offX = (SVG_SH.x - 178) * this.svgScale;
+        const bxMin = isMobile() ? W * 0.15 : W * 0.25;
+        const bxMax = isMobile() ? W * 0.95 : W * 0.95;
+        const iBx = clamp(wp.x + offX, bxMin, bxMax);  // mirrored: + offX
+        // X10 Faster bx: track targets aggressively and immediately
+        this.bx += (iBx - this.bx) * 0.95;
+        // Instant IK tracking
+        this.ikTo(wp.x, wp.y, this.bx, 0.95);
 
         const ee = this.endEffector();
         const dist = Math.hypot(ee.x - wp.x, ee.y - wp.y);
@@ -2603,7 +1837,8 @@ G2 X40 Y30 I40 J0"></textarea>
 
         this.weldFlicker = arcActive ? clamp(baseFlicker, 0, 1) : 0;
 
-        this.ikTo(wx, wy, 0.35);
+        const offX = (SVG_SH.x - 178) * this.svgScale;
+        this.ikTo(wx, wy, clamp(wx - offX, W * 0.12, W * 0.88), 0.08);
 
         const ee = this.endEffector();
         if (arcActive && Math.random() < sparkRate) {
@@ -2619,7 +1854,7 @@ G2 X40 Y30 I40 J0"></textarea>
         else if (this.state === ST.GCODE) this.updateGcode();
         else {
           // FOLLOWING — track mouse, draw + weld on pointer down
-          this.ikTo(mouse.x, mouse.y, 0.85);
+          this.ikTo(mouse.x, mouse.y, null, 0.10);
 
           if (pointer.down) {
             // Compute arc flicker while drawing
@@ -2673,15 +1908,14 @@ G2 X40 Y30 I40 J0"></textarea>
         svgCont.style.top = (this.by - (SVG_BASE_Y - VBY) * ppU) + 'px';
         kukaSvg.style.width = rW + 'px';
         kukaSvg.style.height = rH + 'px';
-        kukaSvg.style.transform = 'scaleX(-1)';
-        // NO sobreescribir this.svgScale — layout() ya lo calcula correctamente.
-        // Sobreescribirlo aquí causaba NaN en th1 en el primer frame (bx=0 → ppU=0).
+        kukaSvg.style.transform = 'scaleX(-1)';  // mirror the arm, rail/chain stay in canvas
+        this.svgScale = ppU;
       }
 
       // ── Draw helpers ──
       drawGrid(c) {
         c.save();
-        const g = isSmall() ? 35 : 45;
+        const g = isMobile() ? 35 : 45;
         c.strokeStyle = 'rgba(90,145,255,0.07)';
         c.lineWidth = 1;
         for (let x = 0; x < W; x += g) { c.beginPath(); c.moveTo(x, 0); c.lineTo(x, H); c.stroke(); }
@@ -2699,38 +1933,29 @@ G2 X40 Y30 I40 J0"></textarea>
       }
 
       drawRail(c) {
-        const s  = this.svgScale;
-        const rx = W * 0.05;
-        const rw = W * 0.9;
+        const rx = isMobile() ? W * 0.01 : W * 0.05;
+        const rw = isMobile() ? W * 0.98 : W * 0.9;
         const ry = this.by;
-        const h1 = Math.round(70 * s), h2 = Math.round(15 * s), h3 = Math.round(8 * s);
-        const h4 = Math.round(38 * s), h5 = Math.round(22 * s), h6 = Math.round(50 * s);
-        const r4 = Math.max(1, Math.round(4 * s));
-        c.fillStyle = '#040f1c'; c.fillRect(rx, ry, rw, h1);
-        c.fillStyle = '#0d2342'; c.fillRect(rx, ry + h2, rw, h3);
-        c.fillStyle = '#091929'; c.fillRect(rx, ry + h4, rw, h5);
-        c.fillStyle = 'rgba(74,158,255,0.12)'; c.fillRect(rx, ry + h2, rw, 2);
+        c.fillStyle = '#040f1c'; c.fillRect(rx, ry, rw, 70);
+        c.fillStyle = '#0d2342'; c.fillRect(rx, ry + 15, rw, 8);
+        c.fillStyle = '#091929'; c.fillRect(rx, ry + 38, rw, 22);
+        c.fillStyle = 'rgba(74,158,255,0.12)'; c.fillRect(rx, ry + 15, rw, 2);
         c.fillStyle = '#060d17';
-        const step = Math.max(20, Math.round(40 * s));
-        for (let i = rx + step / 2; i < rx + rw - step / 2; i += step) {
-          c.beginPath(); c.arc(i, ry + h6, r4, 0, Math.PI * 2); c.fill();
+        for (let i = rx + 20; i < rx + rw - 20; i += 40) {
+          c.beginPath(); c.arc(i, ry + 50, 4, 0, Math.PI * 2); c.fill();
         }
       }
 
       drawChain(c) {
         c.save();
-        const s = this.svgScale*1.5;
-        const anchorX = W * 0.05 -510;
-        const carX  = this.bx + Math.round(80 * s);
-        const vOff  = Math.round(35 * s);
-        const vBot  = Math.round(65 * s);
-        const topY  = this.by - vOff, botY = this.by + vBot;
+        const anchorX = W * 0.05 + 210;
+        const carX = this.bx + 80;
+        const topY = this.by - 35, botY = this.by + 65;
         const radius = (botY - topY) / 2, cy = topY + radius;
         const L_geo = this.chainN * this.linkLen;
         let loopX = (carX + anchorX - Math.PI * radius + L_geo) / 2;
         if (loopX < carX + radius * 1.5) loopX = carX + radius * 1.5;
         const L1 = loopX - carX, L2 = Math.PI * radius;
-        const lh = Math.max(4, Math.round(12 * s)); // half-height of link
         for (let i = 0; i < this.chainN; i++) {
           const d = i * this.linkLen; let x, y, ang;
           if (d <= L1) { x = carX + d; y = topY; ang = 0; }
@@ -2740,33 +1965,25 @@ G2 X40 Y30 I40 J0"></textarea>
           } else { x = loopX - (d - L1 - L2); y = botY; ang = Math.PI; }
           c.save(); c.translate(x, y); c.rotate(ang);
           c.fillStyle = '#050e1a';
-          rrect(c, -this.linkLen / 2, -lh, this.linkLen, lh * 2, 3); c.fill();
-          c.fillStyle = '#0c1e33'; c.fillRect(-this.linkLen / 2 + 1, -lh, this.linkLen - 2, Math.round(3 * s));
-          const pw = Math.max(2, Math.round(4 * s)), pg = Math.max(1, Math.round(3 * s));
-          c.fillStyle = '#020810';
-          c.fillRect(-pg - pw, -Math.round(6 * s), pw, Math.round(12 * s));
-          c.fillRect(pg,       -Math.round(6 * s), pw, Math.round(12 * s));
+          rrect(c, -this.linkLen / 2, -12, this.linkLen, 24, 3); c.fill();
+          c.fillStyle = '#0c1e33'; c.fillRect(-this.linkLen / 2 + 1, -10, this.linkLen - 2, 3);
+          c.fillStyle = '#020810'; c.fillRect(-5, -6, 4, 12); c.fillRect(3, -6, 4, 12);
           c.restore();
         }
         c.restore();
       }
 
       drawCabinet(c) {
-        const s  = this.svgScale * 1.4;
-        const bW = 210, bH = 150;  // dimensiones de diseño (referencia desktop)
-        // Posición en pantalla: esquina inferior derecha, encima del riel
-        const screenX =  10 ;
-        const screenY = this.by + Math.round(65 * s) - 100;
+        if (isMobile()) return;  // cabinet hidden on mobile — no room
+        const bW = 210, bH = 150;
+        // Move cabinet to the right corner, away from text/buttons
+        const cX = W * 0.95 - bW, cY = this.by + 65 - bH;
         c.save();
-        c.translate(screenX, screenY);
-        c.scale(s, s);
-        // A partir de aquí todo en coordenadas de diseño (0,0 = esquina sup-izq del gabinete)
-        const cX = 0, cY = 0;
         c.fillStyle = '#030c17'; rrect(c, cX, cY, bW, bH, 4); c.fill();
-        c.strokeStyle = 'rgba(74,158,255,0.18)'; c.lineWidth = 1 / s;
+        c.strokeStyle = 'rgba(74,158,255,0.18)'; c.lineWidth = 1;
         rrect(c, cX, cY, bW, bH, 4); c.stroke();
         const pX = cX + 35, pY = cY + 5, pW = bW - 40, pH = bH - 20;
-        c.fillStyle = '#FF6600'; c.fillRect(pX, pY, pW, pH);
+        c.fillStyle = ORANGE; c.fillRect(pX, pY, pW, pH);
         c.fillStyle = '#080614'; c.fillRect(pX + 20, pY + 15, 60, 25);
         c.fillStyle = '#ff3333'; c.beginPath(); c.arc(pX + 30, pY + 27, 3, 0, Math.PI * 2); c.fill();
         c.fillStyle = '#ffcc00'; c.beginPath(); c.arc(pX + 45, pY + 27, 3, 0, Math.PI * 2); c.fill();
@@ -2778,33 +1995,46 @@ G2 X40 Y30 I40 J0"></textarea>
         c.fillStyle = '#040310'; c.font = '900 30px Orbitron,sans-serif';
         c.textAlign = 'left'; c.textBaseline = 'alphabetic';
         c.fillText('KUKA', pX + 30, pY + pH - 15);
-        c.fillStyle = '#d8d8d8'; c.strokeStyle = '#111'; c.lineWidth = 1 / s;
+        c.fillStyle = '#d8d8d8'; c.strokeStyle = '#111'; c.lineWidth = 1;
         c.fillRect(pX + 115, pY + 68, 45, 25); c.strokeRect(pX + 115, pY + 68, 45, 25);
         c.fillStyle = '#111'; c.font = 'bold 9px sans-serif';
         c.textAlign = 'center'; c.textBaseline = 'alphabetic';
         c.fillText('KUKA', pX + 137, pY + 79); c.font = '7px sans-serif';
         c.fillText('KR C4', pX + 137, pY + 89);
         const tX = pX + 138, tY = pY + 38;
-        c.fillStyle = '#FFD700'; c.strokeStyle = '#111'; c.lineWidth = 2 / s; c.lineJoin = 'miter';
+        c.fillStyle = '#FFD700'; c.strokeStyle = '#111'; c.lineWidth = 2; c.lineJoin = 'miter';
         c.beginPath(); c.moveTo(tX, tY - 18); c.lineTo(tX + 20, tY + 14); c.lineTo(tX - 20, tY + 14); c.closePath(); c.fill(); c.stroke();
         c.fillStyle = '#111'; c.font = 'bold 22px sans-serif'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText('!', tX, tY + 4);
-        // SmartPAD
+        // SmartPAD — shows live robot data
         c.fillStyle = '#040310';
         c.beginPath(); c.moveTo(pX + pW - 5, pY + pH - 60); c.lineTo(pX + pW + 15, pY + pH - 60);
         c.lineTo(pX + pW + 15, pY + pH - 10); c.lineTo(pX + pW - 5, pY + pH - 10); c.fill();
-        c.translate(bW - 5, bH - 60); c.rotate(Math.PI / 16);
+        c.translate(cX + bW - 5, cY + bH - 60); c.rotate(Math.PI / 16);
         c.fillStyle = '#111'; rrect(c, -20, 0, 50, 65, 8); c.fill();
         c.fillStyle = '#0a0a0a'; rrect(c, -18, 2, 46, 61, 6); c.fill();
-        c.fillStyle = '#FF6600'; c.fillRect(-16, 4, 42, 57);
+        c.fillStyle = ORANGE; c.fillRect(-16, 4, 42, 57);
+
+        // Screen area
         c.save(); c.beginPath(); c.rect(-12, 10, 34, 44); c.clip();
         c.fillStyle = '#010a18'; c.fillRect(-12, 10, 34, 44);
+
+        // Header bar
         c.fillStyle = 'rgba(255,102,0,0.85)'; c.fillRect(-12, 10, 34, 7);
         c.fillStyle = '#fff'; c.font = 'bold 4px monospace';
         c.textAlign = 'left'; c.textBaseline = 'top';
         c.fillText('KRC4', -10, 11);
+
+        // Live data lines
         const ee2 = this.endEffector();
-        const modeLabels = { [ST.WRITING]: 'WRITE', [ST.WELDING]: this.weldMode || 'WELD', [ST.FOLLOWING]: 'TRACK', [ST.GCODE]: 'GCODE' };
-        const modeCol   = { [ST.WRITING]: '#ff8833', [ST.WELDING]: '#ffdd00', [ST.FOLLOWING]: '#00ff88', [ST.GCODE]: '#00ccff' };
+        const modeLabels = {
+          [ST.WRITING]: 'WRITE', [ST.WELDING]: this.weldMode || 'WELD',
+          [ST.FOLLOWING]: 'TRACK', [ST.GCODE]: 'GCODE'
+        };
+        const modeCol = {
+          [ST.WRITING]: '#ff8833', [ST.WELDING]: '#ffdd00',
+          [ST.FOLLOWING]: '#00ff88', [ST.GCODE]: '#00ccff'
+        };
+
         c.font = '4px "Share Tech Mono", monospace';
         const lines2 = [
           { label: 'A1', val: (this.th1 * 180 / Math.PI).toFixed(0) + '°' },
@@ -2820,11 +2050,15 @@ G2 X40 Y30 I40 J0"></textarea>
           c.fillStyle = ln.col || '#b0e0ff'; c.textAlign = 'right';
           c.fillText(ln.val, 20, ly);
         });
+
+        // Blinking cursor
         if (Math.floor(Date.now() / 400) % 2 === 0) {
           c.fillStyle = 'rgba(0,255,180,0.7)';
           c.fillRect(12, 50, 6, 2);
         }
+
         c.restore();
+        // E-stop button
         c.fillStyle = '#111'; c.beginPath(); c.arc(15, 8, 5, 0, Math.PI * 2); c.fill();
         c.fillStyle = 'red'; c.beginPath(); c.arc(15, 8, 3.5, 0, Math.PI * 2); c.fill();
         c.restore();
@@ -2833,7 +2067,7 @@ G2 X40 Y30 I40 J0"></textarea>
       drawHUD(c) {
         const ee = this.endEffector();
 
-        if (isSmall()) {
+        if (isMobile()) {
           // ── MOBILE: compact status bar at bottom of screen ──
           const barH = 36, barY = H - barH;
           c.save();
@@ -3000,7 +2234,12 @@ G2 X40 Y30 I40 J0"></textarea>
         c.fillRect(0, 0, W, H);
 
         // Rail hot line
-
+        const railGlow = c.createLinearGradient(0, this.by - 10, 0, this.by + 80);
+        railGlow.addColorStop(0, `rgba(255,130,25,${a * (0.12 + f * 0.09)})`);
+        railGlow.addColorStop(0.5, `rgba(200,80,10,${a * 0.04})`);
+        railGlow.addColorStop(1, 'rgba(0,0,0,0)');
+        c.fillStyle = railGlow;
+        c.fillRect(0, this.by - 10, W, 110);
 
         // ── 3. ARC LIGHT CONE ──
         if (f > 0.01) {
@@ -3063,11 +2302,9 @@ G2 X40 Y30 I40 J0"></textarea>
         this.positionSVG();
         this.applySVG();
         // Mask covers robot + rail + background
- 
+        this.drawWeldingMask(cO);
         // Cabinet and HUD drawn AFTER mask — always fully readable
         this.drawCabinet(cO);
-        
-        this.drawWeldingMask(cO);
         this.drawHUD(cO);
       }
     }
@@ -3194,6 +2431,6 @@ G2 X40 Y30 I40 J0"></textarea>
       loop();
     });
   </script>
-
 </body>
+
 </html>

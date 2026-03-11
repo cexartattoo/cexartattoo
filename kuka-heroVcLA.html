@@ -1,0 +1,1827 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>César Ramírez – Ingeniero Mecatrónico</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap');
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html, body { width: 100%; height: 100%; overflow: hidden; }
+
+    body {
+      background: #071a2e;
+      font-family: 'Orbitron', sans-serif;
+      cursor: crosshair;
+    }
+
+    canvas { position: absolute; top: 0; left: 0; display: block; }
+    #cv { z-index: 1; }
+    #cv-overlay { z-index: 3; pointer-events: none; }
+
+    #robot-svg-container {
+      position: absolute; top: 0; left: 0;
+      z-index: 2; pointer-events: none;
+      transform-origin: top left;
+    }
+
+    /* ── HERO CONTENT ── */
+    #hero-content {
+      position: absolute;
+      top: 0; left: 0; bottom: 0;
+      width: 44%;
+      z-index: 10;
+      pointer-events: none;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 0 4vw 0 5.5vw;
+    }
+
+    .hero-status {
+      display: flex; align-items: center; gap: 9px;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px;
+      color: #4a9eff;
+      letter-spacing: 3.5px;
+      text-transform: uppercase;
+      margin-bottom: 22px;
+      opacity: 0;
+      animation: fadeUp .7s ease .4s forwards;
+    }
+    .pulse-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: #00ff88; box-shadow: 0 0 8px #00ff88;
+      flex-shrink: 0;
+      animation: blink 2s infinite;
+    }
+
+    .hero-name {
+      font-size: clamp(28px, 4.2vw, 58px);
+      font-weight: 900;
+      color: #ffffff;
+      line-height: 1.0;
+      letter-spacing: .5px;
+      opacity: 0;
+      animation: fadeUp .7s ease .6s forwards;
+    }
+    .hero-name .accent { color: #FF6600; }
+
+    .rule {
+      width: 55px; height: 2px;
+      background: linear-gradient(90deg, #FF6600, transparent);
+      margin: 18px 0;
+      opacity: 0;
+      animation: fadeUp .7s ease .8s forwards;
+    }
+
+    .hero-title {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: clamp(11px, 1.3vw, 15px);
+      color: #7ab8ff;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      opacity: 0;
+      animation: fadeUp .7s ease 1s forwards;
+    }
+
+    .hero-tags {
+      display: flex; flex-wrap: wrap; gap: 7px;
+      margin-top: 18px;
+      opacity: 0;
+      animation: fadeUp .7s ease 1.2s forwards;
+    }
+    .tag {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 8.5px;
+      letter-spacing: 2px;
+      padding: 4px 9px;
+      color: rgba(74,158,255,.65);
+      border: 1px solid rgba(74,158,255,.25);
+      text-transform: uppercase;
+    }
+
+    .hero-ctas {
+      display: flex; gap: 12px;
+      margin-top: 28px;
+      pointer-events: all;
+      opacity: 0;
+      animation: fadeUp .7s ease 1.4s forwards;
+    }
+    .btn-p, .btn-o {
+      padding: 12px 26px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 9.5px; font-weight: 700;
+      letter-spacing: 2.5px; text-transform: uppercase;
+      text-decoration: none;
+      display: inline-block;
+      cursor: pointer;
+      transition: transform .2s, background .2s, border-color .2s;
+      clip-path: polygon(9px 0%, 100% 0%, calc(100% - 9px) 100%, 0% 100%);
+    }
+    .btn-p { background: #FF6600; color: #fff; border: none; }
+    .btn-p:hover { background: #ff8833; transform: translateY(-2px); }
+    .btn-o { background: transparent; color: #4a9eff; border: 1px solid rgba(74,158,255,.4); }
+    .btn-o:hover { border-color: #4a9eff; background: rgba(74,158,255,.08); transform: translateY(-2px); }
+
+    /* ── CORNERS ── */
+    .corner {
+      position: fixed;
+      width: 28px; height: 28px;
+      z-index: 20; pointer-events: none;
+      opacity: 0;
+      animation: fadeIn .5s ease 1.8s forwards;
+    }
+    .c-tl { top: 18px; left: 18px; border-top: 1px solid rgba(74,158,255,.45); border-left: 1px solid rgba(74,158,255,.45); }
+    .c-tr { top: 18px; right: 18px; border-top: 1px solid rgba(74,158,255,.45); border-right: 1px solid rgba(74,158,255,.45); }
+    .c-bl { bottom: 18px; left: 18px; border-bottom: 1px solid rgba(74,158,255,.45); border-left: 1px solid rgba(74,158,255,.45); }
+    .c-br { bottom: 18px; right: 18px; border-bottom: 1px solid rgba(74,158,255,.45); border-right: 1px solid rgba(74,158,255,.45); }
+
+    /* ── ROBOT STATE BADGE ── */
+    #badge {
+      position: fixed;
+      bottom: 22px; right: 22px;
+      z-index: 20; pointer-events: none;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 9px; letter-spacing: 3px;
+      color: #4a9eff;
+      padding: 6px 14px;
+      border: 1px solid rgba(74,158,255,.3);
+      background: rgba(7,26,46,.85);
+      text-transform: uppercase;
+      opacity: 0;
+      animation: fadeIn .5s ease 2s forwards;
+    }
+
+    /* ── HINT ── */
+    #hint {
+      position: fixed;
+      bottom: 22px; left: 50%;
+      transform: translateX(-50%);
+      z-index: 20; pointer-events: none;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 9px; letter-spacing: 3px;
+      color: rgba(74,158,255,.45);
+      text-transform: uppercase;
+      opacity: 0;
+      animation: fadeIn 1s ease 4s forwards;
+      transition: opacity .5s;
+    }
+
+    /* ── G-CODE PANEL ── */
+    #gcode-panel {
+      position: fixed;
+      top: 50%; right: 22px;
+      transform: translateY(-50%);
+      z-index: 30;
+      width: 220px;
+      background: rgba(3,9,18,0.92);
+      border: 1px solid rgba(74,158,255,0.3);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px;
+      color: #7ab8ff;
+      display: none;
+      flex-direction: column;
+      gap: 0;
+      clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 0 100%);
+    }
+    #gcode-panel.open { display: flex; }
+    #gcode-panel header {
+      background: rgba(255,102,0,0.15);
+      border-bottom: 1px solid rgba(74,158,255,0.2);
+      padding: 8px 12px;
+      color: #FF6600;
+      letter-spacing: 2px;
+      font-size: 9.5px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    #gcode-panel header button {
+      background: none; border: none; color: rgba(74,158,255,.5);
+      cursor: pointer; font-size: 13px; line-height: 1;
+    }
+    #gcode-panel header button:hover { color: #ff4444; }
+    #gcode-textarea {
+      width: 100%; height: 130px;
+      background: rgba(0,10,22,0.95);
+      border: none; border-bottom: 1px solid rgba(74,158,255,0.15);
+      color: #b0d8ff;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px;
+      padding: 8px 10px;
+      resize: none; outline: none;
+      line-height: 1.6;
+    }
+    #gcode-textarea::placeholder { color: rgba(74,158,255,.25); }
+    #gcode-panel .gc-btns {
+      display: flex; gap: 6px; padding: 8px 10px;
+    }
+    #gcode-panel .gc-btns button {
+      flex: 1; padding: 6px 0;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 9px; letter-spacing: 1.5px;
+      cursor: pointer; border: none;
+      clip-path: polygon(6px 0%,100% 0%,calc(100% - 6px) 100%,0% 100%);
+      transition: opacity .15s;
+    }
+    #gcode-run  { background: #FF6600; color: #fff; }
+    #gcode-stop { background: #1a2d45; color: #4a9eff; border: 1px solid rgba(74,158,255,.3); }
+    #gcode-panel .gc-btns button:hover { opacity: .8; }
+    #gcode-status {
+      padding: 6px 10px 8px;
+      color: rgba(74,158,255,.55);
+      font-size: 9px; letter-spacing: 1px;
+      min-height: 22px;
+    }
+
+    /* toggle button */
+    #gcode-toggle {
+      position: fixed;
+      top: 50%; right: 22px;
+      transform: translateY(-50%);
+      z-index: 25;
+      background: rgba(3,9,18,.88);
+      border: 1px solid rgba(74,158,255,.35);
+      color: #4a9eff;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 9px; letter-spacing: 2px;
+      padding: 9px 13px;
+      cursor: pointer;
+      writing-mode: vertical-rl;
+      opacity: 0;
+      animation: fadeIn .5s ease 3s forwards;
+      transition: background .2s;
+    }
+    #gcode-toggle:hover { background: rgba(74,158,255,.12); }
+    #gcode-toggle.hidden { display: none; }
+
+    @keyframes fadeUp {
+      from { opacity:0; transform:translateY(14px); }
+      to   { opacity:1; transform:translateY(0);    }
+    }
+    @keyframes fadeIn {
+      from { opacity:0; } to { opacity:1; }
+    }
+    @keyframes blink {
+      0%,100% { opacity:1; } 50% { opacity:.25; }
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="cv"></canvas>
+
+  <!-- ══════════════════════════════════════════════
+       KUKA ROBOT SVG  (cinemática 2D)
+  ══════════════════════════════════════════════ -->
+  <div id="robot-svg-container">
+    <svg id="kuka-svg" xmlns="http://www.w3.org/2000/svg"
+         viewBox="-300 -400 1160 1410" width="560" height="610" overflow="visible">
+      <defs>
+        <linearGradient id="ogH" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%"   stop-color="#b83a00"/>
+          <stop offset="28%"  stop-color="#ff6000"/>
+          <stop offset="62%"  stop-color="#ff5000"/>
+          <stop offset="100%" stop-color="#a83200"/>
+        </linearGradient>
+        <linearGradient id="ogV" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%"   stop-color="#ff6e0e"/>
+          <stop offset="42%"  stop-color="#ff5800"/>
+          <stop offset="100%" stop-color="#b83800"/>
+        </linearGradient>
+        <linearGradient id="ogDR" x1="0%" y1="100%" x2="100%" y2="0%">
+          <stop offset="0%"   stop-color="#b63600"/>
+          <stop offset="48%"  stop-color="#ff5800"/>
+          <stop offset="100%" stop-color="#ff6c0c"/>
+        </linearGradient>
+        <linearGradient id="ogDL" x1="100%" y1="100%" x2="0%" y2="0%">
+          <stop offset="0%"   stop-color="#b63600"/>
+          <stop offset="48%"  stop-color="#ff5200"/>
+          <stop offset="100%" stop-color="#ff6808"/>
+        </linearGradient>
+        <linearGradient id="cylG" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%"   stop-color="#050505"/>
+          <stop offset="10%"  stop-color="#1e1e1e"/>
+          <stop offset="28%"  stop-color="#383838"/>
+          <stop offset="48%"  stop-color="#464646"/>
+          <stop offset="68%"  stop-color="#2c2c2c"/>
+          <stop offset="88%"  stop-color="#121212"/>
+          <stop offset="100%" stop-color="#040404"/>
+        </linearGradient>
+        <radialGradient id="capG" cx="38%" cy="35%" r="62%">
+          <stop offset="0%"   stop-color="#404040"/>
+          <stop offset="55%"  stop-color="#1c1c1c"/>
+          <stop offset="100%" stop-color="#080808"/>
+        </radialGradient>
+        <linearGradient id="nemaG" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%"   stop-color="#222"/>
+          <stop offset="100%" stop-color="#060606"/>
+        </linearGradient>
+        <linearGradient id="motorG" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%"   stop-color="#2a2a2a"/>
+          <stop offset="20%"  stop-color="#111"/>
+          <stop offset="100%" stop-color="#000"/>
+        </linearGradient>
+        <linearGradient id="silverG" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%"   stop-color="#f0f0f0"/>
+          <stop offset="40%"  stop-color="#c0c0c0"/>
+          <stop offset="100%" stop-color="#707070"/>
+        </linearGradient>
+        <filter id="sh">
+          <feDropShadow dx="2" dy="3" stdDeviation="4"   flood-color="#00000065"/>
+        </filter>
+        <filter id="shS">
+          <feDropShadow dx="1" dy="2" stdDeviation="2.5" flood-color="#00000052"/>
+        </filter>
+      </defs>
+
+      <!-- ESLABON 0 – BASE FIJA -->
+      <g id="eslabon0">
+        <g filter="url(#sh)">
+          <rect x="118" y="556" width="120" height="30" fill="#a0a4a8"/>
+          <rect x="118" y="583" width="120" height="3"  fill="#808488"/>
+          <rect x="90"  y="556" width="28"  height="34" rx="2" fill="#c44000"/>
+          <rect x="90"  y="586" width="28"  height="4"  rx="1" fill="#9e3000"/>
+          <circle cx="104" cy="568" r="5" fill="#c0c0c0" fill-opacity=".9" stroke="#777" stroke-width="1"/>
+          <circle cx="104" cy="568" r="2" fill="#222"/>
+          <rect x="238" y="556" width="28" height="34" rx="2" fill="#c44000"/>
+          <rect x="238" y="586" width="28" height="4"  rx="1" fill="#9e3000"/>
+          <circle cx="252" cy="568" r="5" fill="#c0c0c0" fill-opacity=".9" stroke="#777" stroke-width="1"/>
+          <circle cx="252" cy="568" r="2" fill="#222"/>
+        </g>
+        <g filter="url(#sh)">
+          <rect x="43" y="534" width="270" height="28" rx="4" fill="#9e3000"/>
+          <rect x="43" y="531" width="270" height="26" rx="4" fill="url(#ogH)"/>
+          <rect x="43" y="546" width="113" height="15" rx="3" fill="#c44000"/>
+          <rect x="43" y="550" width="113" height="7"  rx="2" fill="#a03000"/>
+          <rect x="200" y="546" width="113" height="15" rx="3" fill="#c44000"/>
+          <rect x="200" y="550" width="113" height="7"  rx="2" fill="#a03000"/>
+          <rect x="15" y="540" width="28" height="24" rx="3" fill="#c44000"/>
+          <rect x="15" y="542" width="28" height="6"  fill="#f06010" opacity=".4"/>
+          <rect x="313" y="540" width="28" height="24" rx="3" fill="#c44000"/>
+          <rect x="313" y="542" width="28" height="6"  fill="#f06010" opacity=".4"/>
+        </g>
+        <g filter="url(#sh)">
+          <rect x="157" y="540" width="42" height="55" rx="4" fill="#1c1c1c"/>
+          <rect x="158" y="541" width="40" height="4"  rx="2" fill="#3a3a3a"/>
+        </g>
+        <circle cx="168" cy="548" r="3.2" fill="#c0c0c0" fill-opacity=".9" stroke="#999" stroke-width=".8"/>
+        <circle cx="168" cy="548" r="1.5" fill="#111"/>
+        <circle cx="188" cy="548" r="3.2" fill="#c0c0c0" fill-opacity=".9" stroke="#999" stroke-width=".8"/>
+        <circle cx="188" cy="548" r="1.5" fill="#111"/>
+        <circle cx="178" cy="582" r="5"   fill="#c0c0c0" fill-opacity=".9" stroke="#777" stroke-width="1.2"/>
+        <circle cx="178" cy="582" r="2.5" fill="#222"/>
+        <rect x="177" y="589" width="2" height="6" fill="#111"/>
+        <circle cx="65"  cy="554" r="6"   fill="#141414"/>
+        <circle cx="65"  cy="554" r="4.5" fill="#c0c0c0" fill-opacity=".8" stroke="#eeddcc" stroke-width=".8"/>
+        <circle cx="65"  cy="554" r="2"   fill="#111"/>
+        <circle cx="95"  cy="554" r="6"   fill="#141414"/>
+        <circle cx="95"  cy="554" r="4.5" fill="#c0c0c0" fill-opacity=".8" stroke="#eeddcc" stroke-width=".8"/>
+        <circle cx="95"  cy="554" r="2"   fill="#111"/>
+        <circle cx="261" cy="554" r="6"   fill="#141414"/>
+        <circle cx="261" cy="554" r="4.5" fill="#c0c0c0" fill-opacity=".8" stroke="#eeddcc" stroke-width=".8"/>
+        <circle cx="261" cy="554" r="2"   fill="#111"/>
+        <circle cx="291" cy="554" r="6"   fill="#141414"/>
+        <circle cx="291" cy="554" r="4.5" fill="#c0c0c0" fill-opacity=".8" stroke="#eeddcc" stroke-width=".8"/>
+        <circle cx="291" cy="554" r="2"   fill="#111"/>
+        <circle cx="29"  cy="552" r="6.5" fill="#e0e0e0" filter="url(#shS)"/>
+        <circle cx="29"  cy="552" r="4"   fill="#a0a0a0" stroke="#707070" stroke-width="1"/>
+        <circle cx="29"  cy="552" r="2"   fill="#333"/>
+        <circle cx="327" cy="552" r="6.5" fill="#e0e0e0" filter="url(#shS)"/>
+        <circle cx="327" cy="552" r="4"   fill="#a0a0a0" stroke="#707070" stroke-width="1"/>
+        <circle cx="327" cy="552" r="2"   fill="#333"/>
+        <ellipse cx="178" cy="555" rx="130" ry="13" fill="#00000040"/>
+        <rect x="50" y="517" width="256" height="38" rx="6" fill="#982e00" filter="url(#sh)"/>
+        <rect x="50" y="512" width="256" height="38" rx="6" fill="url(#ogH)"/>
+        <rect x="44" y="541" width="268" height="14" rx="5" fill="#ae3c00"/>
+        <rect x="44" y="538" width="268" height="14" rx="5" fill="#c44400"/>
+        <line x1="50" y1="530" x2="306" y2="530" stroke="#7c2200" stroke-width="1.6"/>
+        <circle cx="62"  cy="522" r="3.5" fill="#7a2800" stroke="#ff5400" stroke-width=".8"/>
+        <circle cx="88"  cy="515" r="3.5" fill="#7a2800" stroke="#ff5400" stroke-width=".8"/>
+        <circle cx="124" cy="512" r="3.5" fill="#7a2800" stroke="#ff5400" stroke-width=".8"/>
+        <circle cx="178" cy="511" r="3.5" fill="#7a2800" stroke="#ff5400" stroke-width=".8"/>
+        <circle cx="232" cy="512" r="3.5" fill="#7a2800" stroke="#ff5400" stroke-width=".8"/>
+        <circle cx="268" cy="515" r="3.5" fill="#7a2800" stroke="#ff5400" stroke-width=".8"/>
+        <circle cx="294" cy="522" r="3.5" fill="#7a2800" stroke="#ff5400" stroke-width=".8"/>
+        <circle cx="62"  cy="540" r="3.5" fill="#7a2800" stroke="#ff5400" stroke-width=".8"/>
+        <circle cx="294" cy="540" r="3.5" fill="#7a2800" stroke="#ff5400" stroke-width=".8"/>
+        <rect x="88"  y="497" width="180" height="18" rx="2" fill="#00000038"/>
+        <rect x="88"  y="506" width="180" height="8"  rx="3" fill="#c44000" filter="url(#sh)"/>
+        <rect x="88"  y="505" width="180" height="4"  rx="3" fill="url(#ogH)"/>
+        <rect x="88"  y="370" width="180" height="136" rx="5" fill="url(#cylG)" filter="url(#sh)"/>
+        <rect x="88"  y="370" width="22"  height="136" rx="5" fill="#1c1c1c" opacity=".85"/>
+        <line x1="96" y1="378" x2="96" y2="480" stroke="#3c3c3c" stroke-width="1.5" opacity=".6"/>
+        <rect x="148" y="370" width="44"  height="136" fill="#505050" opacity=".22"/>
+        <rect x="243" y="370" width="25"  height="136" rx="5" fill="#0a0a0a" opacity=".85"/>
+        <circle cx="108" cy="518" r="3" fill="#0a0a0a" stroke="#505050" stroke-width=".8"/>
+        <circle cx="148" cy="518" r="3" fill="#0a0a0a" stroke="#505050" stroke-width=".8"/>
+        <circle cx="208" cy="518" r="3" fill="#0a0a0a" stroke="#505050" stroke-width=".8"/>
+        <circle cx="248" cy="518" r="3" fill="#0a0a0a" stroke="#505050" stroke-width=".8"/>
+        <rect x="88" y="365" width="180" height="10" rx="3" fill="#3c3c3c"/>
+        <rect x="88" y="362" width="180" height="10" rx="3" fill="#2a2a2a"/>
+        <circle cx="108" cy="372" r="4.5" fill="#b0b0b0" stroke="#777" stroke-width="1"/>
+        <circle cx="108" cy="372" r="2"   fill="#555"/>
+        <circle cx="148" cy="372" r="4.5" fill="#b0b0b0" stroke="#777" stroke-width="1"/>
+        <circle cx="148" cy="372" r="2"   fill="#555"/>
+        <circle cx="208" cy="372" r="4.5" fill="#b0b0b0" stroke="#777" stroke-width="1"/>
+        <circle cx="208" cy="372" r="2"   fill="#555"/>
+        <circle cx="248" cy="372" r="4.5" fill="#b0b0b0" stroke="#777" stroke-width="1"/>
+        <circle cx="248" cy="372" r="2"   fill="#555"/>
+        <rect x="12" y="478" width="56" height="42" rx="3" fill="#141414" filter="url(#sh)"/>
+        <rect x="-8" y="488" width="24" height="22" rx="2" fill="#202020"/>
+        <rect x="-6" y="490" width="18" height="18" rx="1" fill="#080808"/>
+        <g fill="#070707">
+          <rect x="18" y="482" width="4" height="34"/>
+          <rect x="28" y="482" width="4" height="34"/>
+          <rect x="38" y="482" width="4" height="34"/>
+          <rect x="48" y="482" width="4" height="34"/>
+          <rect x="58" y="482" width="4" height="34"/>
+        </g>
+        <path d="M 68 492 L 86 492 L 86 544 L 68 544 Z" fill="#962a00" filter="url(#sh)"/>
+        <path d="M 66 488 L 84 488 L 84 540 L 66 540 Z" fill="url(#ogV)"/>
+        <circle cx="75" cy="497" r="3" fill="#222" stroke="#ff5a0a" stroke-width=".7"/>
+        <circle cx="75" cy="530" r="3" fill="#222" stroke="#ff5a0a" stroke-width=".7"/>
+        <rect x="22" y="520" width="34" height="20" rx="2" fill="#1a1a1a" filter="url(#shS)"/>
+        <rect x="24" y="522" width="30" height="16" rx="1" fill="#0e0e0e"/>
+        <circle cx="30" cy="526" r="1.5" fill="#333"/>
+        <circle cx="48" cy="526" r="1.5" fill="#333"/>
+        <rect x="56" y="528" width="16" height="4" fill="#666"/>
+        <rect x="46" y="356" width="264" height="6" rx="2" fill="#9e3000" filter="url(#sh)"/>
+        <rect x="48" y="354" width="260" height="4" fill="#fc7422"/>
+        <circle cx="65"  cy="358" r="2.5" fill="#444" stroke="#888" stroke-width=".5"/>
+        <circle cx="178" cy="358" r="2.5" fill="#444" stroke="#888" stroke-width=".5"/>
+        <circle cx="291" cy="358" r="2.5" fill="#444" stroke="#888" stroke-width=".5"/>
+        <g id="oreja_posterior" filter="url(#sh)">
+          <path d="M 210,356 L 270,356 C 300,356 353,320 365,270 C 373,205 330,195 308,195 C 280,195 240,245 210,270 Z" fill="#c44000"/>
+          <path d="M 205,356 L 245,356 C 280,356 345,320 350,270 C 373,205 330,195 308,195 C 285,200 245,250 215,275 Z" fill="url(#ogDR)"/>
+        </g>
+        <g id="motor_interno" filter="url(#sh)">
+          <rect x="147" y="240" width="62" height="116" rx="3" fill="#141414"/>
+          <rect x="149" y="242" width="58" height="112" rx="2" fill="#0e0e0e"/>
+          <rect x="149" y="242" width="10" height="112" fill="#2c2c2c" opacity=".7"/>
+          <line x1="154" y1="242" x2="154" y2="354" stroke="#4a4a4a" stroke-width="1"/>
+          <rect x="149" y="260" width="58" height="3.5" fill="#080808"/>
+          <rect x="149" y="280" width="58" height="3.5" fill="#080808"/>
+          <rect x="149" y="300" width="58" height="3.5" fill="#080808"/>
+          <rect x="149" y="320" width="58" height="3.5" fill="#080808"/>
+        </g>
+        <g id="conectores_motor" filter="url(#shS)">
+          <rect x="126" y="255" width="22" height="20" rx="2" fill="#181818"/>
+          <rect x="118" y="258" width="8"  height="5"  fill="#0b0b0b" rx="1"/>
+          <rect x="118" y="267" width="8"  height="5"  fill="#0b0b0b" rx="1"/>
+          <rect x="132" y="292" width="16" height="16" rx="2" fill="#181818"/>
+          <rect x="124" y="297" width="8"  height="5"  fill="#0b0b0b" rx="1"/>
+        </g>
+        <path d="M 102,356 L 210,356 C 210,310 215,285 220,265 C 190,295 140,320 102,320 Z" fill="#b03600" filter="url(#sh)"/>
+        <path d="M 102,356 L 205,356 C 205,310 210,290 215,270 C 190,295 140,320 102,320 Z" fill="url(#ogH)" opacity=".8"/>
+        <path d="M 102,356 L 112,356 C 112,340 110,325 102,320 Z" fill="#ff7e28" opacity=".25"/>
+        <path d="M 102,320 C 140,320 190,290 220,265" stroke="#ff7010" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <path d="M 102,322 C 140,322 190,292 218,267" stroke="#7a2800" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      </g>
+
+      <!-- ESLABON 2 – ANTEBRAZO + MUÑECA + EFECTOR -->
+      <g id="eslabon2" transform="translate(119,93) rotate(-12) translate(-215,-300)">
+        <g filter="url(#sh)">
+          <path d="M 215,265 L 165,265 C 150,265 145,268 145,278 L 145,350 C 145,360 150,365 165,390 L 230,365 Z" fill="url(#ogV)"/>
+          <g transform="translate(86,268)">
+            <rect x="0" y="0" width="70" height="34" rx="2" fill="url(#motorG)" stroke="#333" stroke-width="1"/>
+            <rect x="60" y="2" width="6" height="20" fill="#181818"/>
+            <line x1="12" y1="0" x2="12" y2="24" stroke="#000" stroke-width="2"/>
+            <line x1="24" y1="0" x2="24" y2="24" stroke="#000" stroke-width="2"/>
+            <line x1="36" y1="0" x2="36" y2="24" stroke="#000" stroke-width="2"/>
+            <line x1="48" y1="0" x2="48" y2="24" stroke="#000" stroke-width="2"/>
+            <rect x="5"  y="8"  width="50" height="8" rx="1" fill="#000"/>
+            <rect x="10" y="10" width="4"  height="4" fill="#0ca131"/>
+          </g>
+          <g transform="translate(86,312)">
+            <rect x="0" y="0" width="70" height="34" rx="2" fill="url(#motorG)" stroke="#333" stroke-width="1"/>
+            <rect x="60" y="2" width="6" height="20" fill="#181818"/>
+            <line x1="12" y1="0" x2="12" y2="24" stroke="#000" stroke-width="2"/>
+            <line x1="24" y1="0" x2="24" y2="24" stroke="#000" stroke-width="2"/>
+            <line x1="36" y1="0" x2="36" y2="24" stroke="#000" stroke-width="2"/>
+            <line x1="48" y1="0" x2="48" y2="24" stroke="#000" stroke-width="2"/>
+            <rect x="5"  y="8"  width="50" height="8" rx="1" fill="#000"/>
+            <rect x="10" y="10" width="4"  height="4" fill="#fa0606"/>
+          </g>
+          <g transform="translate(100,357)">
+            <rect x="0" y="0" width="70" height="34" rx="2" fill="url(#motorG)" stroke="#333" stroke-width="1"/>
+            <rect x="60" y="2" width="6" height="20" fill="#181818"/>
+            <line x1="12" y1="0" x2="12" y2="24" stroke="#000" stroke-width="2"/>
+            <line x1="24" y1="0" x2="24" y2="24" stroke="#000" stroke-width="2"/>
+            <line x1="36" y1="0" x2="36" y2="24" stroke="#000" stroke-width="2"/>
+            <line x1="48" y1="0" x2="48" y2="24" stroke="#000" stroke-width="2"/>
+            <rect x="5"  y="8"  width="50" height="8" rx="1" fill="#000"/>
+            <rect x="10" y="10" width="4"  height="4" fill="#fa0606"/>
+          </g>
+        </g>
+        <g filter="url(#sh)">
+          <path d="M 215,257 C 250,257 265,280 344,280 L 344,320 C 265,320 250,343 215,343 A 43 43 0 0 1 215,257 Z" fill="url(#ogV)"/>
+          <path d="M 215,257 C 250,257 265,280 344,280 L 344,285 C 265,285 250,266 215,266 Z" fill="#ff7010" opacity=".4"/>
+          <path d="M 344,312 L 344,320 C 265,320 250,343 215,343 C 250,343 265,312 344,312 Z" fill="#782400" opacity=".6"/>
+          <path d="M 270,300 L 335,300" stroke="#a83000" stroke-width="4.5" fill="none" opacity=".5"/>
+          <path d="M 270,306 L 335,306" stroke="#a83000" stroke-width="2"   fill="none" opacity=".5"/>
+          <circle cx="215" cy="300" r="43" fill="#c44000"/>
+          <circle cx="215" cy="300" r="41" fill="url(#ogH)" opacity=".8"/>
+          <g transform="translate(215,300)">
+            <circle cx="36"   cy="0"    r="2.5" fill="#e0e0e0" stroke="#777"/>
+            <circle cx="31.2" cy="18"   r="2.5" fill="#e0e0e0" stroke="#777"/>
+            <circle cx="18"   cy="31.2" r="2.5" fill="#e0e0e0" stroke="#777"/>
+            <circle cx="0"    cy="36"   r="2.5" fill="#e0e0e0" stroke="#777"/>
+            <circle cx="-18"  cy="31.2" r="2.5" fill="#e0e0e0" stroke="#777"/>
+            <circle cx="-31.2" cy="18"  r="2.5" fill="#e0e0e0" stroke="#777"/>
+            <circle cx="-36"  cy="0"    r="2.5" fill="#e0e0e0" stroke="#777"/>
+            <circle cx="-31.2" cy="-18" r="2.5" fill="#e0e0e0" stroke="#777"/>
+            <circle cx="-18"  cy="-31.2" r="2.5" fill="#e0e0e0" stroke="#777"/>
+            <circle cx="0"    cy="-36"  r="2.5" fill="#e0e0e0" stroke="#777"/>
+            <circle cx="18"   cy="-31.2" r="2.5" fill="#e0e0e0" stroke="#777"/>
+            <circle cx="31.2" cy="-18"  r="2.5" fill="#e0e0e0" stroke="#777"/>
+          </g>
+          <circle cx="215" cy="300" r="28" fill="#a03000" stroke="#802000" stroke-width="1"/>
+          <circle cx="215" cy="300" r="28" fill="#000" opacity=".15"/>
+          <circle cx="215" cy="300" r="14" fill="#a03000"/>
+          <circle cx="215" cy="300" r="14" fill="#fff" opacity=".1"/>
+          <g transform="translate(265,275) rotate(-10)">
+            <ellipse cx="0" cy="0" rx="14" ry="7" fill="none" stroke="#050505" stroke-width="4.5"/>
+            <ellipse cx="0" cy="0" rx="12" ry="5" fill="#180400"/>
+            <path d="M -12,0 A 12 5 0 0 1 12,0 A 10 3 0 0 0 -12,0 Z" fill="#000" opacity=".8"/>
+          </g>
+        </g>
+        <g filter="url(#sh)">
+          <path d="M 344,280 L 365,280 L 365,320 L 344,320 Z" fill="url(#silverG)"/>
+          <rect x="344" y="280" width="6"  height="40" fill="#ddd"/>
+          <rect x="360" y="280" width="5"  height="40" fill="#777"/>
+          <line x1="352" y1="280" x2="352" y2="320" stroke="#999" stroke-width="1.5"/>
+          <polygon points="365,280 380,285 380,315 365,320" fill="#a0a0a0"/>
+          <polygon points="365,280 380,285 380,295 365,290" fill="#f0f0f0"/>
+          <polygon points="365,320 380,315 380,305 365,310" fill="#555"/>
+          <rect x="380" y="285" width="6" height="30" fill="#222"/>
+          <path d="M 386,285 L 430,288 L 430,312 L 386,315 Z" fill="url(#silverG)"/>
+          <polygon points="386,285 430,288 430,292 386,289" fill="#eee"/>
+          <polygon points="386,315 430,312 430,306 386,309" fill="#666"/>
+          <line x1="406" y1="287" x2="406" y2="313" stroke="#999" stroke-width="1.5"/>
+          <polygon points="430,288 433,288 433,312 430,312" fill="#111"/>
+          <path d="M 433,288 C 445,268 460,268 495,294 L 495,306 C 460,332 445,332 433,312 Z" fill="url(#silverG)"/>
+          <path d="M 433,288 C 445,268 460,268 495,294 L 495,298 C 460,275 445,280 433,295 Z" fill="#fff" opacity=".8"/>
+          <path d="M 434,312 C 445,332 460,332 495,306 L 495,302 C 460,324 445,316 434,304 Z" fill="#444" opacity=".25"/>
+          <g transform="translate(460,303)">
+            <text x="0" y="0" font-family="Arial Black,Impact,sans-serif" font-size="10" font-weight="900"
+                  fill="#111" text-anchor="middle" letter-spacing="1">KUKA</text>
+          </g>
+          <rect x="495" y="294" width="4" height="12" fill="#000"/>
+          <rect x="499" y="297" width="2" height="6"  fill="#444"/>
+        </g>
+      </g>
+
+      <!-- ESLABON 1 – BRAZO SUPERIOR -->
+      <g id="eslabon1" transform="translate(308,247) rotate(-140.826)">
+        <g filter="url(#sh)">
+          <path d="M 0,-50 C 40,-50 60,-36 90,-36 L 154,-36 C 184,-36 204,-40 244,-40 A 38 38 0 0 1 244,42 C 204,42 184,36 154,36 L 90,36 C 60,36 40,50 0,50 A 45 45 0 0 1 0,-50 Z"
+                fill="#782400" opacity=".53" transform="translate(1,4)"/>
+          <path d="M 0,-45 C 40,-45 60,-25 90,-25 L 154,-25 C 184,-25 204,-38 244,-38 A 38 38 0 0 1 244,38 C 204,38 184,32 154,32 L 90,32 C 60,32 40,45 0,45 A 45 45 0 0 1 0,-45 Z"
+                fill="url(#ogV)"/>
+          <path d="M 0,-45 C 40,-45 60,-25 90,-25 L 154,-25 C 184,-25 204,-38 244,-38 L 244,-34 C 204,-34 184,-28 154,-28 L 90,-28 C 60,-28 40,-40 0,-40 Z"
+                fill="#ff7010" opacity=".4"/>
+          <g>
+            <circle cx="0"   cy="0"  r="45" fill="#3c3c3c" stroke="#555" stroke-width="2"/>
+            <circle cx="0"   cy="0"  r="34" fill="#2a2a2a"/>
+            <circle cx="0"   cy="0"  r="18" fill="#1a1a1a" stroke="#444" stroke-width="1.5"/>
+            <circle cx="0"   cy="-35" r="3" fill="#a0a0a0" stroke="#707070" stroke-width=".8"/>
+            <circle cx="25"  cy="-25" r="3" fill="#a0a0a0" stroke="#707070" stroke-width=".8"/>
+            <circle cx="35"  cy="0"   r="3" fill="#a0a0a0" stroke="#707070" stroke-width=".8"/>
+            <circle cx="25"  cy="25"  r="3" fill="#a0a0a0" stroke="#707070" stroke-width=".8"/>
+            <circle cx="0"   cy="35"  r="3" fill="#a0a0a0" stroke="#707070" stroke-width=".8"/>
+            <circle cx="-25" cy="25"  r="3" fill="#a0a0a0" stroke="#707070" stroke-width=".8"/>
+            <circle cx="-35" cy="0"   r="3" fill="#a0a0a0" stroke="#707070" stroke-width=".8"/>
+            <circle cx="-25" cy="-25" r="3" fill="#a0a0a0" stroke="#707070" stroke-width=".8"/>
+          </g>
+          <g transform="translate(244,0)">
+            <circle cx="0"   cy="0"  r="38" fill="#3c3c3c" stroke="#555" stroke-width="2"/>
+            <circle cx="0"   cy="0"  r="30" fill="#2a2a2a"/>
+            <circle cx="0"   cy="0"  r="14" fill="#1a1a1a" stroke="#444" stroke-width="1.5"/>
+            <circle cx="0"   cy="-30" r="2.5" fill="#a0a0a0" stroke="#707070" stroke-width=".8"/>
+            <circle cx="21"  cy="-21" r="2.5" fill="#a0a0a0" stroke="#707070" stroke-width=".8"/>
+            <circle cx="30"  cy="0"   r="2.5" fill="#a0a0a0" stroke="#707070" stroke-width=".8"/>
+            <circle cx="21"  cy="21"  r="2.5" fill="#a0a0a0" stroke="#707070" stroke-width=".8"/>
+            <circle cx="0"   cy="30"  r="2.5" fill="#a0a0a0" stroke="#707070" stroke-width=".8"/>
+            <circle cx="-21" cy="21"  r="2.5" fill="#a0a0a0" stroke="#707070" stroke-width=".8"/>
+            <circle cx="-30" cy="0"   r="2.5" fill="#a0a0a0" stroke="#707070" stroke-width=".8"/>
+            <circle cx="-21" cy="-21" r="2.5" fill="#a0a0a0" stroke="#707070" stroke-width=".8"/>
+          </g>
+          <g transform="translate(122,0)">
+            <rect x="-35" y="-12" width="70" height="24" rx="3" fill="#111" stroke="#222" stroke-width="1"/>
+            <text x="0" y="5" font-family="Arial Black,Impact,sans-serif" font-size="16" font-weight="900"
+                  fill="#ff7010" text-anchor="middle" letter-spacing="2">KUKA</text>
+          </g>
+        </g>
+      </g>
+
+      <!-- CABLES -->
+      <g id="cables">
+        <path d="M 118,260 C 50,260 50,360 140,350 C 200,340 250,320 290,245" stroke="#0e0e0e" stroke-width="10" fill="none" stroke-linecap="round" filter="url(#shS)"/>
+        <path d="M 118,260 C 50,260 50,360 140,350 C 200,340 250,320 290,245" stroke="#1a1a1a" stroke-width="4"  fill="none" stroke-linecap="round"/>
+        <path d="M 124,300 C 70,300 85,340 145,335 C 190,330 240,310 280,240" stroke="#121212" stroke-width="6.5" fill="none" stroke-linecap="round"/>
+        <path d="M 124,300 C 70,300 85,340 145,335 C 190,330 240,310 280,240" stroke="#1c1c1c" stroke-width="2"  fill="none" stroke-linecap="round"/>
+        <path d="M 118,270 C 65,270 65,350 148,342 C 210,335 260,310 300,235" stroke="#2a2a2a" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+        <rect x="145" y="338" width="22" height="7" rx="2" fill="#666" transform="rotate(-15,156,341)"/>
+        <rect x="220" y="302" width="26" height="9" rx="2" fill="#666" transform="rotate(-40,233,306)"/>
+        <rect x="222" y="304" width="22" height="5" rx="1" fill="#888" transform="rotate(-40,233,306)"/>
+      </g>
+    </svg>
+  </div>
+
+  <canvas id="cv-overlay"></canvas>
+
+  <!-- ══════════════════════════════════════════════
+       HERO TEXT
+  ══════════════════════════════════════════════ -->
+  <div id="hero-content">
+    <div class="hero-status">
+      <div class="pulse-dot"></div>
+      <span>// SISTEMA ACTIVO — KUKA KR C4</span>
+    </div>
+    <div class="hero-name">CÉSAR<br><span class="accent">RAMÍREZ</span></div>
+    <div class="rule"></div>
+    <div class="hero-title">Ingeniero Mecatrónico</div>
+    <div class="hero-tags">
+      <span class="tag">Robótica</span>
+      <span class="tag">Automatización</span>
+      <span class="tag">Visión Artificial</span>
+      <span class="tag">PLCs Siemens</span>
+    </div>
+    <div class="hero-ctas">
+      <a href="#projects" class="btn-p">Ver Proyectos</a>
+      <a href="#contact"  class="btn-o">Contactar</a>
+    </div>
+  </div>
+
+  <div class="corner c-tl"></div>
+  <div class="corner c-tr"></div>
+  <div class="corner c-bl"></div>
+  <div class="corner c-br"></div>
+
+  <div id="badge">◎ WRITING…</div>
+  <div id="hint">Mueve el mouse al robot · Click/toca para dibujar</div>
+
+  <!-- G-CODE PANEL -->
+  <button id="gcode-toggle">G-CODE CNC ▶</button>
+
+  <div id="gcode-panel">
+    <header>
+      <span>⚙ G-CODE EXECUTOR</span>
+      <button id="gcode-close">✕</button>
+    </header>
+    <textarea id="gcode-textarea" spellcheck="false" placeholder="; Escribe G-code aquí
+; Ejemplo:
+G0 X0 Y0
+G1 X80 Y0 F200
+G1 X80 Y60
+G1 X0 Y60
+G1 X0 Y0
+G2 X40 Y30 I40 J0"></textarea>
+    <div class="gc-btns">
+      <button id="gcode-run">▶ EJECUTAR</button>
+      <button id="gcode-stop">■ STOP</button>
+    </div>
+    <div id="gcode-status">// listo para ejecutar</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       JAVASCRIPT — STATE MACHINE + KINEMATICS
+  ══════════════════════════════════════════════ -->
+  <script>
+  'use strict';
+
+  // ── Canvas setup ──────────────────────────────
+  const cv       = document.getElementById('cv');
+  const cvO      = document.getElementById('cv-overlay');
+  const ctx      = cv.getContext('2d');
+  const ctxO     = cvO.getContext('2d');
+  let W, H;
+
+  function resize() {
+    W = cv.width = cvO.width = innerWidth;
+    H = cv.height = cvO.height = innerHeight;
+    if (arm) arm.waypoints = []; // rebuild on resize
+  }
+  window.addEventListener('resize', resize);
+
+  const mouse   = { x: -2000, y: -2000 };
+  const pointer = { down: false };
+
+  document.addEventListener('mousemove',  e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+  document.addEventListener('mousedown',  e => { pointer.down = true; });
+  document.addEventListener('mouseup',    e => { pointer.down = false; });
+
+  document.addEventListener('touchmove', e => {
+    const t = e.touches[0];
+    mouse.x = t.clientX; mouse.y = t.clientY;
+    e.preventDefault();
+  }, { passive: false });
+  document.addEventListener('touchstart', e => {
+    const t = e.touches[0];
+    mouse.x = t.clientX; mouse.y = t.clientY;
+    pointer.down = true;
+    e.preventDefault();
+  }, { passive: false });
+  document.addEventListener('touchend', e => { pointer.down = false; });
+
+  // ── Utilities ─────────────────────────────────
+  const clamp  = (v,a,b) => Math.max(a, Math.min(b, v));
+  const lerp   = (a,b,t) => a + (b-a)*t;
+  function rrect(c, x,y,w,h,r) {
+    c.beginPath();
+    c.moveTo(x+r,y); c.arcTo(x+w,y,x+w,y+h,r); c.arcTo(x+w,y+h,x,y+h,r);
+    c.arcTo(x,y+h,x,y,r); c.arcTo(x,y,x+w,y,r); c.closePath();
+  }
+  const ORANGE = '#f56300';
+
+  // ── Letter path definitions ────────────────────
+  // Normalized: x∈[0,1], y∈[0,1]  where y=0=top, y=1=bottom in screen coords
+  // Each letter = array of strokes; each stroke = array of [nx, ny]
+  // All coords strictly in [0,1] range — negative y caused waypoints outside robot workspace
+  const LETTERS = {
+    'C': [ [[0.88,0.10],[0.5,0.02],[0.10,0.18],[0.02,0.50],[0.10,0.82],[0.5,0.98],[0.88,0.90]] ],
+    'É': [
+      [[0.14,0.02],[0.14,0.98]],
+      [[0.14,0.02],[0.88,0.02]],
+      [[0.14,0.50],[0.70,0.50]],
+      [[0.14,0.98],[0.88,0.98]]
+    ],
+    'S': [ [[0.86,0.10],[0.50,0.02],[0.14,0.12],[0.06,0.35],[0.50,0.50],[0.94,0.65],[0.86,0.88],[0.50,0.98],[0.14,0.88]] ],
+    'A': [
+      [[0.50,0.02],[0.02,0.98]],
+      [[0.50,0.02],[0.98,0.98]],
+      [[0.20,0.60],[0.80,0.60]]
+    ],
+    'R': [
+      [[0.12,0.02],[0.12,0.98]],
+      [[0.12,0.02],[0.60,0.02],[0.88,0.14],[0.88,0.38],[0.60,0.50],[0.12,0.50]],
+      [[0.44,0.50],[0.96,0.98]]
+    ],
+    ' ': [],
+    '.': [ [[0.38,0.98]] ]
+  };
+
+  function buildWaypoints() {
+    const chars   = ['C','É','S','A','R',' ','R'];
+    const lW      = Math.max(32, Math.min(52, W * 0.042));
+    const lH      = Math.max(44, Math.min(68, H * 0.090));
+    const sp      = lW * 0.30;
+    const totalW  = chars.length * (lW + sp) - sp;
+    const cx      = W * 0.635;
+    const bY      = H * 0.44;   // baseline Y
+    const startX  = cx - totalW / 2;
+
+    const wps = [];
+    chars.forEach((ch, ci) => {
+      const ox = startX + ci * (lW + sp);
+      const oy = bY - lH;
+      const strokes = LETTERS[ch] || [];
+      strokes.forEach(stroke => {
+        stroke.forEach((pt, pi) => {
+          const wx = ox + pt[0] * lW;
+          const wy = oy + pt[1] * lH;
+          // interpolate long segments so robot has intermediate targets
+          if (pi > 0) {
+            const prev = stroke[pi-1];
+            const px = ox + prev[0]*lW, py = oy + prev[1]*lH;
+            const segLen = Math.hypot(wx-px, wy-py);
+            const steps  = Math.max(1, Math.floor(segLen / 28));
+            for (let s=1; s<steps; s++) {
+              wps.push({ x: px+(wx-px)*s/steps, y: py+(wy-py)*s/steps, penDown: true });
+            }
+          }
+          wps.push({ x: wx, y: wy, penDown: pi > 0 });
+        });
+      });
+    });
+    return wps;
+  }
+
+  // ── Spark particles ────────────────────────────
+  class Spark {
+    constructor(x, y) {
+      this.x = x; this.y = y;
+      const a = Math.random() * Math.PI * 2;
+      const s = 1 + Math.random() * 4.5;
+      this.vx  = Math.cos(a) * s;
+      this.vy  = Math.sin(a) * s - 1.5;
+      this.life = 1;
+      this.dec  = 0.025 + Math.random() * 0.045;
+      this.sz   = 1.2 + Math.random() * 2;
+      this.hue  = 28 + Math.random() * 38;
+    }
+    update() {
+      this.x += this.vx; this.y += this.vy;
+      this.vy += 0.18; this.vx *= 0.96;
+      this.life -= this.dec;
+    }
+    draw(c) {
+      c.save();
+      c.globalAlpha = Math.max(0, this.life);
+      c.fillStyle   = `hsl(${this.hue},100%,${55 + this.life*30}%)`;
+      c.shadowColor = `hsl(${this.hue},100%,70%)`;
+      c.shadowBlur  = 5;
+      c.beginPath();
+      c.arc(this.x, this.y, this.sz * this.life, 0, Math.PI*2);
+      c.fill();
+      c.restore();
+    }
+  }
+  const sparks = [];
+  function emit(x, y, n=3) {
+    for (let i=0; i<n; i++) sparks.push(new Spark(x,y));
+  }
+
+  // ── Trails ─────────────────────────────────────
+  const trail     = [];      // {x,y} — permanent, written by robot, used as weld reference
+  const userTrail = [];      // {x,y,alpha} — drawn by user in FOLLOWING mode, fades out
+  const MAX_TRAIL  = 2000;
+  const FADE_RATE  = 0.008;  // alpha decay per frame
+
+  function tickUserTrail() {
+    for (let i = userTrail.length - 1; i >= 0; i--) {
+      userTrail[i].alpha -= FADE_RATE;
+      if (userTrail[i].alpha <= 0) userTrail.splice(i, 1);
+    }
+  }
+
+  function drawTrail(c) {
+    // ── Permanent robot trail ──
+    if (trail.length >= 2) {
+      c.save();
+      c.lineWidth = 7; c.strokeStyle = 'rgba(255,140,40,0.06)';
+      c.lineJoin = 'round'; c.lineCap = 'round';
+      c.beginPath(); c.moveTo(trail[0].x, trail[0].y);
+      trail.forEach(p => c.lineTo(p.x, p.y)); c.stroke();
+      c.lineWidth = 1.8; c.strokeStyle = 'rgba(255,150,60,0.72)';
+      c.shadowColor = 'rgba(255,100,0,0.55)'; c.shadowBlur = 6;
+      c.beginPath(); c.moveTo(trail[0].x, trail[0].y);
+      trail.forEach(p => c.lineTo(p.x, p.y)); c.stroke();
+      c.restore();
+    }
+
+    // ── Fading user trail — draw as connected segments per alpha group ──
+    if (userTrail.length >= 2) {
+      c.save();
+      c.lineJoin = 'round'; c.lineCap = 'round';
+      for (let i = 1; i < userTrail.length; i++) {
+        const p0 = userTrail[i-1], p1 = userTrail[i];
+        const a  = Math.min(p0.alpha, p1.alpha);
+        if (a <= 0) continue;
+        // glow
+        c.lineWidth = 6; c.strokeStyle = `rgba(180,220,255,${a * 0.08})`;
+        c.beginPath(); c.moveTo(p0.x, p0.y); c.lineTo(p1.x, p1.y); c.stroke();
+        // core
+        c.lineWidth = 1.6;
+        c.strokeStyle = `rgba(140,200,255,${a * 0.75})`;
+        c.shadowColor = `rgba(80,160,255,${a * 0.5})`; c.shadowBlur = 5;
+        c.beginPath(); c.moveTo(p0.x, p0.y); c.lineTo(p1.x, p1.y); c.stroke();
+      }
+      c.restore();
+    }
+  }
+
+  // ── KUKA constants ─────────────────────────────
+  const SVG_SH  = { x:308, y:247 };   // shoulder SVG coords
+  const SVG_BASE_Y = 562;
+  const SVG_L1  = Math.hypot(308-119, 247-93);   // ≈244.4
+  const SVG_L2  = 284;
+
+  const svgCont = document.getElementById('robot-svg-container');
+  const kukaSvg = document.getElementById('kuka-svg');
+  const esl1    = document.getElementById('eslabon1');
+  const esl2    = document.getElementById('eslabon2');
+
+  // ── State enum ────────────────────────────────
+  const ST = { WRITING:0, WELDING:1, FOLLOWING:2, GCODE:3 };
+  const badge = document.getElementById('badge');
+  const hint  = document.getElementById('hint');
+  const BADGE_LABELS = {
+    [ST.WRITING]:  '✏  ESCRIBIENDO…',
+    [ST.WELDING]:  '⚡  SOLDANDO',
+    [ST.FOLLOWING]:'◎  TRACKING',
+    [ST.GCODE]:    '⚙  G-CODE EXEC'
+  };
+
+  // ── KukaKinematic class ────────────────────────
+  class KukaKinematic {
+    constructor() {
+      this.by = 0; this.bx = 0;
+      this.th1 = -Math.PI/2; this.th2 = 0;
+      this.svgScale = 1;
+      this.linkLen = 36; this.chainN = 20;
+
+      this.state   = ST.WRITING;
+      this.waypoints = [];
+      this.wpIdx   = 0;
+
+      this.weldT   = 0;
+      this.idleTmr = 0;
+      this.eeX     = 0;
+      this.eeY     = 0;
+      this.weldFlicker   = 0;
+      this.maskAlpha     = 0;
+      this.gcodeFlicker  = 0;
+      this.writeFlicker  = 0;   // flicker during WRITING state
+      this.userArcActive = false; // true when user is drawing in FOLLOWING mode
+
+      // Welding behavior state machine
+      this.weldMode      = 'BEAD';   // BEAD | SPOT | STITCH | WEAVE | CIRCULAR
+      this.weldModeTimer = 0;
+      this.weldModeDur   = 180;      // frames before picking next mode
+      this.spotPhase     = 0;        // for SPOT: 0=moving, 1=firing, 2=cooling
+      this.spotTimer     = 0;
+      this.spotTarget    = { x:0, y:0 };
+      this.stitchOn      = true;
+      this.stitchTimer   = 0;
+
+      // G-code state
+      this.gcWaypoints = [];
+      this.gcIdx       = 0;
+      this.gcPos       = { x:0, y:0 };   // current machine pos (mm)
+      this._stuckFrames = 0;
+    }
+
+    // Rebuild layout
+    layout() {
+      this.by = H * 0.82;
+      this.svgScale = this.by / (SVG_BASE_Y - (-400));
+      // Chain length
+      const maxCarX = W*0.9 + 80;
+      const anchorX = W*0.05 + 210;
+      const radius  = 50;
+      this.chainN   = Math.ceil((Math.abs(maxCarX-anchorX) + Math.PI*radius) / this.linkLen);
+      // Init waypoints first time or after resize
+      if (!this.waypoints.length) {
+        this.waypoints = buildWaypoints();
+        this.wpIdx = 0;
+        trail.length = 0;
+        this.state = ST.WRITING;
+        badge.textContent = BADGE_LABELS[ST.WRITING];
+        hint.style.opacity = '0';
+      }
+    }
+
+    shoulder() {
+      const offX = (SVG_SH.x - 178) * this.svgScale;
+      return {
+        x: this.bx + offX,
+        y: this.by - (SVG_BASE_Y - SVG_SH.y) * this.svgScale
+      };
+    }
+
+    endEffector() {
+      const sh = this.shoulder();
+      const L1 = SVG_L1 * this.svgScale;
+      const L2 = SVG_L2 * this.svgScale;
+      const ex = sh.x + Math.cos(this.th1) * L1;
+      const ey = sh.y + Math.sin(this.th1) * L1;
+      return {
+        x: ex + Math.cos(this.th1 + this.th2) * L2,
+        y: ey + Math.sin(this.th1 + this.th2) * L2
+      };
+    }
+
+    mouseNear() {
+      const sh = this.shoulder();
+      return Math.hypot(mouse.x - sh.x, mouse.y - sh.y) < 320
+          && mouse.x > W * 0.38;
+    }
+
+    ikTo(tx, ty, bxOverride = null, speed = 0.07) {
+      this.layout();
+      const offX = (SVG_SH.x - 178) * this.svgScale;
+      const iBx  = bxOverride !== null ? bxOverride
+                   : clamp(tx - offX, W*0.1, W*0.9);
+      this.bx += (iBx - this.bx) * 0.09;
+
+      const sh = this.shoulder();
+      const dx = tx - sh.x, dy = ty - sh.y;
+      const d  = Math.hypot(dx, dy);
+      const L1 = SVG_L1 * this.svgScale;
+      const L2 = SVG_L2 * this.svgScale;
+      const r  = clamp(d, Math.abs(L1-L2)+2, L1+L2-2);
+      const c2 = (r*r - L1*L1 - L2*L2) / (2*L1*L2);
+      const th2t = Math.acos(clamp(c2,-1,1));
+      const k1 = L1 + L2*Math.cos(th2t), k2 = L2*Math.sin(th2t);
+      const sx = d>0 ? dx/d*r : 0, sy = d>0 ? dy/d*r : -r;
+      let th1t  = Math.atan2(sy,sx) - Math.atan2(k2,k1);
+      th1t      = clamp(th1t, -160*Math.PI/180, 10*Math.PI/180);
+      const th2c = clamp(th2t, 0, Math.PI);
+      this.th1 += (th1t  - this.th1) * speed;
+      this.th2 += (th2c  - this.th2) * speed;
+    }
+
+    // ── State machine ──
+    stateMachine() {
+      if (this.state === ST.GCODE) return;  // G-code overrides everything
+      const near = this.mouseNear();
+      if (this.state === ST.WRITING) {
+        // handled in updateWriting
+      } else if (this.state === ST.WELDING) {
+        if (near) {
+          this.state = ST.FOLLOWING;
+          badge.textContent = BADGE_LABELS[ST.FOLLOWING];
+          hint.style.opacity = '0';
+        }
+      } else { // FOLLOWING
+        if (!near) {
+          this.idleTmr++;
+          if (this.idleTmr > 100) {
+            this.state = ST.WELDING;
+            this.weldT = 0; this.idleTmr = 0;
+            badge.textContent = BADGE_LABELS[ST.WELDING];
+          }
+        } else {
+          this.idleTmr = 0;
+        }
+      }
+    }
+
+    // ── G-code execution ──
+    startGcode(waypoints) {
+      this.gcWaypoints = waypoints;
+      this.gcIdx       = 0;
+      this.state       = ST.GCODE;
+      this._stuckFrames= 0;
+      badge.textContent = BADGE_LABELS[ST.GCODE];
+    }
+
+    stopGcode() {
+      this.state = ST.WELDING; this.weldT = 0;
+      badge.textContent = BADGE_LABELS[ST.WELDING];
+      document.getElementById('gcode-status').textContent = '// detenido';
+    }
+
+    updateGcode() {
+      const t = Date.now();
+      this.gcodeFlicker = clamp(
+        Math.abs(Math.sin(t * 0.028)) * 0.35 +
+        Math.abs(Math.sin(t * 0.077)) * 0.30 +
+        (Math.random() < 0.05 ? Math.random() * 0.5 : 0),
+        0, 1
+      );
+      this.weldFlicker = this.gcodeFlicker;
+      if (this.gcIdx >= this.gcWaypoints.length) {
+        this.state = ST.WELDING; this.weldT = 0;
+        badge.textContent = BADGE_LABELS[ST.WELDING];
+        document.getElementById('gcode-status').textContent = '// programa terminado ✓';
+        return;
+      }
+      const wp  = this.gcWaypoints[this.gcIdx];
+      const offX = (SVG_SH.x - 178) * this.svgScale;
+      const iBx  = clamp(wp.x - offX, W*0.12, W*0.88);
+      this.ikTo(wp.x, wp.y, iBx, wp.rapid ? 0.15 : 0.10);
+      const ee   = this.endEffector();
+      const dist = Math.hypot(ee.x - wp.x, ee.y - wp.y);
+
+      if (wp.penDown && dist < 50) {
+        const last = trail[trail.length-1];
+        if (!last || Math.hypot(ee.x-last.x, ee.y-last.y) > 1.5) {
+          trail.push({ x: ee.x, y: ee.y });
+          if (trail.length > MAX_TRAIL) trail.shift();
+        }
+        if (wp.arc) emit(ee.x, ee.y, 1);
+      }
+
+      if (!this._stuckFrames) this._stuckFrames = 0;
+      if (dist < 28) {
+        this.gcIdx++; this._stuckFrames = 0;
+        const pct = Math.round(this.gcIdx / this.gcWaypoints.length * 100);
+        document.getElementById('gcode-status').textContent =
+          `// bloque ${this.gcIdx}/${this.gcWaypoints.length} · ${pct}%`;
+      } else {
+        this._stuckFrames++;
+        if (this._stuckFrames > 90) { this.gcIdx++; this._stuckFrames = 0; }
+      }
+    }
+
+    // ── Writing ──
+    updateWriting() {
+      // Arc flicker during writing — same multi-freq noise as welding
+      const t = Date.now();
+      this.writeFlicker = clamp(
+        Math.abs(Math.sin(t * 0.028)) * 0.30 +
+        Math.abs(Math.sin(t * 0.079)) * 0.22 +
+        Math.abs(Math.sin(t * 0.17))  * 0.12 +
+        (Math.random() < 0.05 ? Math.random() * 0.40 : 0),
+        0, 1
+      );
+      this.weldFlicker = this.writeFlicker; // mask uses weldFlicker
+
+      if (this.wpIdx >= this.waypoints.length) {
+        this.state = ST.WELDING; this.weldT = 0;
+        badge.textContent = BADGE_LABELS[ST.WELDING];
+        setTimeout(() => { hint.style.opacity = '1'; }, 800);
+        return;
+      }
+      const wp   = this.waypoints[this.wpIdx];
+      const offX = (SVG_SH.x - 178) * this.svgScale;
+      const iBx  = clamp(wp.x - offX, W*0.12, W*0.88);
+      this.ikTo(wp.x, wp.y, iBx, 0.11);
+
+      const ee   = this.endEffector();
+      const dist = Math.hypot(ee.x - wp.x, ee.y - wp.y);
+
+      // Draw trail when pen is down and close enough
+      if (wp.penDown && dist < 55) {
+        const last = trail[trail.length-1];
+        if (!last || Math.hypot(ee.x-last.x, ee.y-last.y) > 1.8) {
+          trail.push({ x: ee.x, y: ee.y });
+          if (trail.length > MAX_TRAIL) trail.shift();
+        }
+      }
+
+      // Advance waypoint: either reached OR stuck too long (skip after 80 frames)
+      if (!this._stuckFrames) this._stuckFrames = 0;
+      if (dist < 32) {
+        this.wpIdx++;
+        this._stuckFrames = 0;
+      } else {
+        this._stuckFrames++;
+        if (this._stuckFrames > 80) {
+          this.wpIdx++;          // skip unreachable waypoint
+          this._stuckFrames = 0;
+        }
+      }
+    }
+
+    // ── Welding choreography — works ON the written trail ──
+    pickWeldMode() {
+      if (!trail.length) return;
+
+      const modes = ['BEAD','BEAD','SPOT','STITCH','WEAVE','CIRCULAR'];
+      this.weldMode      = modes[Math.floor(Math.random() * modes.length)];
+      this.weldModeDur   = 120 + Math.floor(Math.random() * 200);
+      this.weldModeTimer = 0;
+      this.spotPhase     = 0; this.spotTimer = 0;
+      this.stitchOn      = true; this.stitchTimer = 0;
+
+      // Pick a random contiguous segment of the trail to work on
+      const minSeg = Math.max(8,  Math.floor(trail.length * 0.04));
+      const maxSeg = Math.max(20, Math.floor(trail.length * 0.35));
+      const segLen = minSeg + Math.floor(Math.random() * (maxSeg - minSeg));
+      const maxStart = Math.max(0, trail.length - segLen);
+      this.segStart  = Math.floor(Math.random() * maxStart);
+      this.segEnd    = Math.min(trail.length - 1, this.segStart + segLen);
+      this.segIdx    = this.segStart;   // current position along segment
+      this.segDir    = Math.random() < 0.5 ? 1 : -1;  // forward or backward
+      if (this.segDir === -1) this.segIdx = this.segEnd;
+
+      badge.textContent = `⚡  ${this.weldMode}`;
+    }
+
+    // Get current target point on trail (clamped to segment)
+    trailPoint(idx) {
+      const i = clamp(idx, this.segStart, this.segEnd);
+      return trail[i];
+    }
+
+    updateWelding() {
+      this.weldT += 0.016;
+
+      // First call — init
+      if (this.weldModeTimer === 0 && trail.length) this.pickWeldMode();
+      this.weldModeTimer++;
+      if (this.weldModeTimer >= this.weldModeDur) this.pickWeldMode();
+
+      // If trail is empty, fallback idle
+      if (!trail.length || this.segStart === undefined) {
+        this.weldFlicker = 0;
+        return;
+      }
+
+      // Multi-frequency arc flicker
+      const t = Date.now();
+      const baseFlicker =
+        Math.abs(Math.sin(t * 0.031)) * 0.32 +
+        Math.abs(Math.sin(t * 0.083)) * 0.24 +
+        Math.abs(Math.sin(t * 0.19))  * 0.14 +
+        (Math.random() < 0.06 ? Math.random() * 0.45 : 0);
+
+      let wx, wy;
+      let sparkRate = 0.28;
+      let arcActive = true;
+      const tp = this.trailPoint(this.segIdx);
+
+      // ─── BEAD: follow segment smoothly fwd/bwd ───
+      if (this.weldMode === 'BEAD') {
+        wx = tp.x; wy = tp.y;
+        const ee = this.endEffector();
+        if (Math.hypot(ee.x - wx, ee.y - wy) < 28) {
+          this.segIdx += this.segDir;
+          // Bounce at ends
+          if (this.segIdx > this.segEnd)   { this.segIdx = this.segEnd;   this.segDir = -1; }
+          if (this.segIdx < this.segStart) { this.segIdx = this.segStart; this.segDir =  1; }
+        }
+        sparkRate = 0.22;
+
+      // ─── SPOT: jump to random trail points, fire burst ───
+      } else if (this.weldMode === 'SPOT') {
+        if (this.spotPhase === 0) {
+          if (this.spotTimer === 0) {
+            // pick a random point within the segment
+            const ri = this.segStart + Math.floor(Math.random() * (this.segEnd - this.segStart + 1));
+            this.spotTarget = { ...trail[ri] };
+          }
+          wx = this.spotTarget.x; wy = this.spotTarget.y;
+          this.spotTimer++;
+          const ee = this.endEffector();
+          if (Math.hypot(ee.x - wx, ee.y - wy) < 30) { this.spotPhase = 1; this.spotTimer = 0; }
+          arcActive = false; sparkRate = 0;
+        } else if (this.spotPhase === 1) {
+          wx = this.spotTarget.x; wy = this.spotTarget.y;
+          this.spotTimer++;
+          sparkRate = 0.72;
+          if (this.spotTimer > 32 + Math.floor(Math.random()*28)) { this.spotPhase = 2; this.spotTimer = 0; }
+        } else {
+          wx = this.spotTarget.x; wy = this.spotTarget.y;
+          this.spotTimer++;
+          arcActive = false; sparkRate = 0;
+          if (this.spotTimer > 18) { this.spotPhase = 0; this.spotTimer = 0; }
+        }
+
+      // ─── STITCH: run segment in bursts with pauses ───
+      } else if (this.weldMode === 'STITCH') {
+        this.stitchTimer++;
+        const period = 55;
+        if (this.stitchTimer % period < period * 0.55) {
+          wx = tp.x; wy = tp.y;
+          const ee = this.endEffector();
+          if (Math.hypot(ee.x - wx, ee.y - wy) < 28) {
+            this.segIdx += this.segDir;
+            if (this.segIdx > this.segEnd)   { this.segIdx = this.segEnd;   this.segDir = -1; }
+            if (this.segIdx < this.segStart) { this.segIdx = this.segStart; this.segDir =  1; }
+          }
+          sparkRate = 0.38;
+        } else {
+          wx = this.eeX || tp.x; wy = this.eeY || tp.y; // hold
+          arcActive = false; sparkRate = 0;
+        }
+
+      // ─── WEAVE: follow trail but oscillate perpendicular ───
+      } else if (this.weldMode === 'WEAVE') {
+        // Get tangent direction from adjacent trail points
+        const prev = this.trailPoint(Math.max(this.segStart, this.segIdx - 1));
+        const next = this.trailPoint(Math.min(this.segEnd,   this.segIdx + 1));
+        const tdx = next.x - prev.x, tdy = next.y - prev.y;
+        const tLen = Math.hypot(tdx, tdy) || 1;
+        // Perpendicular = (-tdy, tdx)
+        const amp  = 14 + Math.sin(this.weldT * 0.4) * 6;
+        const wave = Math.sin(this.weldT * 3.5) * amp;
+        wx = tp.x + (-tdy / tLen) * wave;
+        wy = tp.y + ( tdx / tLen) * wave;
+        const ee = this.endEffector();
+        if (Math.hypot(ee.x - tp.x, ee.y - tp.y) < 32) {
+          this.segIdx += this.segDir;
+          if (this.segIdx > this.segEnd)   { this.segIdx = this.segEnd;   this.segDir = -1; }
+          if (this.segIdx < this.segStart) { this.segIdx = this.segStart; this.segDir =  1; }
+        }
+        sparkRate = 0.32;
+
+      // ─── CIRCULAR: small circles centered on trail points ───
+      } else if (this.weldMode === 'CIRCULAR') {
+        const r = 10 + Math.sin(this.weldT * 0.3) * 6;
+        wx = tp.x + Math.cos(this.weldT * 2.8) * r;
+        wy = tp.y + Math.sin(this.weldT * 2.8) * r;
+        // Advance along trail slowly
+        if (Math.floor(this.weldT * 5) % 8 === 0) {
+          this.segIdx += this.segDir;
+          if (this.segIdx > this.segEnd)   { this.segIdx = this.segEnd;   this.segDir = -1; }
+          if (this.segIdx < this.segStart) { this.segIdx = this.segStart; this.segDir =  1; }
+        }
+        sparkRate = 0.48;
+      }
+
+      this.weldFlicker = arcActive ? clamp(baseFlicker, 0, 1) : 0;
+
+      const offX = (SVG_SH.x - 178) * this.svgScale;
+      this.ikTo(wx, wy, clamp(wx - offX, W*0.12, W*0.88), 0.08);
+
+      const ee = this.endEffector();
+      if (arcActive && Math.random() < sparkRate) {
+        emit(ee.x, ee.y, 1 + Math.floor(Math.random() * (this.weldMode==='SPOT' ? 5 : 3)));
+      }
+    }
+
+    update() {
+      this.layout();
+      this.stateMachine();
+      if (this.state === ST.WRITING)        this.updateWriting();
+      else if (this.state === ST.WELDING)  this.updateWelding();
+      else if (this.state === ST.GCODE)    this.updateGcode();
+      else {
+        // FOLLOWING — track mouse, draw + weld on pointer down
+        this.ikTo(mouse.x, mouse.y, null, 0.10);
+
+        if (pointer.down) {
+          // Compute arc flicker while drawing
+          const t = Date.now();
+          this.weldFlicker = clamp(
+            Math.abs(Math.sin(t * 0.030)) * 0.34 +
+            Math.abs(Math.sin(t * 0.081)) * 0.26 +
+            Math.abs(Math.sin(t * 0.18))  * 0.14 +
+            (Math.random() < 0.07 ? Math.random() * 0.50 : 0),
+            0, 1
+          );
+          this.userArcActive = true;
+
+          const ee = this.endEffector();
+          const last = userTrail[userTrail.length - 1];
+          if (!last || Math.hypot(ee.x - last.x, ee.y - last.y) > 2.5) {
+            userTrail.push({ x: ee.x, y: ee.y, alpha: 1.0 });
+          }
+          // Sparks while drawing
+          if (Math.random() < 0.30) emit(ee.x, ee.y, 1 + Math.floor(Math.random() * 3));
+        } else {
+          // Arc off when not pressing
+          this.weldFlicker  = 0;
+          this.userArcActive = false;
+        }
+      }
+      const ee = this.endEffector();
+      this.eeX = ee.x; this.eeY = ee.y;
+    }
+
+    // ── SVG transforms ──
+    applySVG() {
+      const th1d = this.th1 * 180/Math.PI;
+      esl1.setAttribute('transform',
+        `translate(${SVG_SH.x},${SVG_SH.y}) rotate(${th1d})`);
+      const ex = SVG_SH.x + Math.cos(this.th1)*SVG_L1;
+      const ey = SVG_SH.y + Math.sin(this.th1)*SVG_L1;
+      const wd = (this.th1+this.th2)*180/Math.PI;
+      esl2.setAttribute('transform',
+        `translate(${ex.toFixed(1)},${ey.toFixed(1)}) rotate(${wd.toFixed(2)}) translate(-215,-300)`);
+    }
+
+    positionSVG() {
+      const VBW=1160, VBH=1410, VBX=-300, VBY=-400;
+      const rW  = this.by * VBW / (SVG_BASE_Y-VBY);
+      const rH  = rW * VBH / VBW;
+      const ppU = rW / VBW;
+      svgCont.style.left = (this.bx - (178-VBX)*ppU) + 'px';
+      svgCont.style.top  = (this.by - (SVG_BASE_Y-VBY)*ppU) + 'px';
+      kukaSvg.style.width  = rW + 'px';
+      kukaSvg.style.height = rH + 'px';
+      this.svgScale = ppU;
+    }
+
+    // ── Draw helpers ──
+    drawGrid(c) {
+      c.save();
+      // minor grid
+      c.strokeStyle = 'rgba(90,145,255,0.07)';
+      c.lineWidth = 1;
+      const g = 45;
+      for (let x=0; x<W; x+=g) { c.beginPath(); c.moveTo(x,0); c.lineTo(x,H); c.stroke(); }
+      for (let y=0; y<H; y+=g) { c.beginPath(); c.moveTo(0,y); c.lineTo(W,y); c.stroke(); }
+      // major grid
+      c.strokeStyle = 'rgba(90,145,255,0.16)';
+      c.lineWidth = 1;
+      const G = g*4;
+      for (let x=0; x<W; x+=G) { c.beginPath(); c.moveTo(x,0); c.lineTo(x,H); c.stroke(); }
+      for (let y=0; y<H; y+=G) { c.beginPath(); c.moveTo(0,y); c.lineTo(W,y); c.stroke(); }
+      // crosshairs at major junctions
+      c.strokeStyle = 'rgba(90,145,255,0.28)';
+      c.lineWidth = 1;
+      for (let x=0; x<W; x+=G) for (let y=0; y<H; y+=G) {
+        c.beginPath(); c.moveTo(x-4,y); c.lineTo(x+4,y); c.stroke();
+        c.beginPath(); c.moveTo(x,y-4); c.lineTo(x,y+4); c.stroke();
+      }
+      c.restore();
+    }
+
+    drawRail(c) {
+      const rx=W*0.05, rw=W*0.9, ry=this.by;
+      c.fillStyle='#040f1c'; c.fillRect(rx,ry,rw,70);
+      c.fillStyle='#0d2342'; c.fillRect(rx,ry+15,rw,8);
+      c.fillStyle='#091929'; c.fillRect(rx,ry+38,rw,22);
+      // rail highlight
+      c.fillStyle='rgba(74,158,255,0.12)'; c.fillRect(rx,ry+15,rw,2);
+      c.fillStyle='#060d17';
+      for (let i=rx+20; i<rx+rw-20; i+=40) {
+        c.beginPath(); c.arc(i,ry+50,4,0,Math.PI*2); c.fill();
+      }
+    }
+
+    drawChain(c) {
+      c.save();
+      const anchorX = W*0.05+210;
+      const carX    = this.bx + 80;
+      const topY    = this.by-35, botY=this.by+65;
+      const radius  = (botY-topY)/2, cy=topY+radius;
+      const L_geo   = this.chainN * this.linkLen;
+      let loopX = (carX + anchorX - Math.PI*radius + L_geo) / 2;
+      if (loopX < carX + radius*1.5) loopX = carX + radius*1.5;
+      const L1=loopX-carX, L2=Math.PI*radius;
+      for (let i=0; i<this.chainN; i++) {
+        const d=i*this.linkLen; let x,y,ang;
+        if (d<=L1) { x=carX+d; y=topY; ang=0; }
+        else if (d<=L1+L2) {
+          const u=(d-L1)/L2, a=-Math.PI/2+u*Math.PI;
+          x=loopX+Math.cos(a)*radius; y=cy+Math.sin(a)*radius; ang=a+Math.PI/2;
+        } else { x=loopX-(d-L1-L2); y=botY; ang=Math.PI; }
+        c.save(); c.translate(x,y); c.rotate(ang);
+        c.fillStyle='#050e1a';
+        rrect(c,-this.linkLen/2,-12,this.linkLen,24,3); c.fill();
+        c.fillStyle='#0c1e33'; c.fillRect(-this.linkLen/2+1,-10,this.linkLen-2,3);
+        c.fillStyle='#020810'; c.fillRect(-5,-6,4,12); c.fillRect(3,-6,4,12);
+        c.restore();
+      }
+      c.restore();
+    }
+
+    drawCabinet(c) {
+      const bW=210, bH=150;
+      const cX=W*0.05+10, cY=this.by+65-bH;
+      c.save();
+      c.fillStyle='#030c17'; rrect(c,cX,cY,bW,bH,4); c.fill();
+      c.strokeStyle='rgba(74,158,255,0.18)'; c.lineWidth=1;
+      rrect(c,cX,cY,bW,bH,4); c.stroke();
+      const pX=cX+35, pY=cY+5, pW=bW-40, pH=bH-20;
+      c.fillStyle=ORANGE; c.fillRect(pX,pY,pW,pH);
+      c.fillStyle='#080614'; c.fillRect(pX+20,pY+15,60,25);
+      c.fillStyle='#ff3333'; c.beginPath(); c.arc(pX+30,pY+27,3,0,Math.PI*2); c.fill();
+      c.fillStyle='#ffcc00'; c.beginPath(); c.arc(pX+45,pY+27,3,0,Math.PI*2); c.fill();
+      const pl=(Math.sin(Date.now()*.005)+1)*.5;
+      c.save(); c.fillStyle=`rgba(51,255,51,${.4+pl*.6})`;
+      c.shadowColor='#33ff33'; c.shadowBlur=4+pl*8;
+      c.beginPath(); c.arc(pX+60,pY+27,3,0,Math.PI*2); c.fill(); c.restore();
+      c.fillStyle='#060512'; rrect(c,pX+7,pY+70,12,45,2); c.fill();
+      c.fillStyle='#040310'; c.font='900 30px Orbitron,sans-serif';
+      c.textAlign='left'; c.textBaseline='alphabetic';
+      c.fillText('KUKA',pX+30,pY+pH-15);
+      c.fillStyle='#d8d8d8'; c.strokeStyle='#111'; c.lineWidth=1;
+      c.fillRect(pX+115,pY+68,45,25); c.strokeRect(pX+115,pY+68,45,25);
+      c.fillStyle='#111'; c.font='bold 9px sans-serif';
+      c.textAlign='center'; c.textBaseline='alphabetic';
+      c.fillText('KUKA',pX+137,pY+79); c.font='7px sans-serif';
+      c.fillText('KR C4',pX+137,pY+89);
+      const tX=pX+138, tY=pY+38;
+      c.fillStyle='#FFD700'; c.strokeStyle='#111'; c.lineWidth=2; c.lineJoin='miter';
+      c.beginPath(); c.moveTo(tX,tY-18); c.lineTo(tX+20,tY+14); c.lineTo(tX-20,tY+14); c.closePath(); c.fill(); c.stroke();
+      c.fillStyle='#111'; c.font='bold 22px sans-serif'; c.textAlign='center'; c.textBaseline='middle'; c.fillText('!',tX,tY+4);
+      // SmartPAD — shows live robot data
+      c.fillStyle='#040310';
+      c.beginPath(); c.moveTo(pX+pW-5,pY+pH-60); c.lineTo(pX+pW+15,pY+pH-60);
+      c.lineTo(pX+pW+15,pY+pH-10); c.lineTo(pX+pW-5,pY+pH-10); c.fill();
+      c.translate(cX+bW-5,cY+bH-60); c.rotate(Math.PI/16);
+      c.fillStyle='#111'; rrect(c,-20,0,50,65,8); c.fill();
+      c.fillStyle='#0a0a0a'; rrect(c,-18,2,46,61,6); c.fill();
+      c.fillStyle=ORANGE; c.fillRect(-16,4,42,57);
+
+      // Screen area
+      c.save(); c.beginPath(); c.rect(-12,10,34,44); c.clip();
+      c.fillStyle='#010a18'; c.fillRect(-12,10,34,44);
+
+      // Header bar
+      c.fillStyle='rgba(255,102,0,0.85)'; c.fillRect(-12,10,34,7);
+      c.fillStyle='#fff'; c.font='bold 4px monospace';
+      c.textAlign='left'; c.textBaseline='top';
+      c.fillText('KRC4', -10, 11);
+
+      // Live data lines
+      const ee2 = this.endEffector();
+      const modeLabels = { [ST.WRITING]:'WRITE', [ST.WELDING]: this.weldMode||'WELD',
+                           [ST.FOLLOWING]:'TRACK', [ST.GCODE]:'GCODE' };
+      const modeCol = { [ST.WRITING]:'#ff8833', [ST.WELDING]:'#ffdd00',
+                        [ST.FOLLOWING]:'#00ff88', [ST.GCODE]:'#00ccff' };
+
+      c.font = '4px "Share Tech Mono", monospace';
+      const lines2 = [
+        { label:'A1', val: (this.th1*180/Math.PI).toFixed(0)+'°' },
+        { label:'A2', val: (this.th2*180/Math.PI).toFixed(0)+'°' },
+        { label:' X', val: (ee2.x - W/2).toFixed(0)  },
+        { label:' Y', val: (-(ee2.y-H*.5)).toFixed(0) },
+        { label:'ST', val: modeLabels[this.state] || '—', col: modeCol[this.state] },
+      ];
+      lines2.forEach((ln, i) => {
+        const ly = 21 + i * 7;
+        c.fillStyle = 'rgba(100,180,255,0.55)'; c.textAlign='left';
+        c.fillText(ln.label+':', -11, ly);
+        c.fillStyle = ln.col || '#b0e0ff'; c.textAlign='right';
+        c.fillText(ln.val, 20, ly);
+      });
+
+      // Blinking cursor
+      if (Math.floor(Date.now() / 400) % 2 === 0) {
+        c.fillStyle='rgba(0,255,180,0.7)';
+        c.fillRect(12, 50, 6, 2);
+      }
+
+      c.restore();
+      // E-stop button
+      c.fillStyle='#111'; c.beginPath(); c.arc(15,8,5,0,Math.PI*2); c.fill();
+      c.fillStyle='red'; c.beginPath(); c.arc(15,8,3.5,0,Math.PI*2); c.fill();
+      c.restore();
+    }
+
+    drawHUD(c) {
+      const hx = W - 22, hy = H * 0.14;
+      const hw = 148;
+      const sh = this.shoulder();
+      const ee = this.endEffector();
+
+      c.save();
+      c.font = '9.5px "Share Tech Mono", monospace';
+
+      // panel bg
+      c.fillStyle   = 'rgba(4,12,24,0.82)';
+      c.strokeStyle = 'rgba(74,158,255,0.28)';
+      c.lineWidth   = 1;
+      rrect(c, hx-hw-14, hy, hw+22, 198, 3);
+      c.fill(); c.stroke();
+
+      const lx = hx - hw, lx2 = hx + 8;
+
+      const line = (lbl, val, yy, col='#fff') => {
+        c.textAlign='left'; c.fillStyle='rgba(100,160,255,0.6)'; c.fillText(lbl, lx, yy);
+        c.textAlign='right'; c.fillStyle=col; c.fillText(val, lx2, yy);
+      };
+
+      // Header
+      c.textAlign='left'; c.fillStyle=ORANGE;
+      c.font='bold 9.5px "Share Tech Mono", monospace';
+      c.fillText('KUKA KR 6 R900', lx, hy+16);
+      c.fillStyle='rgba(74,158,255,0.3)'; c.fillRect(lx-2,hy+20,hw+14,1);
+
+      // Joints
+      c.font='9.5px "Share Tech Mono", monospace';
+      c.textAlign='left'; c.fillStyle='rgba(74,158,255,.45)';
+      c.fillText('── JOINTS', lx, hy+36);
+      line('A1:', (this.th1*180/Math.PI).toFixed(1)+'°', hy+52);
+      line('A2:', (this.th2*180/Math.PI).toFixed(1)+'°', hy+68);
+
+      c.fillStyle='rgba(74,158,255,.45)'; c.textAlign='left';
+      c.fillText('── POSITION', lx, hy+88);
+      line('X:', (ee.x - W/2).toFixed(0)+' mm',   hy+104);
+      line('Y:', (-(ee.y - H*0.5)).toFixed(0)+' mm', hy+120);
+
+      c.fillStyle='rgba(74,158,255,.45)'; c.textAlign='left';
+      c.fillText('── STATUS', lx, hy+140);
+      const cols = { [ST.WRITING]:'#FF6600', [ST.WELDING]:'#ffdd00', [ST.FOLLOWING]:'#00ff88' };
+      const labs = { [ST.WRITING]:'WRITING', [ST.WELDING]:'WELDING', [ST.FOLLOWING]:'TRACKING' };
+      c.textAlign='left'; c.fillStyle=cols[this.state];
+      c.fillText('● '+labs[this.state], lx, hy+156);
+
+      // Write progress bar
+      if (this.state === ST.WRITING) {
+        const pct = this.waypoints.length ? this.wpIdx / this.waypoints.length : 0;
+        c.fillStyle='rgba(74,158,255,.15)'; c.fillRect(lx-2,hy+168,hw+14,7);
+        c.fillStyle=ORANGE; c.fillRect(lx-2,hy+168,(hw+14)*pct,7);
+        c.fillStyle='rgba(74,158,255,.4)'; c.textAlign='right';
+        c.fillText(Math.round(pct*100)+'%', lx2, hy+192);
+      }
+
+      c.restore();
+
+      // Crosshair at EE
+      if (this.state !== ST.WRITING) {
+        const col = this.state===ST.WELDING ? 'rgba(255,210,0,.55)' : 'rgba(0,255,136,.55)';
+        c.save();
+        c.strokeStyle=col; c.lineWidth=1;
+        c.beginPath();
+        c.moveTo(ee.x-14,ee.y); c.lineTo(ee.x+14,ee.y);
+        c.moveTo(ee.x,ee.y-14); c.lineTo(ee.x,ee.y+14);
+        c.stroke();
+        c.beginPath(); c.arc(ee.x,ee.y,7,0,Math.PI*2); c.stroke();
+        c.restore();
+      }
+    }
+
+    // ── WELDING MASK EFFECT ──────────────────────
+    drawWeldingMask(c) {
+      const isActive = (this.state === ST.WELDING || this.state === ST.GCODE ||
+                        this.state === ST.WRITING  ||
+                       (this.state === ST.FOLLOWING && this.userArcActive));
+      const arcTarget = isActive ? this.weldFlicker : 0;
+
+      // Fully instant — no lerp, tracks flicker frame-by-frame
+      this.maskAlpha = arcTarget;
+
+      if (this.maskAlpha < 0.01) return;
+
+      const a  = this.maskAlpha;
+      const f  = this.weldFlicker;
+      const ee = { x: this.eeX, y: this.eeY };
+      const sh = this.shoulder();
+
+      c.save();
+
+      // ── 1. VISOR DARKNESS — more pronounced ──
+      const darkness = 0.62 + f * 0.10;
+      c.globalAlpha = a * darkness;
+      c.fillStyle = '#000510';
+      c.fillRect(0, 0, W, H);
+      c.globalAlpha = 1;
+
+      // ── 2. AMBIENT GLOW on robot body ──
+      c.globalCompositeOperation = 'lighter';
+
+      const ambient = c.createRadialGradient(sh.x, sh.y - 40, 10, sh.x, sh.y + 60, 480);
+      ambient.addColorStop(0,    `rgba(255,160,50,${a * (0.18 + f * 0.12)})`);
+      ambient.addColorStop(0.30, `rgba(220,100,20,${a * (0.08 + f * 0.05)})`);
+      ambient.addColorStop(0.70, `rgba(180,70,10,${a * 0.03})`);
+      ambient.addColorStop(1,    'rgba(0,0,0,0)');
+      c.fillStyle = ambient;
+      c.fillRect(0, 0, W, H);
+
+      // Rail hot line
+      const railGlow = c.createLinearGradient(0, this.by - 10, 0, this.by + 80);
+      railGlow.addColorStop(0,   `rgba(255,130,25,${a * (0.12 + f * 0.09)})`);
+      railGlow.addColorStop(0.5, `rgba(200,80,10,${a * 0.04})`);
+      railGlow.addColorStop(1,   'rgba(0,0,0,0)');
+      c.fillStyle = railGlow;
+      c.fillRect(0, this.by - 10, W, 110);
+
+      // ── 3. ARC LIGHT CONE ──
+      if (f > 0.01) {
+        const arcR = 240 + f * 110;
+        const arcA = a * (0.42 + f * 0.30);
+        const arcLight = c.createRadialGradient(ee.x, ee.y, 0, ee.x, ee.y, arcR);
+        arcLight.addColorStop(0,    `rgba(200,225,255,${arcA})`);
+        arcLight.addColorStop(0.08, `rgba(170,205,255,${arcA * 0.75})`);
+        arcLight.addColorStop(0.25, `rgba(120,170,255,${arcA * 0.30})`);
+        arcLight.addColorStop(0.55, `rgba(70,120,220,${arcA * 0.09})`);
+        arcLight.addColorStop(1,    'rgba(0,0,0,0)');
+        c.fillStyle = arcLight;
+        c.fillRect(0, 0, W, H);
+
+        // ── 4. ARC CORE ──
+        const coreR = 22 + f * 18;
+        const core  = c.createRadialGradient(ee.x, ee.y, 0, ee.x, ee.y, coreR);
+        core.addColorStop(0,    `rgba(255,255,255,${a * (0.92 + f * 0.08)})`);
+        core.addColorStop(0.15, `rgba(220,240,255,${a * (0.75 + f * 0.18)})`);
+        core.addColorStop(0.40, `rgba(140,200,255,${a * (0.38 + f * 0.18)})`);
+        core.addColorStop(0.75, `rgba(70,150,255,${a * 0.10})`);
+        core.addColorStop(1,    'rgba(0,0,0,0)');
+        c.fillStyle = core;
+        c.beginPath(); c.arc(ee.x, ee.y, coreR, 0, Math.PI * 2); c.fill();
+
+        if (f > 0.45) {
+          const pin = c.createRadialGradient(ee.x, ee.y, 0, ee.x, ee.y, 5 + f * 4);
+          pin.addColorStop(0, `rgba(255,255,255,${a * (0.95 + f * 0.05)})`);
+          pin.addColorStop(1, 'rgba(255,255,255,0)');
+          c.fillStyle = pin;
+          c.beginPath(); c.arc(ee.x, ee.y, 5+f*4, 0, Math.PI*2); c.fill();
+        }
+      }
+
+      // ── 5. EDGE VIGNETTE ──
+      c.globalCompositeOperation = 'source-over';
+      const vig = c.createRadialGradient(W/2, H/2, H*0.28, W/2, H/2, H*0.88);
+      vig.addColorStop(0, 'rgba(0,0,0,0)');
+      vig.addColorStop(1, `rgba(0,2,10,${a * 0.52})`);
+      c.fillStyle = vig;
+      c.fillRect(0, 0, W, H);
+
+      c.globalCompositeOperation = 'source-over';
+      c.globalAlpha = 1;
+      c.restore();
+    }
+
+    draw(c, cO) {
+      this.drawGrid(c);
+      this.drawRail(c);
+      this.drawChain(c);
+      drawTrail(c);
+      // writing cursor dot
+      if (this.state===ST.WRITING) {
+        c.save();
+        c.fillStyle='rgba(255,120,30,.9)'; c.shadowColor='rgba(255,90,0,.7)'; c.shadowBlur=10;
+        c.beginPath(); c.arc(this.eeX,this.eeY,3.5,0,Math.PI*2); c.fill();
+        c.restore();
+      }
+      this.positionSVG();
+      this.applySVG();
+      // Mask covers robot + rail + background
+      this.drawWeldingMask(cO);
+      // Cabinet and HUD drawn AFTER mask — always fully readable
+      this.drawCabinet(cO);
+      this.drawHUD(cO);
+    }
+  }
+
+  // ── G-CODE PARSER ─────────────────────────────
+  // Coordinate space: mm → screen pixels mapped to center of robot workspace
+  // Origin (0,0) = center of right half of screen
+  const MM_TO_PX = () => Math.min(W, H) / 420;  // 1mm ≈ scale based on viewport
+
+  function parseGcode(src) {
+    const lines = src.split('\n');
+    const wps   = [];
+    let cx = W*0.64, cy = H*0.36;  // machine origin in screen coords
+    let px = cx, py = cy;           // current position
+    const scale = MM_TO_PX();
+
+    for (let raw of lines) {
+      const line = raw.split(';')[0].trim().toUpperCase();
+      if (!line) continue;
+
+      const tok = {};
+      line.split(/\s+/).forEach(t => {
+        const letter = t[0];
+        const val    = parseFloat(t.slice(1));
+        if (!isNaN(val)) tok[letter] = val;
+      });
+
+      const code = line.match(/^(G\d+|M\d+)/)?.[1] || '';
+      if (!code) continue;
+
+      // G0 – Rapid move (pen up)
+      if (code === 'G0') {
+        const nx = cx + (tok['X'] !== undefined ? tok['X'] * scale : (px-cx));
+        const ny = cy - (tok['Y'] !== undefined ? tok['Y'] * scale : (cy-py));
+        wps.push({ x:nx, y:ny, penDown:false, rapid:true });
+        px = nx; py = ny;
+      }
+      // G1 – Linear feed (pen down)
+      else if (code === 'G1') {
+        const nx = cx + (tok['X'] !== undefined ? tok['X'] * scale : (px-cx));
+        const ny = cy - (tok['Y'] !== undefined ? tok['Y'] * scale : (cy-py));
+        // Interpolate
+        const dist = Math.hypot(nx-px, ny-py);
+        const steps = Math.max(1, Math.floor(dist / 22));
+        for (let s=1; s<=steps; s++) {
+          wps.push({ x: px+(nx-px)*s/steps, y: py+(ny-py)*s/steps, penDown:true, rapid:false });
+        }
+        px = nx; py = ny;
+      }
+      // G2 – CW arc  G3 – CCW arc
+      else if (code === 'G2' || code === 'G3') {
+        const ex = cx + (tok['X'] !== undefined ? tok['X'] * scale : (px-cx));
+        const ey = cy - (tok['Y'] !== undefined ? tok['Y'] * scale : (cy-py));
+        const icx = px + (tok['I'] !== undefined ? tok['I'] * scale : 0);
+        const icy = py - (tok['J'] !== undefined ? tok['J'] * scale : 0);
+        const r   = Math.hypot(icx-px, icy-py);
+        const a0  = Math.atan2(py-icy, px-icx);
+        let   a1  = Math.atan2(ey-icy, ex-icx);
+        const cw  = (code === 'G2');
+        if (cw  && a1 > a0) a1 -= Math.PI*2;
+        if (!cw && a1 < a0) a1 += Math.PI*2;
+        const arcSteps = Math.max(8, Math.floor(Math.abs(a1-a0)*r/18));
+        for (let s=1; s<=arcSteps; s++) {
+          const a = a0 + (a1-a0)*s/arcSteps;
+          wps.push({ x: icx+Math.cos(a)*r, y: icy+Math.sin(a)*r, penDown:true, rapid:false, arc:true });
+        }
+        px = ex; py = ey;
+      }
+      // M2/M30 – End
+      else if (code==='M2' || code==='M30') break;
+    }
+    return wps;
+  }
+
+  // ── G-code UI wiring ──────────────────────────
+  const gcPanel  = document.getElementById('gcode-panel');
+  const gcToggle = document.getElementById('gcode-toggle');
+  const gcClose  = document.getElementById('gcode-close');
+  const gcRun    = document.getElementById('gcode-run');
+  const gcStop   = document.getElementById('gcode-stop');
+  const gcTA     = document.getElementById('gcode-textarea');
+
+  gcToggle.addEventListener('click', () => {
+    gcToggle.classList.add('hidden');
+    gcPanel.classList.add('open');
+  });
+  gcClose.addEventListener('click', () => {
+    gcPanel.classList.remove('open');
+    gcToggle.classList.remove('hidden');
+  });
+  gcRun.addEventListener('click', () => {
+    const wps = parseGcode(gcTA.value);
+    if (!wps.length) {
+      document.getElementById('gcode-status').textContent = '// sin waypoints válidos';
+      return;
+    }
+    trail.length = 0;
+    document.getElementById('gcode-status').textContent = `// ${wps.length} puntos cargados…`;
+    arm.startGcode(wps);
+  });
+  gcStop.addEventListener('click', () => arm.stopGcode());
+
+  // ── Bootstrap ─────────────────────────────────
+  const arm = new KukaKinematic();
+  resize(); // initial size + waypoints
+
+  function loop() {
+    ctx.clearRect(0,0,W,H);
+    ctxO.clearRect(0,0,W,H);
+    tickUserTrail();
+    arm.update();
+    arm.draw(ctx, ctxO);
+    // update & draw sparks
+    for (let i=sparks.length-1; i>=0; i--) {
+      sparks[i].update();
+      if (sparks[i].life <= 0) { sparks.splice(i,1); continue; }
+      sparks[i].draw(ctxO);
+    }
+    requestAnimationFrame(loop);
+  }
+  loop();
+  </script>
+</body>
+</html>
