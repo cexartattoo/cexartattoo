@@ -667,6 +667,122 @@
   </style>
 
   </style>
+    <style>
+        /* ── ABOUT DESKTOP INTEGRATION ── */
+        @media (min-width: 993px) {
+            body .about {
+                margin-top: -180px !important;
+                position: relative !important;
+                z-index: 20 !important;
+                background: transparent !important;
+                padding-top: 0 !important;
+                padding-bottom: 0 !important;
+            }
+
+            body .about > .about-fade-top {
+                display: block;
+            }
+
+            body .about > .about-bg-fill {
+                background: #07101d;
+                padding-bottom: 60px;
+            }
+
+            .about-integrated-wrapper {
+                display: grid;
+                grid-template-columns: 320px 1fr;
+                gap: 0;
+                align-items: stretch;
+                min-height: 420px;
+                position: relative;
+            }
+
+            /* Left column: foto sobre fondo semitransparente que continúa del hero */
+            .about-col-photo {
+                position: relative;
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-end;
+                padding: 0 30px 40px 0;
+            }
+
+            .about-col-photo .image-frame {
+                width: 260px;
+                height: 340px;
+                aspect-ratio: unset;
+                border-radius: 16px;
+                overflow: hidden;
+                border: 1px solid rgba(255,90,0,0.3);
+                box-shadow: 0 0 40px rgba(255,90,0,0.15), 0 20px 60px rgba(0,0,0,0.6);
+            }
+
+            /* Right column: header + texto sobre fondo con gradiente */
+            .about-col-content {
+                background: linear-gradient(135deg, rgba(7,16,29,0.85) 0%, rgba(4,8,20,0.95) 100%);
+                backdrop-filter: blur(8px);
+                border: 1px solid rgba(255,90,0,0.12);
+                border-radius: 0 20px 20px 0;
+                padding: 48px 52px 44px 44px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
+
+            .about-col-content .section-header {
+                margin-bottom: 28px;
+            }
+
+            .about-col-content .about-subtitle {
+                font-size: 1.3rem;
+                margin-bottom: 16px;
+            }
+
+            .about-col-content .about-text p {
+                font-size: 0.95rem;
+                line-height: 1.7;
+                margin-bottom: 12px;
+            }
+
+            .about-col-content .about-highlights {
+                margin-top: 24px;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 10px;
+            }
+
+            .about-col-content .highlight {
+                padding: 10px 12px;
+                font-size: 0.82rem;
+                flex-direction: column;
+                text-align: center;
+                gap: 6px;
+                background: rgba(255,90,0,0.06);
+                border: 1px solid rgba(255,90,0,0.15);
+                border-radius: 10px;
+            }
+
+            /* Gradiente de transición debajo del hero */
+            .about-fade-top {
+                height: 180px;
+                background: linear-gradient(to bottom, transparent 0%, #071a2e 100%);
+                margin-bottom: -1px;
+            }
+
+            /* Fondo continuo debajo de la tarjeta */
+            .about-bg-fill {
+                background: #07101d;
+                padding-bottom: 60px;
+            }
+        }
+
+        /* ── MOBILE: sin cambios ── */
+        @media (max-width: 992px) {
+            .about-integrated-wrapper { display: contents; }
+            .about-col-photo { display: contents; }
+            .about-col-content { display: contents; background: none; border: none; padding: 0; }
+            .about-fade-top { display: none; }
+            .about-bg-fill { background: none; padding-bottom: 0; }
+        }
+    </style>
 </head>
 
 <body>
@@ -1144,56 +1260,67 @@ G2 X40 Y30 I40 J0"></textarea>
   <!-- ═══════════ END KUKA HERO ═══════════ -->
 
     <!-- About Section -->
-    <section class="about" id="about" style="margin-top:-120px; position:relative; z-index:20; background: linear-gradient(to bottom, transparent 0%, #071a2e 120px); padding-top: 140px;">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-tag">01</span>
-                <h2 class="section-title">Sobre Mí</h2>
-                <div class="section-line"></div>
-            </div>
-            <div class="about-content">
-                <div class="about-image">
-                    <div class="image-frame">
-                        <img src="perfil.jpeg" alt="César Javier Ramírez Hormaza - Ingeniero Mecatrónico"
-                            class="profile-photo">
-                        <div class="frame-corner frame-tl"></div>
-                        <div class="frame-corner frame-tr"></div>
-                        <div class="frame-corner frame-bl"></div>
-                        <div class="frame-corner frame-br"></div>
-                    </div>
-                </div>
-                <div class="about-text">
-                    <h3 class="about-subtitle">Ingeniero Mecatrónico con visión de futuro</h3>
-                    <p>
-                        Soy un Ingeniero Mecatrónico egresado de la Universidad de Pamplona, con una pasión
-                        profunda por la robótica y la automatización. Mi enfoque combina la creatividad
-                        con la precisión técnica para desarrollar soluciones que transforman procesos industriales.
-                    </p>
-                    <p>
-                        Soy el creador del <strong>Robot Tatuador 360</strong>, logrando precisiones de ±80 nanómetros,
-                        primer sistema robótico de tatuaje con precisión nanométrica en Latinoamérica. Especializado en
-                        visión artificial (OpenCV, YOLO), PLCs Siemens y programación de cinemática robótica. Más de 3
-                        años asesorando más de 20 proyectos internacionales de automatización con enfoque en manufactura
-                        inteligente.
-                    </p>
-                    <div class="about-highlights">
-                        <div class="highlight">
-                            <span class="highlight-icon">🤖</span>
-                            <span>Robótica Avanzada</span>
-                        </div>
-                        <div class="highlight">
-                            <span class="highlight-icon">👁️</span>
-                            <span>Visión Artificial</span>
-                        </div>
-                        <div class="highlight">
-                            <span class="highlight-icon">⚙️</span>
-                            <span>PLCs Siemens</span>
-                        </div>
-                        <div class="highlight">
-                            <span class="highlight-icon">🐍</span>
-                            <span>Python & C++</span>
+
+    <section class="about" id="about">
+        <!-- Franja de transición del hero -->
+        <div class="about-fade-top"></div>
+        <div class="about-bg-fill">
+            <div class="container">
+                <div class="about-integrated-wrapper">
+
+                    <!-- Columna izquierda: foto -->
+                    <div class="about-col-photo">
+                        <div class="image-frame">
+                            <img src="perfil.jpeg" alt="César Javier Ramírez Hormaza - Ingeniero Mecatrónico" class="profile-photo">
+                            <div class="frame-corner frame-tl"></div>
+                            <div class="frame-corner frame-tr"></div>
+                            <div class="frame-corner frame-bl"></div>
+                            <div class="frame-corner frame-br"></div>
                         </div>
                     </div>
+
+                    <!-- Columna derecha: contenido -->
+                    <div class="about-col-content">
+                        <div class="section-header">
+                            <span class="section-tag">01</span>
+                            <h2 class="section-title">Sobre Mí</h2>
+                            <div class="section-line"></div>
+                        </div>
+                        <div class="about-text">
+                            <h3 class="about-subtitle">Ingeniero Mecatrónico con visión de futuro</h3>
+                            <p>
+                                Soy un Ingeniero Mecatrónico egresado de la Universidad de Pamplona, con una pasión
+                                profunda por la robótica y la automatización. Mi enfoque combina la creatividad
+                                con la precisión técnica para desarrollar soluciones que transforman procesos industriales.
+                            </p>
+                            <p>
+                                Soy el creador del <strong>Robot Tatuador 360</strong>, logrando precisiones de ±80 nanómetros,
+                                primer sistema robótico de tatuaje con precisión nanométrica en Latinoamérica. Especializado en
+                                visión artificial (OpenCV, YOLO), PLCs Siemens y programación de cinemática robótica. Más de 3
+                                años asesorando más de 20 proyectos internacionales de automatización con enfoque en manufactura
+                                inteligente.
+                            </p>
+                            <div class="about-highlights">
+                                <div class="highlight">
+                                    <span class="highlight-icon">🤖</span>
+                                    <span>Robótica Avanzada</span>
+                                </div>
+                                <div class="highlight">
+                                    <span class="highlight-icon">👁️</span>
+                                    <span>Visión Artificial</span>
+                                </div>
+                                <div class="highlight">
+                                    <span class="highlight-icon">⚙️</span>
+                                    <span>PLCs Siemens</span>
+                                </div>
+                                <div class="highlight">
+                                    <span class="highlight-icon">🐍</span>
+                                    <span>Python & C++</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
