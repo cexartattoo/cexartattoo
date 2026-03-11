@@ -2,37 +2,36 @@
 <html lang="es">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- SEO básico -->
-    <meta name="description"
-        content="César Javier Ramírez Hormaza – Ingeniero Mecatrónico especializado en robótica, automatización industrial y visión artificial. Creador del Robot Tatuador 360. Bogotá, Colombia.">
-    <meta name="keywords"
-        content="ingeniero mecatrónico Colombia, robótica, automatización industrial, visión artificial, OpenCV, PLC Siemens, robot tatuador">
-    <meta name="author" content="César Javier Ramírez Hormaza">
-    <meta name="google-site-verification" content="5mxPMNXdQG5ojcV9rxyK0txiAHAnLicHlCnZQPf3-z0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- SEO básico -->
+  <meta name="description"
+    content="César Javier Ramírez Hormaza – Ingeniero Mecatrónico especializado en robótica, automatización industrial y visión artificial. Creador del Robot Tatuador 360. Bogotá, Colombia.">
+  <meta name="keywords"
+    content="ingeniero mecatrónico Colombia, robótica, automatización industrial, visión artificial, OpenCV, PLC Siemens, robot tatuador">
+  <meta name="author" content="César Javier Ramírez Hormaza">
+  <meta name="google-site-verification" content="5mxPMNXdQG5ojcV9rxyK0txiAHAnLicHlCnZQPf3-z0" />
 
-    <!-- Open Graph (para que se vea bien al compartir en LinkedIn, WhatsApp, etc.) -->
-    <meta property="og:title" content="César Ramírez – Ingeniero Mecatrónico | Robótica & Automatización">
-    <meta property="og:description"
-        content="Portafolio de César Ramírez. Proyectos de robótica, visión artificial y automatización industrial.">
-    <meta property="og:url" content="https://cexartattoo.github.io/cexartattoo/">
-    <meta property="og:type" content="website">
+  <!-- Open Graph (para que se vea bien al compartir en LinkedIn, WhatsApp, etc.) -->
+  <meta property="og:title" content="César Ramírez – Ingeniero Mecatrónico | Robótica & Automatización">
+  <meta property="og:description"
+    content="Portafolio de César Ramírez. Proyectos de robótica, visión artificial y automatización industrial.">
+  <meta property="og:url" content="https://cexartattoo.github.io/cexartattoo/">
+  <meta property="og:type" content="website">
 
-    <!-- Título optimizado -->
-    <title>César Ramírez | Ingeniero Mecatrónico – Robótica y Automatización Colombia</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="projects-styles.css">
+  <!-- Título optimizado -->
+  <title>César Ramírez | Ingeniero Mecatrónico – Robótica y Automatización Colombia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="projects-styles.css">
 
   <!-- Kuka Hero Styles -->
   <style>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap');
+    <style>@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap');
 
     *,
     *::before,
@@ -613,7 +612,8 @@
     @media (max-width: 900px) and (orientation: landscape) {
       #hero-content {
         width: 100%;
-        padding: 0;               /* el padding lo pone cada columna */
+        padding: 0;
+        /* el padding lo pone cada columna */
         flex-direction: row;
         align-items: stretch;
         gap: 0;
@@ -635,8 +635,14 @@
         line-height: 0.95;
       }
 
-      .hero-title { font-size: 8px; }
-      .hero-tags  { gap: 5px; margin-top: 8px; }
+      .hero-title {
+        font-size: 8px;
+      }
+
+      .hero-tags {
+        gap: 5px;
+        margin-top: 8px;
+      }
 
       .tag {
         font-size: 6.5px;
@@ -667,464 +673,616 @@
   </style>
 
   </style>
+  <style>
+    /* ── ABOUT DESKTOP INTEGRATION ── */
+
+    /* ── MOBILE HERO FIXES ── */
+    @media (max-width: 768px) {
+      #kuka-hero-wrapper {
+        height: 100svh !important;
+        /* usa svh para descontar barra del browser */
+        min-height: 500px;
+      }
+
+      /* Ocultar G-CODE en móvil — interfiere con scroll */
+      #gcode-toggle,
+      #gcode-panel {
+        display: none !important;
+      }
+    }
+
+    @media (min-width: 993px) {
+      body .about {
+        margin-top: -180px !important;
+        position: relative !important;
+        z-index: 20 !important;
+        background: transparent !important;
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+      }
+
+      body .about>.about-fade-top {
+        display: block;
+      }
+
+      body .about>.about-bg-fill {
+        background: #07101d;
+        padding-bottom: 60px;
+      }
+
+      .about-integrated-wrapper {
+        display: grid;
+        grid-template-columns: 320px 1fr;
+        gap: 0;
+        align-items: stretch;
+        min-height: 420px;
+        position: relative;
+      }
+
+      /* Left column: foto sobre fondo semitransparente que continúa del hero */
+      .about-col-photo {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding: 0 30px 40px 0;
+      }
+
+      .about-col-photo .image-frame {
+        width: 260px;
+        height: 340px;
+        aspect-ratio: unset;
+        border-radius: 16px;
+        overflow: hidden;
+        border: 1px solid rgba(255, 90, 0, 0.3);
+        box-shadow: 0 0 40px rgba(255, 90, 0, 0.15), 0 20px 60px rgba(0, 0, 0, 0.6);
+      }
+
+      /* Right column: header + texto sobre fondo con gradiente */
+      .about-col-content {
+        background: linear-gradient(135deg, rgba(7, 16, 29, 0.85) 0%, rgba(4, 8, 20, 0.95) 100%);
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(255, 90, 0, 0.12);
+        border-radius: 0 20px 20px 0;
+        padding: 48px 52px 44px 44px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      .about-col-content .section-header {
+        margin-bottom: 28px;
+      }
+
+      .about-col-content .about-subtitle {
+        font-size: 1.3rem;
+        margin-bottom: 16px;
+      }
+
+      .about-col-content .about-text p {
+        font-size: 0.95rem;
+        line-height: 1.7;
+        margin-bottom: 12px;
+      }
+
+      .about-col-content .about-highlights {
+        margin-top: 24px;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+      }
+
+      .about-col-content .highlight {
+        padding: 10px 12px;
+        font-size: 0.82rem;
+        flex-direction: column;
+        text-align: center;
+        gap: 6px;
+        background: rgba(255, 90, 0, 0.06);
+        border: 1px solid rgba(255, 90, 0, 0.15);
+        border-radius: 10px;
+      }
+
+      /* Gradiente de transición debajo del hero */
+      .about-fade-top {
+        height: 180px;
+        background: linear-gradient(to bottom, transparent 0%, #071a2e 100%);
+        margin-bottom: -1px;
+      }
+
+      /* Fondo continuo debajo de la tarjeta */
+      .about-bg-fill {
+        background: #07101d;
+        padding-bottom: 60px;
+      }
+    }
+
+    /* ── MOBILE: sin cambios ── */
+    @media (max-width: 992px) {
+      .about-integrated-wrapper {
+        display: contents;
+      }
+
+      .about-col-photo {
+        display: contents;
+      }
+
+      .about-col-content {
+        display: contents;
+        background: none;
+        border: none;
+        padding: 0;
+      }
+
+      .about-fade-top {
+        display: none;
+      }
+
+      .about-bg-fill {
+        background: none;
+        padding-bottom: 0;
+      }
+    }
+  </style>
 </head>
 
 <body>
-    <!-- Navigation -->
-    <nav class="navbar" id="navbar">
-        <div class="nav-container">
-            <a href="#hero" class="nav-logo">
-                <span class="logo-text">CR</span>
-                <span class="logo-dot"></span>
-            </a>
-            <ul class="nav-menu" id="nav-menu">
-                <li><a href="#hero" class="nav-link">Inicio</a></li>
-                <li><a href="#about" class="nav-link">Sobre Mí</a></li>
-                <li><a href="#experience" class="nav-link">Experiencia</a></li>
-                <li><a href="#projects" class="nav-link">Proyectos</a></li>
-                <li><a href="#skills" class="nav-link">Habilidades</a></li>
-                <li><a href="#education" class="nav-link">Educación</a></li>
-                <li><a href="#contact" class="nav-link nav-cta">Contacto</a></li>
-                <li><a href="CV_Visual_César.pdf" download class="nav-link nav-cta"
-                        style="background:linear-gradient(135deg,#00ff88,#0088ff);margin-left:5px;">📄 CV</a></li>
-            </ul>
-            <div class="hamburger" id="hamburger">
-                <span class="bar"></span>
-                <span class="bar"></span>
-                <span class="bar"></span>
-            </div>
-        </div>
-    </nav>
+  <!-- Navigation -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="#hero" class="nav-logo">
+        <span class="logo-text">CR</span>
+        <span class="logo-dot"></span>
+      </a>
+      <ul class="nav-menu" id="nav-menu">
+        <li><a href="#hero" class="nav-link">Inicio</a></li>
+        <li><a href="#about" class="nav-link">Sobre Mí</a></li>
+        <li><a href="#experience" class="nav-link">Experiencia</a></li>
+        <li><a href="#projects" class="nav-link">Proyectos</a></li>
+        <li><a href="#skills" class="nav-link">Habilidades</a></li>
+        <li><a href="#education" class="nav-link">Educación</a></li>
+        <li><a href="#contact" class="nav-link nav-cta">Contacto</a></li>
+        <li><a href="CV_Visual_César.pdf" download class="nav-link nav-cta"
+            style="background:linear-gradient(135deg,#00ff88,#0088ff);margin-left:5px;">📄 CV</a></li>
+      </ul>
+      <div class="hamburger" id="hamburger">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </div>
+    </div>
+  </nav>
 
-    <!-- Hero Section -->
+  <!-- Hero Section -->
 
   <!-- ═══════════ KUKA HERO ═══════════ -->
   <div id="kuka-hero-wrapper" style="position:relative;width:100%;height:100vh;overflow:hidden;">
 
-  <canvas id="cv"></canvas>
+    <canvas id="cv"></canvas>
 
-  <!-- ══════════════════════════════════════════════
+    <!-- ══════════════════════════════════════════════
        KUKA ROBOT SVG  (cinemática 2D)
   ══════════════════════════════════════════════ -->
-  <div id="robot-svg-container">
-    <svg id="kuka-svg" xmlns="http://www.w3.org/2000/svg" viewBox="-300 -400 1160 1410" width="560" height="610"
-      overflow="visible">
-      <defs>
-        <linearGradient id="ogH" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stop-color="#b83a00" />
-          <stop offset="28%" stop-color="#ff6000" />
-          <stop offset="62%" stop-color="#ff5000" />
-          <stop offset="100%" stop-color="#a83200" />
-        </linearGradient>
-        <linearGradient id="ogV" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stop-color="#ff6e0e" />
-          <stop offset="42%" stop-color="#ff5800" />
-          <stop offset="100%" stop-color="#b83800" />
-        </linearGradient>
-        <linearGradient id="ogDR" x1="0%" y1="100%" x2="100%" y2="0%">
-          <stop offset="0%" stop-color="#b63600" />
-          <stop offset="48%" stop-color="#ff5800" />
-          <stop offset="100%" stop-color="#ff6c0c" />
-        </linearGradient>
-        <linearGradient id="ogDL" x1="100%" y1="100%" x2="0%" y2="0%">
-          <stop offset="0%" stop-color="#b63600" />
-          <stop offset="48%" stop-color="#ff5200" />
-          <stop offset="100%" stop-color="#ff6808" />
-        </linearGradient>
-        <linearGradient id="cylG" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stop-color="#050505" />
-          <stop offset="10%" stop-color="#1e1e1e" />
-          <stop offset="28%" stop-color="#383838" />
-          <stop offset="48%" stop-color="#464646" />
-          <stop offset="68%" stop-color="#2c2c2c" />
-          <stop offset="88%" stop-color="#121212" />
-          <stop offset="100%" stop-color="#040404" />
-        </linearGradient>
-        <radialGradient id="capG" cx="38%" cy="35%" r="62%">
-          <stop offset="0%" stop-color="#404040" />
-          <stop offset="55%" stop-color="#1c1c1c" />
-          <stop offset="100%" stop-color="#080808" />
-        </radialGradient>
-        <linearGradient id="nemaG" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#222" />
-          <stop offset="100%" stop-color="#060606" />
-        </linearGradient>
-        <linearGradient id="motorG" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stop-color="#2a2a2a" />
-          <stop offset="20%" stop-color="#111" />
-          <stop offset="100%" stop-color="#000" />
-        </linearGradient>
-        <linearGradient id="silverG" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stop-color="#f0f0f0" />
-          <stop offset="40%" stop-color="#c0c0c0" />
-          <stop offset="100%" stop-color="#707070" />
-        </linearGradient>
-        <filter id="sh">
-          <feDropShadow dx="2" dy="3" stdDeviation="4" flood-color="#00000065" />
-        </filter>
-        <filter id="shS">
-          <feDropShadow dx="1" dy="2" stdDeviation="2.5" flood-color="#00000052" />
-        </filter>
-      </defs>
+    <div id="robot-svg-container">
+      <svg id="kuka-svg" xmlns="http://www.w3.org/2000/svg" viewBox="-300 -400 1160 1410" width="560" height="610"
+        overflow="visible">
+        <defs>
+          <linearGradient id="ogH" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#b83a00" />
+            <stop offset="28%" stop-color="#ff6000" />
+            <stop offset="62%" stop-color="#ff5000" />
+            <stop offset="100%" stop-color="#a83200" />
+          </linearGradient>
+          <linearGradient id="ogV" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#ff6e0e" />
+            <stop offset="42%" stop-color="#ff5800" />
+            <stop offset="100%" stop-color="#b83800" />
+          </linearGradient>
+          <linearGradient id="ogDR" x1="0%" y1="100%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#b63600" />
+            <stop offset="48%" stop-color="#ff5800" />
+            <stop offset="100%" stop-color="#ff6c0c" />
+          </linearGradient>
+          <linearGradient id="ogDL" x1="100%" y1="100%" x2="0%" y2="0%">
+            <stop offset="0%" stop-color="#b63600" />
+            <stop offset="48%" stop-color="#ff5200" />
+            <stop offset="100%" stop-color="#ff6808" />
+          </linearGradient>
+          <linearGradient id="cylG" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#050505" />
+            <stop offset="10%" stop-color="#1e1e1e" />
+            <stop offset="28%" stop-color="#383838" />
+            <stop offset="48%" stop-color="#464646" />
+            <stop offset="68%" stop-color="#2c2c2c" />
+            <stop offset="88%" stop-color="#121212" />
+            <stop offset="100%" stop-color="#040404" />
+          </linearGradient>
+          <radialGradient id="capG" cx="38%" cy="35%" r="62%">
+            <stop offset="0%" stop-color="#404040" />
+            <stop offset="55%" stop-color="#1c1c1c" />
+            <stop offset="100%" stop-color="#080808" />
+          </radialGradient>
+          <linearGradient id="nemaG" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#222" />
+            <stop offset="100%" stop-color="#060606" />
+          </linearGradient>
+          <linearGradient id="motorG" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#2a2a2a" />
+            <stop offset="20%" stop-color="#111" />
+            <stop offset="100%" stop-color="#000" />
+          </linearGradient>
+          <linearGradient id="silverG" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#f0f0f0" />
+            <stop offset="40%" stop-color="#c0c0c0" />
+            <stop offset="100%" stop-color="#707070" />
+          </linearGradient>
+          <filter id="sh">
+            <feDropShadow dx="2" dy="3" stdDeviation="4" flood-color="#00000065" />
+          </filter>
+          <filter id="shS">
+            <feDropShadow dx="1" dy="2" stdDeviation="2.5" flood-color="#00000052" />
+          </filter>
+        </defs>
 
-      <!-- ESLABON 0 – BASE FIJA -->
-      <g id="eslabon0">
-        <g filter="url(#sh)">
-          <rect x="118" y="556" width="120" height="30" fill="#a0a4a8" />
-          <rect x="118" y="583" width="120" height="3" fill="#808488" />
-          <rect x="90" y="556" width="28" height="34" rx="2" fill="#c44000" />
-          <rect x="90" y="586" width="28" height="4" rx="1" fill="#9e3000" />
-          <circle cx="104" cy="568" r="5" fill="#c0c0c0" fill-opacity=".9" stroke="#777" stroke-width="1" />
-          <circle cx="104" cy="568" r="2" fill="#222" />
-          <rect x="238" y="556" width="28" height="34" rx="2" fill="#c44000" />
-          <rect x="238" y="586" width="28" height="4" rx="1" fill="#9e3000" />
-          <circle cx="252" cy="568" r="5" fill="#c0c0c0" fill-opacity=".9" stroke="#777" stroke-width="1" />
-          <circle cx="252" cy="568" r="2" fill="#222" />
-        </g>
-        <g filter="url(#sh)">
-          <rect x="43" y="534" width="270" height="28" rx="4" fill="#9e3000" />
-          <rect x="43" y="531" width="270" height="26" rx="4" fill="url(#ogH)" />
-          <rect x="43" y="546" width="113" height="15" rx="3" fill="#c44000" />
-          <rect x="43" y="550" width="113" height="7" rx="2" fill="#a03000" />
-          <rect x="200" y="546" width="113" height="15" rx="3" fill="#c44000" />
-          <rect x="200" y="550" width="113" height="7" rx="2" fill="#a03000" />
-          <rect x="15" y="540" width="28" height="24" rx="3" fill="#c44000" />
-          <rect x="15" y="542" width="28" height="6" fill="#f06010" opacity=".4" />
-          <rect x="313" y="540" width="28" height="24" rx="3" fill="#c44000" />
-          <rect x="313" y="542" width="28" height="6" fill="#f06010" opacity=".4" />
-        </g>
-        <g filter="url(#sh)">
-          <rect x="157" y="540" width="42" height="55" rx="4" fill="#1c1c1c" />
-          <rect x="158" y="541" width="40" height="4" rx="2" fill="#3a3a3a" />
-        </g>
-        <circle cx="168" cy="548" r="3.2" fill="#c0c0c0" fill-opacity=".9" stroke="#999" stroke-width=".8" />
-        <circle cx="168" cy="548" r="1.5" fill="#111" />
-        <circle cx="188" cy="548" r="3.2" fill="#c0c0c0" fill-opacity=".9" stroke="#999" stroke-width=".8" />
-        <circle cx="188" cy="548" r="1.5" fill="#111" />
-        <circle cx="178" cy="582" r="5" fill="#c0c0c0" fill-opacity=".9" stroke="#777" stroke-width="1.2" />
-        <circle cx="178" cy="582" r="2.5" fill="#222" />
-        <rect x="177" y="589" width="2" height="6" fill="#111" />
-        <circle cx="65" cy="554" r="6" fill="#141414" />
-        <circle cx="65" cy="554" r="4.5" fill="#c0c0c0" fill-opacity=".8" stroke="#eeddcc" stroke-width=".8" />
-        <circle cx="65" cy="554" r="2" fill="#111" />
-        <circle cx="95" cy="554" r="6" fill="#141414" />
-        <circle cx="95" cy="554" r="4.5" fill="#c0c0c0" fill-opacity=".8" stroke="#eeddcc" stroke-width=".8" />
-        <circle cx="95" cy="554" r="2" fill="#111" />
-        <circle cx="261" cy="554" r="6" fill="#141414" />
-        <circle cx="261" cy="554" r="4.5" fill="#c0c0c0" fill-opacity=".8" stroke="#eeddcc" stroke-width=".8" />
-        <circle cx="261" cy="554" r="2" fill="#111" />
-        <circle cx="291" cy="554" r="6" fill="#141414" />
-        <circle cx="291" cy="554" r="4.5" fill="#c0c0c0" fill-opacity=".8" stroke="#eeddcc" stroke-width=".8" />
-        <circle cx="291" cy="554" r="2" fill="#111" />
-        <circle cx="29" cy="552" r="6.5" fill="#e0e0e0" filter="url(#shS)" />
-        <circle cx="29" cy="552" r="4" fill="#a0a0a0" stroke="#707070" stroke-width="1" />
-        <circle cx="29" cy="552" r="2" fill="#333" />
-        <circle cx="327" cy="552" r="6.5" fill="#e0e0e0" filter="url(#shS)" />
-        <circle cx="327" cy="552" r="4" fill="#a0a0a0" stroke="#707070" stroke-width="1" />
-        <circle cx="327" cy="552" r="2" fill="#333" />
-        <ellipse cx="178" cy="555" rx="130" ry="13" fill="#00000040" />
-        <rect x="50" y="517" width="256" height="38" rx="6" fill="#982e00" filter="url(#sh)" />
-        <rect x="50" y="512" width="256" height="38" rx="6" fill="url(#ogH)" />
-        <rect x="44" y="541" width="268" height="14" rx="5" fill="#ae3c00" />
-        <rect x="44" y="538" width="268" height="14" rx="5" fill="#c44400" />
-        <line x1="50" y1="530" x2="306" y2="530" stroke="#7c2200" stroke-width="1.6" />
-        <circle cx="62" cy="522" r="3.5" fill="#7a2800" stroke="#ff5400" stroke-width=".8" />
-        <circle cx="88" cy="515" r="3.5" fill="#7a2800" stroke="#ff5400" stroke-width=".8" />
-        <circle cx="124" cy="512" r="3.5" fill="#7a2800" stroke="#ff5400" stroke-width=".8" />
-        <circle cx="178" cy="511" r="3.5" fill="#7a2800" stroke="#ff5400" stroke-width=".8" />
-        <circle cx="232" cy="512" r="3.5" fill="#7a2800" stroke="#ff5400" stroke-width=".8" />
-        <circle cx="268" cy="515" r="3.5" fill="#7a2800" stroke="#ff5400" stroke-width=".8" />
-        <circle cx="294" cy="522" r="3.5" fill="#7a2800" stroke="#ff5400" stroke-width=".8" />
-        <circle cx="62" cy="540" r="3.5" fill="#7a2800" stroke="#ff5400" stroke-width=".8" />
-        <circle cx="294" cy="540" r="3.5" fill="#7a2800" stroke="#ff5400" stroke-width=".8" />
-        <rect x="88" y="497" width="180" height="18" rx="2" fill="#00000038" />
-        <rect x="88" y="506" width="180" height="8" rx="3" fill="#c44000" filter="url(#sh)" />
-        <rect x="88" y="505" width="180" height="4" rx="3" fill="url(#ogH)" />
-        <rect x="88" y="370" width="180" height="136" rx="5" fill="url(#cylG)" filter="url(#sh)" />
-        <rect x="88" y="370" width="22" height="136" rx="5" fill="#1c1c1c" opacity=".85" />
-        <line x1="96" y1="378" x2="96" y2="480" stroke="#3c3c3c" stroke-width="1.5" opacity=".6" />
-        <rect x="148" y="370" width="44" height="136" fill="#505050" opacity=".22" />
-        <rect x="243" y="370" width="25" height="136" rx="5" fill="#0a0a0a" opacity=".85" />
-        <circle cx="108" cy="518" r="3" fill="#0a0a0a" stroke="#505050" stroke-width=".8" />
-        <circle cx="148" cy="518" r="3" fill="#0a0a0a" stroke="#505050" stroke-width=".8" />
-        <circle cx="208" cy="518" r="3" fill="#0a0a0a" stroke="#505050" stroke-width=".8" />
-        <circle cx="248" cy="518" r="3" fill="#0a0a0a" stroke="#505050" stroke-width=".8" />
-        <rect x="88" y="365" width="180" height="10" rx="3" fill="#3c3c3c" />
-        <rect x="88" y="362" width="180" height="10" rx="3" fill="#2a2a2a" />
-        <circle cx="108" cy="372" r="4.5" fill="#b0b0b0" stroke="#777" stroke-width="1" />
-        <circle cx="108" cy="372" r="2" fill="#555" />
-        <circle cx="148" cy="372" r="4.5" fill="#b0b0b0" stroke="#777" stroke-width="1" />
-        <circle cx="148" cy="372" r="2" fill="#555" />
-        <circle cx="208" cy="372" r="4.5" fill="#b0b0b0" stroke="#777" stroke-width="1" />
-        <circle cx="208" cy="372" r="2" fill="#555" />
-        <circle cx="248" cy="372" r="4.5" fill="#b0b0b0" stroke="#777" stroke-width="1" />
-        <circle cx="248" cy="372" r="2" fill="#555" />
-        <rect x="12" y="478" width="56" height="42" rx="3" fill="#141414" filter="url(#sh)" />
-        <rect x="-8" y="488" width="24" height="22" rx="2" fill="#202020" />
-        <rect x="-6" y="490" width="18" height="18" rx="1" fill="#080808" />
-        <g fill="#070707">
-          <rect x="18" y="482" width="4" height="34" />
-          <rect x="28" y="482" width="4" height="34" />
-          <rect x="38" y="482" width="4" height="34" />
-          <rect x="48" y="482" width="4" height="34" />
-          <rect x="58" y="482" width="4" height="34" />
-        </g>
-        <path d="M 68 492 L 86 492 L 86 544 L 68 544 Z" fill="#962a00" filter="url(#sh)" />
-        <path d="M 66 488 L 84 488 L 84 540 L 66 540 Z" fill="url(#ogV)" />
-        <circle cx="75" cy="497" r="3" fill="#222" stroke="#ff5a0a" stroke-width=".7" />
-        <circle cx="75" cy="530" r="3" fill="#222" stroke="#ff5a0a" stroke-width=".7" />
-        <rect x="22" y="520" width="34" height="20" rx="2" fill="#1a1a1a" filter="url(#shS)" />
-        <rect x="24" y="522" width="30" height="16" rx="1" fill="#0e0e0e" />
-        <circle cx="30" cy="526" r="1.5" fill="#333" />
-        <circle cx="48" cy="526" r="1.5" fill="#333" />
-        <rect x="56" y="528" width="16" height="4" fill="#666" />
-        <rect x="46" y="356" width="264" height="6" rx="2" fill="#9e3000" filter="url(#sh)" />
-        <rect x="48" y="354" width="260" height="4" fill="#fc7422" />
-        <circle cx="65" cy="358" r="2.5" fill="#444" stroke="#888" stroke-width=".5" />
-        <circle cx="178" cy="358" r="2.5" fill="#444" stroke="#888" stroke-width=".5" />
-        <circle cx="291" cy="358" r="2.5" fill="#444" stroke="#888" stroke-width=".5" />
-        <g id="oreja_posterior" filter="url(#sh)">
-          <path d="M 210,356 L 270,356 C 300,356 353,320 365,270 C 373,205 330,195 308,195 C 280,195 240,245 210,270 Z"
-            fill="#c44000" />
-          <path d="M 205,356 L 245,356 C 280,356 345,320 350,270 C 373,205 330,195 308,195 C 285,200 245,250 215,275 Z"
-            fill="url(#ogDR)" />
-        </g>
-        <g id="motor_interno" filter="url(#sh)">
-          <rect x="147" y="240" width="62" height="116" rx="3" fill="#141414" />
-          <rect x="149" y="242" width="58" height="112" rx="2" fill="#0e0e0e" />
-          <rect x="149" y="242" width="10" height="112" fill="#2c2c2c" opacity=".7" />
-          <line x1="154" y1="242" x2="154" y2="354" stroke="#4a4a4a" stroke-width="1" />
-          <rect x="149" y="260" width="58" height="3.5" fill="#080808" />
-          <rect x="149" y="280" width="58" height="3.5" fill="#080808" />
-          <rect x="149" y="300" width="58" height="3.5" fill="#080808" />
-          <rect x="149" y="320" width="58" height="3.5" fill="#080808" />
-        </g>
-        <g id="conectores_motor" filter="url(#shS)">
-          <rect x="126" y="255" width="22" height="20" rx="2" fill="#181818" />
-          <rect x="118" y="258" width="8" height="5" fill="#0b0b0b" rx="1" />
-          <rect x="118" y="267" width="8" height="5" fill="#0b0b0b" rx="1" />
-          <rect x="132" y="292" width="16" height="16" rx="2" fill="#181818" />
-          <rect x="124" y="297" width="8" height="5" fill="#0b0b0b" rx="1" />
-        </g>
-        <path d="M 102,356 L 210,356 C 210,310 215,285 220,265 C 190,295 140,320 102,320 Z" fill="#b03600"
-          filter="url(#sh)" />
-        <path d="M 102,356 L 205,356 C 205,310 210,290 215,270 C 190,295 140,320 102,320 Z" fill="url(#ogH)"
-          opacity=".8" />
-        <path d="M 102,356 L 112,356 C 112,340 110,325 102,320 Z" fill="#ff7e28" opacity=".25" />
-        <path d="M 102,320 C 140,320 190,290 220,265" stroke="#ff7010" stroke-width="3" fill="none"
-          stroke-linecap="round" />
-        <path d="M 102,322 C 140,322 190,292 218,267" stroke="#7a2800" stroke-width="1.5" fill="none"
-          stroke-linecap="round" />
-      </g>
-
-      <!-- ESLABON 2 – ANTEBRAZO + MUÑECA + EFECTOR -->
-      <g id="eslabon2" transform="translate(119,93) rotate(-12) translate(-215,-300)">
-        <g filter="url(#sh)">
-          <path d="M 215,265 L 165,265 C 150,265 145,268 145,278 L 145,350 C 145,360 150,365 165,390 L 230,365 Z"
-            fill="url(#ogV)" />
-          <g transform="translate(86,268)">
-            <rect x="0" y="0" width="70" height="34" rx="2" fill="url(#motorG)" stroke="#333" stroke-width="1" />
-            <rect x="60" y="2" width="6" height="20" fill="#181818" />
-            <line x1="12" y1="0" x2="12" y2="24" stroke="#000" stroke-width="2" />
-            <line x1="24" y1="0" x2="24" y2="24" stroke="#000" stroke-width="2" />
-            <line x1="36" y1="0" x2="36" y2="24" stroke="#000" stroke-width="2" />
-            <line x1="48" y1="0" x2="48" y2="24" stroke="#000" stroke-width="2" />
-            <rect x="5" y="8" width="50" height="8" rx="1" fill="#000" />
-            <rect x="10" y="10" width="4" height="4" fill="#0ca131" />
+        <!-- ESLABON 0 – BASE FIJA -->
+        <g id="eslabon0">
+          <g filter="url(#sh)">
+            <rect x="118" y="556" width="120" height="30" fill="#a0a4a8" />
+            <rect x="118" y="583" width="120" height="3" fill="#808488" />
+            <rect x="90" y="556" width="28" height="34" rx="2" fill="#c44000" />
+            <rect x="90" y="586" width="28" height="4" rx="1" fill="#9e3000" />
+            <circle cx="104" cy="568" r="5" fill="#c0c0c0" fill-opacity=".9" stroke="#777" stroke-width="1" />
+            <circle cx="104" cy="568" r="2" fill="#222" />
+            <rect x="238" y="556" width="28" height="34" rx="2" fill="#c44000" />
+            <rect x="238" y="586" width="28" height="4" rx="1" fill="#9e3000" />
+            <circle cx="252" cy="568" r="5" fill="#c0c0c0" fill-opacity=".9" stroke="#777" stroke-width="1" />
+            <circle cx="252" cy="568" r="2" fill="#222" />
           </g>
-          <g transform="translate(86,312)">
-            <rect x="0" y="0" width="70" height="34" rx="2" fill="url(#motorG)" stroke="#333" stroke-width="1" />
-            <rect x="60" y="2" width="6" height="20" fill="#181818" />
-            <line x1="12" y1="0" x2="12" y2="24" stroke="#000" stroke-width="2" />
-            <line x1="24" y1="0" x2="24" y2="24" stroke="#000" stroke-width="2" />
-            <line x1="36" y1="0" x2="36" y2="24" stroke="#000" stroke-width="2" />
-            <line x1="48" y1="0" x2="48" y2="24" stroke="#000" stroke-width="2" />
-            <rect x="5" y="8" width="50" height="8" rx="1" fill="#000" />
-            <rect x="10" y="10" width="4" height="4" fill="#fa0606" />
+          <g filter="url(#sh)">
+            <rect x="43" y="534" width="270" height="28" rx="4" fill="#9e3000" />
+            <rect x="43" y="531" width="270" height="26" rx="4" fill="url(#ogH)" />
+            <rect x="43" y="546" width="113" height="15" rx="3" fill="#c44000" />
+            <rect x="43" y="550" width="113" height="7" rx="2" fill="#a03000" />
+            <rect x="200" y="546" width="113" height="15" rx="3" fill="#c44000" />
+            <rect x="200" y="550" width="113" height="7" rx="2" fill="#a03000" />
+            <rect x="15" y="540" width="28" height="24" rx="3" fill="#c44000" />
+            <rect x="15" y="542" width="28" height="6" fill="#f06010" opacity=".4" />
+            <rect x="313" y="540" width="28" height="24" rx="3" fill="#c44000" />
+            <rect x="313" y="542" width="28" height="6" fill="#f06010" opacity=".4" />
           </g>
-          <g transform="translate(100,357)">
-            <rect x="0" y="0" width="70" height="34" rx="2" fill="url(#motorG)" stroke="#333" stroke-width="1" />
-            <rect x="60" y="2" width="6" height="20" fill="#181818" />
-            <line x1="12" y1="0" x2="12" y2="24" stroke="#000" stroke-width="2" />
-            <line x1="24" y1="0" x2="24" y2="24" stroke="#000" stroke-width="2" />
-            <line x1="36" y1="0" x2="36" y2="24" stroke="#000" stroke-width="2" />
-            <line x1="48" y1="0" x2="48" y2="24" stroke="#000" stroke-width="2" />
-            <rect x="5" y="8" width="50" height="8" rx="1" fill="#000" />
-            <rect x="10" y="10" width="4" height="4" fill="#fa0606" />
+          <g filter="url(#sh)">
+            <rect x="157" y="540" width="42" height="55" rx="4" fill="#1c1c1c" />
+            <rect x="158" y="541" width="40" height="4" rx="2" fill="#3a3a3a" />
           </g>
-        </g>
-        <g filter="url(#sh)">
-          <path d="M 215,257 C 250,257 265,280 344,280 L 344,320 C 265,320 250,343 215,343 A 43 43 0 0 1 215,257 Z"
-            fill="url(#ogV)" />
-          <path d="M 215,257 C 250,257 265,280 344,280 L 344,285 C 265,285 250,266 215,266 Z" fill="#ff7010"
-            opacity=".4" />
-          <path d="M 344,312 L 344,320 C 265,320 250,343 215,343 C 250,343 265,312 344,312 Z" fill="#782400"
-            opacity=".6" />
-          <path d="M 270,300 L 335,300" stroke="#a83000" stroke-width="4.5" fill="none" opacity=".5" />
-          <path d="M 270,306 L 335,306" stroke="#a83000" stroke-width="2" fill="none" opacity=".5" />
-          <circle cx="215" cy="300" r="43" fill="#c44000" />
-          <circle cx="215" cy="300" r="41" fill="url(#ogH)" opacity=".8" />
-          <g transform="translate(215,300)">
-            <circle cx="36" cy="0" r="2.5" fill="#e0e0e0" stroke="#777" />
-            <circle cx="31.2" cy="18" r="2.5" fill="#e0e0e0" stroke="#777" />
-            <circle cx="18" cy="31.2" r="2.5" fill="#e0e0e0" stroke="#777" />
-            <circle cx="0" cy="36" r="2.5" fill="#e0e0e0" stroke="#777" />
-            <circle cx="-18" cy="31.2" r="2.5" fill="#e0e0e0" stroke="#777" />
-            <circle cx="-31.2" cy="18" r="2.5" fill="#e0e0e0" stroke="#777" />
-            <circle cx="-36" cy="0" r="2.5" fill="#e0e0e0" stroke="#777" />
-            <circle cx="-31.2" cy="-18" r="2.5" fill="#e0e0e0" stroke="#777" />
-            <circle cx="-18" cy="-31.2" r="2.5" fill="#e0e0e0" stroke="#777" />
-            <circle cx="0" cy="-36" r="2.5" fill="#e0e0e0" stroke="#777" />
-            <circle cx="18" cy="-31.2" r="2.5" fill="#e0e0e0" stroke="#777" />
-            <circle cx="31.2" cy="-18" r="2.5" fill="#e0e0e0" stroke="#777" />
+          <circle cx="168" cy="548" r="3.2" fill="#c0c0c0" fill-opacity=".9" stroke="#999" stroke-width=".8" />
+          <circle cx="168" cy="548" r="1.5" fill="#111" />
+          <circle cx="188" cy="548" r="3.2" fill="#c0c0c0" fill-opacity=".9" stroke="#999" stroke-width=".8" />
+          <circle cx="188" cy="548" r="1.5" fill="#111" />
+          <circle cx="178" cy="582" r="5" fill="#c0c0c0" fill-opacity=".9" stroke="#777" stroke-width="1.2" />
+          <circle cx="178" cy="582" r="2.5" fill="#222" />
+          <rect x="177" y="589" width="2" height="6" fill="#111" />
+          <circle cx="65" cy="554" r="6" fill="#141414" />
+          <circle cx="65" cy="554" r="4.5" fill="#c0c0c0" fill-opacity=".8" stroke="#eeddcc" stroke-width=".8" />
+          <circle cx="65" cy="554" r="2" fill="#111" />
+          <circle cx="95" cy="554" r="6" fill="#141414" />
+          <circle cx="95" cy="554" r="4.5" fill="#c0c0c0" fill-opacity=".8" stroke="#eeddcc" stroke-width=".8" />
+          <circle cx="95" cy="554" r="2" fill="#111" />
+          <circle cx="261" cy="554" r="6" fill="#141414" />
+          <circle cx="261" cy="554" r="4.5" fill="#c0c0c0" fill-opacity=".8" stroke="#eeddcc" stroke-width=".8" />
+          <circle cx="261" cy="554" r="2" fill="#111" />
+          <circle cx="291" cy="554" r="6" fill="#141414" />
+          <circle cx="291" cy="554" r="4.5" fill="#c0c0c0" fill-opacity=".8" stroke="#eeddcc" stroke-width=".8" />
+          <circle cx="291" cy="554" r="2" fill="#111" />
+          <circle cx="29" cy="552" r="6.5" fill="#e0e0e0" filter="url(#shS)" />
+          <circle cx="29" cy="552" r="4" fill="#a0a0a0" stroke="#707070" stroke-width="1" />
+          <circle cx="29" cy="552" r="2" fill="#333" />
+          <circle cx="327" cy="552" r="6.5" fill="#e0e0e0" filter="url(#shS)" />
+          <circle cx="327" cy="552" r="4" fill="#a0a0a0" stroke="#707070" stroke-width="1" />
+          <circle cx="327" cy="552" r="2" fill="#333" />
+          <ellipse cx="178" cy="555" rx="130" ry="13" fill="#00000040" />
+          <rect x="50" y="517" width="256" height="38" rx="6" fill="#982e00" filter="url(#sh)" />
+          <rect x="50" y="512" width="256" height="38" rx="6" fill="url(#ogH)" />
+          <rect x="44" y="541" width="268" height="14" rx="5" fill="#ae3c00" />
+          <rect x="44" y="538" width="268" height="14" rx="5" fill="#c44400" />
+          <line x1="50" y1="530" x2="306" y2="530" stroke="#7c2200" stroke-width="1.6" />
+          <circle cx="62" cy="522" r="3.5" fill="#7a2800" stroke="#ff5400" stroke-width=".8" />
+          <circle cx="88" cy="515" r="3.5" fill="#7a2800" stroke="#ff5400" stroke-width=".8" />
+          <circle cx="124" cy="512" r="3.5" fill="#7a2800" stroke="#ff5400" stroke-width=".8" />
+          <circle cx="178" cy="511" r="3.5" fill="#7a2800" stroke="#ff5400" stroke-width=".8" />
+          <circle cx="232" cy="512" r="3.5" fill="#7a2800" stroke="#ff5400" stroke-width=".8" />
+          <circle cx="268" cy="515" r="3.5" fill="#7a2800" stroke="#ff5400" stroke-width=".8" />
+          <circle cx="294" cy="522" r="3.5" fill="#7a2800" stroke="#ff5400" stroke-width=".8" />
+          <circle cx="62" cy="540" r="3.5" fill="#7a2800" stroke="#ff5400" stroke-width=".8" />
+          <circle cx="294" cy="540" r="3.5" fill="#7a2800" stroke="#ff5400" stroke-width=".8" />
+          <rect x="88" y="497" width="180" height="18" rx="2" fill="#00000038" />
+          <rect x="88" y="506" width="180" height="8" rx="3" fill="#c44000" filter="url(#sh)" />
+          <rect x="88" y="505" width="180" height="4" rx="3" fill="url(#ogH)" />
+          <rect x="88" y="370" width="180" height="136" rx="5" fill="url(#cylG)" filter="url(#sh)" />
+          <rect x="88" y="370" width="22" height="136" rx="5" fill="#1c1c1c" opacity=".85" />
+          <line x1="96" y1="378" x2="96" y2="480" stroke="#3c3c3c" stroke-width="1.5" opacity=".6" />
+          <rect x="148" y="370" width="44" height="136" fill="#505050" opacity=".22" />
+          <rect x="243" y="370" width="25" height="136" rx="5" fill="#0a0a0a" opacity=".85" />
+          <circle cx="108" cy="518" r="3" fill="#0a0a0a" stroke="#505050" stroke-width=".8" />
+          <circle cx="148" cy="518" r="3" fill="#0a0a0a" stroke="#505050" stroke-width=".8" />
+          <circle cx="208" cy="518" r="3" fill="#0a0a0a" stroke="#505050" stroke-width=".8" />
+          <circle cx="248" cy="518" r="3" fill="#0a0a0a" stroke="#505050" stroke-width=".8" />
+          <rect x="88" y="365" width="180" height="10" rx="3" fill="#3c3c3c" />
+          <rect x="88" y="362" width="180" height="10" rx="3" fill="#2a2a2a" />
+          <circle cx="108" cy="372" r="4.5" fill="#b0b0b0" stroke="#777" stroke-width="1" />
+          <circle cx="108" cy="372" r="2" fill="#555" />
+          <circle cx="148" cy="372" r="4.5" fill="#b0b0b0" stroke="#777" stroke-width="1" />
+          <circle cx="148" cy="372" r="2" fill="#555" />
+          <circle cx="208" cy="372" r="4.5" fill="#b0b0b0" stroke="#777" stroke-width="1" />
+          <circle cx="208" cy="372" r="2" fill="#555" />
+          <circle cx="248" cy="372" r="4.5" fill="#b0b0b0" stroke="#777" stroke-width="1" />
+          <circle cx="248" cy="372" r="2" fill="#555" />
+          <rect x="12" y="478" width="56" height="42" rx="3" fill="#141414" filter="url(#sh)" />
+          <rect x="-8" y="488" width="24" height="22" rx="2" fill="#202020" />
+          <rect x="-6" y="490" width="18" height="18" rx="1" fill="#080808" />
+          <g fill="#070707">
+            <rect x="18" y="482" width="4" height="34" />
+            <rect x="28" y="482" width="4" height="34" />
+            <rect x="38" y="482" width="4" height="34" />
+            <rect x="48" y="482" width="4" height="34" />
+            <rect x="58" y="482" width="4" height="34" />
           </g>
-          <circle cx="215" cy="300" r="28" fill="#a03000" stroke="#802000" stroke-width="1" />
-          <circle cx="215" cy="300" r="28" fill="#000" opacity=".15" />
-          <circle cx="215" cy="300" r="14" fill="#a03000" />
-          <circle cx="215" cy="300" r="14" fill="#fff" opacity=".1" />
-          <g transform="translate(265,275) rotate(-10)">
-            <ellipse cx="0" cy="0" rx="14" ry="7" fill="none" stroke="#050505" stroke-width="4.5" />
-            <ellipse cx="0" cy="0" rx="12" ry="5" fill="#180400" />
-            <path d="M -12,0 A 12 5 0 0 1 12,0 A 10 3 0 0 0 -12,0 Z" fill="#000" opacity=".8" />
+          <path d="M 68 492 L 86 492 L 86 544 L 68 544 Z" fill="#962a00" filter="url(#sh)" />
+          <path d="M 66 488 L 84 488 L 84 540 L 66 540 Z" fill="url(#ogV)" />
+          <circle cx="75" cy="497" r="3" fill="#222" stroke="#ff5a0a" stroke-width=".7" />
+          <circle cx="75" cy="530" r="3" fill="#222" stroke="#ff5a0a" stroke-width=".7" />
+          <rect x="22" y="520" width="34" height="20" rx="2" fill="#1a1a1a" filter="url(#shS)" />
+          <rect x="24" y="522" width="30" height="16" rx="1" fill="#0e0e0e" />
+          <circle cx="30" cy="526" r="1.5" fill="#333" />
+          <circle cx="48" cy="526" r="1.5" fill="#333" />
+          <rect x="56" y="528" width="16" height="4" fill="#666" />
+          <rect x="46" y="356" width="264" height="6" rx="2" fill="#9e3000" filter="url(#sh)" />
+          <rect x="48" y="354" width="260" height="4" fill="#fc7422" />
+          <circle cx="65" cy="358" r="2.5" fill="#444" stroke="#888" stroke-width=".5" />
+          <circle cx="178" cy="358" r="2.5" fill="#444" stroke="#888" stroke-width=".5" />
+          <circle cx="291" cy="358" r="2.5" fill="#444" stroke="#888" stroke-width=".5" />
+          <g id="oreja_posterior" filter="url(#sh)">
+            <path
+              d="M 210,356 L 270,356 C 300,356 353,320 365,270 C 373,205 330,195 308,195 C 280,195 240,245 210,270 Z"
+              fill="#c44000" />
+            <path
+              d="M 205,356 L 245,356 C 280,356 345,320 350,270 C 373,205 330,195 308,195 C 285,200 245,250 215,275 Z"
+              fill="url(#ogDR)" />
           </g>
-        </g>
-        <g filter="url(#sh)">
-          <path d="M 344,280 L 365,280 L 365,320 L 344,320 Z" fill="url(#silverG)" />
-          <rect x="344" y="280" width="6" height="40" fill="#ddd" />
-          <rect x="360" y="280" width="5" height="40" fill="#777" />
-          <line x1="352" y1="280" x2="352" y2="320" stroke="#999" stroke-width="1.5" />
-          <polygon points="365,280 380,285 380,315 365,320" fill="#a0a0a0" />
-          <polygon points="365,280 380,285 380,295 365,290" fill="#f0f0f0" />
-          <polygon points="365,320 380,315 380,305 365,310" fill="#555" />
-          <rect x="380" y="285" width="6" height="30" fill="#222" />
-          <path d="M 386,285 L 430,288 L 430,312 L 386,315 Z" fill="url(#silverG)" />
-          <polygon points="386,285 430,288 430,292 386,289" fill="#eee" />
-          <polygon points="386,315 430,312 430,306 386,309" fill="#666" />
-          <line x1="406" y1="287" x2="406" y2="313" stroke="#999" stroke-width="1.5" />
-          <polygon points="430,288 433,288 433,312 430,312" fill="#111" />
-          <path d="M 433,288 C 445,268 460,268 495,294 L 495,306 C 460,332 445,332 433,312 Z" fill="url(#silverG)" />
-          <path d="M 433,288 C 445,268 460,268 495,294 L 495,298 C 460,275 445,280 433,295 Z" fill="#fff"
+          <g id="motor_interno" filter="url(#sh)">
+            <rect x="147" y="240" width="62" height="116" rx="3" fill="#141414" />
+            <rect x="149" y="242" width="58" height="112" rx="2" fill="#0e0e0e" />
+            <rect x="149" y="242" width="10" height="112" fill="#2c2c2c" opacity=".7" />
+            <line x1="154" y1="242" x2="154" y2="354" stroke="#4a4a4a" stroke-width="1" />
+            <rect x="149" y="260" width="58" height="3.5" fill="#080808" />
+            <rect x="149" y="280" width="58" height="3.5" fill="#080808" />
+            <rect x="149" y="300" width="58" height="3.5" fill="#080808" />
+            <rect x="149" y="320" width="58" height="3.5" fill="#080808" />
+          </g>
+          <g id="conectores_motor" filter="url(#shS)">
+            <rect x="126" y="255" width="22" height="20" rx="2" fill="#181818" />
+            <rect x="118" y="258" width="8" height="5" fill="#0b0b0b" rx="1" />
+            <rect x="118" y="267" width="8" height="5" fill="#0b0b0b" rx="1" />
+            <rect x="132" y="292" width="16" height="16" rx="2" fill="#181818" />
+            <rect x="124" y="297" width="8" height="5" fill="#0b0b0b" rx="1" />
+          </g>
+          <path d="M 102,356 L 210,356 C 210,310 215,285 220,265 C 190,295 140,320 102,320 Z" fill="#b03600"
+            filter="url(#sh)" />
+          <path d="M 102,356 L 205,356 C 205,310 210,290 215,270 C 190,295 140,320 102,320 Z" fill="url(#ogH)"
             opacity=".8" />
-          <path d="M 434,312 C 445,332 460,332 495,306 L 495,302 C 460,324 445,316 434,304 Z" fill="#444"
-            opacity=".25" />
-          <g transform="translate(460,303) scale(-1,1)">
-            <text x="0" y="0" font-family="Arial Black,Impact,sans-serif" font-size="10" font-weight="900" fill="#111"
-              text-anchor="middle" letter-spacing="1">KUKA</text>
-          </g>
-          <rect x="495" y="294" width="4" height="12" fill="#000" />
-          <rect x="499" y="297" width="2" height="6" fill="#444" />
+          <path d="M 102,356 L 112,356 C 112,340 110,325 102,320 Z" fill="#ff7e28" opacity=".25" />
+          <path d="M 102,320 C 140,320 190,290 220,265" stroke="#ff7010" stroke-width="3" fill="none"
+            stroke-linecap="round" />
+          <path d="M 102,322 C 140,322 190,292 218,267" stroke="#7a2800" stroke-width="1.5" fill="none"
+            stroke-linecap="round" />
         </g>
-      </g>
 
-      <!-- ESLABON 1 – BRAZO SUPERIOR -->
-      <g id="eslabon1" transform="translate(308,247) rotate(-140.826)">
-        <g filter="url(#sh)">
-          <path
-            d="M 0,-50 C 40,-50 60,-36 90,-36 L 154,-36 C 184,-36 204,-40 244,-40 A 38 38 0 0 1 244,42 C 204,42 184,36 154,36 L 90,36 C 60,36 40,50 0,50 A 45 45 0 0 1 0,-50 Z"
-            fill="#782400" opacity=".53" transform="translate(1,4)" />
-          <path
-            d="M 0,-45 C 40,-45 60,-25 90,-25 L 154,-25 C 184,-25 204,-38 244,-38 A 38 38 0 0 1 244,38 C 204,38 184,32 154,32 L 90,32 C 60,32 40,45 0,45 A 45 45 0 0 1 0,-45 Z"
-            fill="url(#ogV)" />
-          <path
-            d="M 0,-45 C 40,-45 60,-25 90,-25 L 154,-25 C 184,-25 204,-38 244,-38 L 244,-34 C 204,-34 184,-28 154,-28 L 90,-28 C 60,-28 40,-40 0,-40 Z"
-            fill="#ff7010" opacity=".4" />
-          <g>
-            <circle cx="0" cy="0" r="45" fill="#3c3c3c" stroke="#555" stroke-width="2" />
-            <circle cx="0" cy="0" r="34" fill="#2a2a2a" />
-            <circle cx="0" cy="0" r="18" fill="#1a1a1a" stroke="#444" stroke-width="1.5" />
-            <circle cx="0" cy="-35" r="3" fill="#a0a0a0" stroke="#707070" stroke-width=".8" />
-            <circle cx="25" cy="-25" r="3" fill="#a0a0a0" stroke="#707070" stroke-width=".8" />
-            <circle cx="35" cy="0" r="3" fill="#a0a0a0" stroke="#707070" stroke-width=".8" />
-            <circle cx="25" cy="25" r="3" fill="#a0a0a0" stroke="#707070" stroke-width=".8" />
-            <circle cx="0" cy="35" r="3" fill="#a0a0a0" stroke="#707070" stroke-width=".8" />
-            <circle cx="-25" cy="25" r="3" fill="#a0a0a0" stroke="#707070" stroke-width=".8" />
-            <circle cx="-35" cy="0" r="3" fill="#a0a0a0" stroke="#707070" stroke-width=".8" />
-            <circle cx="-25" cy="-25" r="3" fill="#a0a0a0" stroke="#707070" stroke-width=".8" />
+        <!-- ESLABON 2 – ANTEBRAZO + MUÑECA + EFECTOR -->
+        <g id="eslabon2" transform="translate(119,93) rotate(-12) translate(-215,-300)">
+          <g filter="url(#sh)">
+            <path d="M 215,265 L 165,265 C 150,265 145,268 145,278 L 145,350 C 145,360 150,365 165,390 L 230,365 Z"
+              fill="url(#ogV)" />
+            <g transform="translate(86,268)">
+              <rect x="0" y="0" width="70" height="34" rx="2" fill="url(#motorG)" stroke="#333" stroke-width="1" />
+              <rect x="60" y="2" width="6" height="20" fill="#181818" />
+              <line x1="12" y1="0" x2="12" y2="24" stroke="#000" stroke-width="2" />
+              <line x1="24" y1="0" x2="24" y2="24" stroke="#000" stroke-width="2" />
+              <line x1="36" y1="0" x2="36" y2="24" stroke="#000" stroke-width="2" />
+              <line x1="48" y1="0" x2="48" y2="24" stroke="#000" stroke-width="2" />
+              <rect x="5" y="8" width="50" height="8" rx="1" fill="#000" />
+              <rect x="10" y="10" width="4" height="4" fill="#0ca131" />
+            </g>
+            <g transform="translate(86,312)">
+              <rect x="0" y="0" width="70" height="34" rx="2" fill="url(#motorG)" stroke="#333" stroke-width="1" />
+              <rect x="60" y="2" width="6" height="20" fill="#181818" />
+              <line x1="12" y1="0" x2="12" y2="24" stroke="#000" stroke-width="2" />
+              <line x1="24" y1="0" x2="24" y2="24" stroke="#000" stroke-width="2" />
+              <line x1="36" y1="0" x2="36" y2="24" stroke="#000" stroke-width="2" />
+              <line x1="48" y1="0" x2="48" y2="24" stroke="#000" stroke-width="2" />
+              <rect x="5" y="8" width="50" height="8" rx="1" fill="#000" />
+              <rect x="10" y="10" width="4" height="4" fill="#fa0606" />
+            </g>
+            <g transform="translate(100,357)">
+              <rect x="0" y="0" width="70" height="34" rx="2" fill="url(#motorG)" stroke="#333" stroke-width="1" />
+              <rect x="60" y="2" width="6" height="20" fill="#181818" />
+              <line x1="12" y1="0" x2="12" y2="24" stroke="#000" stroke-width="2" />
+              <line x1="24" y1="0" x2="24" y2="24" stroke="#000" stroke-width="2" />
+              <line x1="36" y1="0" x2="36" y2="24" stroke="#000" stroke-width="2" />
+              <line x1="48" y1="0" x2="48" y2="24" stroke="#000" stroke-width="2" />
+              <rect x="5" y="8" width="50" height="8" rx="1" fill="#000" />
+              <rect x="10" y="10" width="4" height="4" fill="#fa0606" />
+            </g>
           </g>
-          <g transform="translate(244,0)">
-            <circle cx="0" cy="0" r="38" fill="#3c3c3c" stroke="#555" stroke-width="2" />
-            <circle cx="0" cy="0" r="30" fill="#2a2a2a" />
-            <circle cx="0" cy="0" r="14" fill="#1a1a1a" stroke="#444" stroke-width="1.5" />
-            <circle cx="0" cy="-30" r="2.5" fill="#a0a0a0" stroke="#707070" stroke-width=".8" />
-            <circle cx="21" cy="-21" r="2.5" fill="#a0a0a0" stroke="#707070" stroke-width=".8" />
-            <circle cx="30" cy="0" r="2.5" fill="#a0a0a0" stroke="#707070" stroke-width=".8" />
-            <circle cx="21" cy="21" r="2.5" fill="#a0a0a0" stroke="#707070" stroke-width=".8" />
-            <circle cx="0" cy="30" r="2.5" fill="#a0a0a0" stroke="#707070" stroke-width=".8" />
-            <circle cx="-21" cy="21" r="2.5" fill="#a0a0a0" stroke="#707070" stroke-width=".8" />
-            <circle cx="-30" cy="0" r="2.5" fill="#a0a0a0" stroke="#707070" stroke-width=".8" />
-            <circle cx="-21" cy="-21" r="2.5" fill="#a0a0a0" stroke="#707070" stroke-width=".8" />
+          <g filter="url(#sh)">
+            <path d="M 215,257 C 250,257 265,280 344,280 L 344,320 C 265,320 250,343 215,343 A 43 43 0 0 1 215,257 Z"
+              fill="url(#ogV)" />
+            <path d="M 215,257 C 250,257 265,280 344,280 L 344,285 C 265,285 250,266 215,266 Z" fill="#ff7010"
+              opacity=".4" />
+            <path d="M 344,312 L 344,320 C 265,320 250,343 215,343 C 250,343 265,312 344,312 Z" fill="#782400"
+              opacity=".6" />
+            <path d="M 270,300 L 335,300" stroke="#a83000" stroke-width="4.5" fill="none" opacity=".5" />
+            <path d="M 270,306 L 335,306" stroke="#a83000" stroke-width="2" fill="none" opacity=".5" />
+            <circle cx="215" cy="300" r="43" fill="#c44000" />
+            <circle cx="215" cy="300" r="41" fill="url(#ogH)" opacity=".8" />
+            <g transform="translate(215,300)">
+              <circle cx="36" cy="0" r="2.5" fill="#e0e0e0" stroke="#777" />
+              <circle cx="31.2" cy="18" r="2.5" fill="#e0e0e0" stroke="#777" />
+              <circle cx="18" cy="31.2" r="2.5" fill="#e0e0e0" stroke="#777" />
+              <circle cx="0" cy="36" r="2.5" fill="#e0e0e0" stroke="#777" />
+              <circle cx="-18" cy="31.2" r="2.5" fill="#e0e0e0" stroke="#777" />
+              <circle cx="-31.2" cy="18" r="2.5" fill="#e0e0e0" stroke="#777" />
+              <circle cx="-36" cy="0" r="2.5" fill="#e0e0e0" stroke="#777" />
+              <circle cx="-31.2" cy="-18" r="2.5" fill="#e0e0e0" stroke="#777" />
+              <circle cx="-18" cy="-31.2" r="2.5" fill="#e0e0e0" stroke="#777" />
+              <circle cx="0" cy="-36" r="2.5" fill="#e0e0e0" stroke="#777" />
+              <circle cx="18" cy="-31.2" r="2.5" fill="#e0e0e0" stroke="#777" />
+              <circle cx="31.2" cy="-18" r="2.5" fill="#e0e0e0" stroke="#777" />
+            </g>
+            <circle cx="215" cy="300" r="28" fill="#a03000" stroke="#802000" stroke-width="1" />
+            <circle cx="215" cy="300" r="28" fill="#000" opacity=".15" />
+            <circle cx="215" cy="300" r="14" fill="#a03000" />
+            <circle cx="215" cy="300" r="14" fill="#fff" opacity=".1" />
+            <g transform="translate(265,275) rotate(-10)">
+              <ellipse cx="0" cy="0" rx="14" ry="7" fill="none" stroke="#050505" stroke-width="4.5" />
+              <ellipse cx="0" cy="0" rx="12" ry="5" fill="#180400" />
+              <path d="M -12,0 A 12 5 0 0 1 12,0 A 10 3 0 0 0 -12,0 Z" fill="#000" opacity=".8" />
+            </g>
           </g>
-          <g transform="translate(122,0) scale(-1,1) rotate(-90)">
-            <rect x="-28" y="32" width="50" height="26" rx="3" fill="#111" stroke="#222" stroke-width="1" />
-            <text x="-3" y="50" font-family="Arial Black,Impact,sans-serif" font-size="16" font-weight="900"
-              fill="#ff7010" text-anchor="middle" letter-spacing="2">CÉX</text>
+          <g filter="url(#sh)">
+            <path d="M 344,280 L 365,280 L 365,320 L 344,320 Z" fill="url(#silverG)" />
+            <rect x="344" y="280" width="6" height="40" fill="#ddd" />
+            <rect x="360" y="280" width="5" height="40" fill="#777" />
+            <line x1="352" y1="280" x2="352" y2="320" stroke="#999" stroke-width="1.5" />
+            <polygon points="365,280 380,285 380,315 365,320" fill="#a0a0a0" />
+            <polygon points="365,280 380,285 380,295 365,290" fill="#f0f0f0" />
+            <polygon points="365,320 380,315 380,305 365,310" fill="#555" />
+            <rect x="380" y="285" width="6" height="30" fill="#222" />
+            <path d="M 386,285 L 430,288 L 430,312 L 386,315 Z" fill="url(#silverG)" />
+            <polygon points="386,285 430,288 430,292 386,289" fill="#eee" />
+            <polygon points="386,315 430,312 430,306 386,309" fill="#666" />
+            <line x1="406" y1="287" x2="406" y2="313" stroke="#999" stroke-width="1.5" />
+            <polygon points="430,288 433,288 433,312 430,312" fill="#111" />
+            <path d="M 433,288 C 445,268 460,268 495,294 L 495,306 C 460,332 445,332 433,312 Z" fill="url(#silverG)" />
+            <path d="M 433,288 C 445,268 460,268 495,294 L 495,298 C 460,275 445,280 433,295 Z" fill="#fff"
+              opacity=".8" />
+            <path d="M 434,312 C 445,332 460,332 495,306 L 495,302 C 460,324 445,316 434,304 Z" fill="#444"
+              opacity=".25" />
+            <g transform="translate(460,303) scale(-1,1)">
+              <text x="0" y="0" font-family="Arial Black,Impact,sans-serif" font-size="10" font-weight="900" fill="#111"
+                text-anchor="middle" letter-spacing="1">KUKA</text>
+            </g>
+            <rect x="495" y="294" width="4" height="12" fill="#000" />
+            <rect x="499" y="297" width="2" height="6" fill="#444" />
           </g>
         </g>
-      </g>
 
-      <!-- CABLES -->
-      <g id="cables">
-        <path d="M 118,260 C 50,260 50,360 140,350 C 200,340 250,320 290,245" stroke="#0e0e0e" stroke-width="10"
-          fill="none" stroke-linecap="round" filter="url(#shS)" />
-        <path d="M 118,260 C 50,260 50,360 140,350 C 200,340 250,320 290,245" stroke="#1a1a1a" stroke-width="4"
-          fill="none" stroke-linecap="round" />
-        <path d="M 124,300 C 70,300 85,340 145,335 C 190,330 240,310 280,240" stroke="#121212" stroke-width="6.5"
-          fill="none" stroke-linecap="round" />
-        <path d="M 124,300 C 70,300 85,340 145,335 C 190,330 240,310 280,240" stroke="#1c1c1c" stroke-width="2"
-          fill="none" stroke-linecap="round" />
-        <path d="M 118,270 C 65,270 65,350 148,342 C 210,335 260,310 300,235" stroke="#2a2a2a" stroke-width="3.5"
-          fill="none" stroke-linecap="round" />
-        <rect x="145" y="338" width="22" height="7" rx="2" fill="#666" transform="rotate(-15,156,341)" />
-        <rect x="220" y="302" width="26" height="9" rx="2" fill="#666" transform="rotate(-40,233,306)" />
-        <rect x="222" y="304" width="22" height="5" rx="1" fill="#888" transform="rotate(-40,233,306)" />
-      </g>
-    </svg>
-  </div>
+        <!-- ESLABON 1 – BRAZO SUPERIOR -->
+        <g id="eslabon1" transform="translate(308,247) rotate(-140.826)">
+          <g filter="url(#sh)">
+            <path
+              d="M 0,-50 C 40,-50 60,-36 90,-36 L 154,-36 C 184,-36 204,-40 244,-40 A 38 38 0 0 1 244,42 C 204,42 184,36 154,36 L 90,36 C 60,36 40,50 0,50 A 45 45 0 0 1 0,-50 Z"
+              fill="#782400" opacity=".53" transform="translate(1,4)" />
+            <path
+              d="M 0,-45 C 40,-45 60,-25 90,-25 L 154,-25 C 184,-25 204,-38 244,-38 A 38 38 0 0 1 244,38 C 204,38 184,32 154,32 L 90,32 C 60,32 40,45 0,45 A 45 45 0 0 1 0,-45 Z"
+              fill="url(#ogV)" />
+            <path
+              d="M 0,-45 C 40,-45 60,-25 90,-25 L 154,-25 C 184,-25 204,-38 244,-38 L 244,-34 C 204,-34 184,-28 154,-28 L 90,-28 C 60,-28 40,-40 0,-40 Z"
+              fill="#ff7010" opacity=".4" />
+            <g>
+              <circle cx="0" cy="0" r="45" fill="#3c3c3c" stroke="#555" stroke-width="2" />
+              <circle cx="0" cy="0" r="34" fill="#2a2a2a" />
+              <circle cx="0" cy="0" r="18" fill="#1a1a1a" stroke="#444" stroke-width="1.5" />
+              <circle cx="0" cy="-35" r="3" fill="#a0a0a0" stroke="#707070" stroke-width=".8" />
+              <circle cx="25" cy="-25" r="3" fill="#a0a0a0" stroke="#707070" stroke-width=".8" />
+              <circle cx="35" cy="0" r="3" fill="#a0a0a0" stroke="#707070" stroke-width=".8" />
+              <circle cx="25" cy="25" r="3" fill="#a0a0a0" stroke="#707070" stroke-width=".8" />
+              <circle cx="0" cy="35" r="3" fill="#a0a0a0" stroke="#707070" stroke-width=".8" />
+              <circle cx="-25" cy="25" r="3" fill="#a0a0a0" stroke="#707070" stroke-width=".8" />
+              <circle cx="-35" cy="0" r="3" fill="#a0a0a0" stroke="#707070" stroke-width=".8" />
+              <circle cx="-25" cy="-25" r="3" fill="#a0a0a0" stroke="#707070" stroke-width=".8" />
+            </g>
+            <g transform="translate(244,0)">
+              <circle cx="0" cy="0" r="38" fill="#3c3c3c" stroke="#555" stroke-width="2" />
+              <circle cx="0" cy="0" r="30" fill="#2a2a2a" />
+              <circle cx="0" cy="0" r="14" fill="#1a1a1a" stroke="#444" stroke-width="1.5" />
+              <circle cx="0" cy="-30" r="2.5" fill="#a0a0a0" stroke="#707070" stroke-width=".8" />
+              <circle cx="21" cy="-21" r="2.5" fill="#a0a0a0" stroke="#707070" stroke-width=".8" />
+              <circle cx="30" cy="0" r="2.5" fill="#a0a0a0" stroke="#707070" stroke-width=".8" />
+              <circle cx="21" cy="21" r="2.5" fill="#a0a0a0" stroke="#707070" stroke-width=".8" />
+              <circle cx="0" cy="30" r="2.5" fill="#a0a0a0" stroke="#707070" stroke-width=".8" />
+              <circle cx="-21" cy="21" r="2.5" fill="#a0a0a0" stroke="#707070" stroke-width=".8" />
+              <circle cx="-30" cy="0" r="2.5" fill="#a0a0a0" stroke="#707070" stroke-width=".8" />
+              <circle cx="-21" cy="-21" r="2.5" fill="#a0a0a0" stroke="#707070" stroke-width=".8" />
+            </g>
+            <g transform="translate(122,0) scale(-1,1) rotate(-90)">
+              <rect x="-28" y="32" width="50" height="26" rx="3" fill="#111" stroke="#222" stroke-width="1" />
+              <text x="-3" y="50" font-family="Arial Black,Impact,sans-serif" font-size="16" font-weight="900"
+                fill="#ff7010" text-anchor="middle" letter-spacing="2">CÉX</text>
+            </g>
+          </g>
+        </g>
 
-  <canvas id="cv-overlay"></canvas>
+        <!-- CABLES -->
+        <g id="cables">
+          <path d="M 118,260 C 50,260 50,360 140,350 C 200,340 250,320 290,245" stroke="#0e0e0e" stroke-width="10"
+            fill="none" stroke-linecap="round" filter="url(#shS)" />
+          <path d="M 118,260 C 50,260 50,360 140,350 C 200,340 250,320 290,245" stroke="#1a1a1a" stroke-width="4"
+            fill="none" stroke-linecap="round" />
+          <path d="M 124,300 C 70,300 85,340 145,335 C 190,330 240,310 280,240" stroke="#121212" stroke-width="6.5"
+            fill="none" stroke-linecap="round" />
+          <path d="M 124,300 C 70,300 85,340 145,335 C 190,330 240,310 280,240" stroke="#1c1c1c" stroke-width="2"
+            fill="none" stroke-linecap="round" />
+          <path d="M 118,270 C 65,270 65,350 148,342 C 210,335 260,310 300,235" stroke="#2a2a2a" stroke-width="3.5"
+            fill="none" stroke-linecap="round" />
+          <rect x="145" y="338" width="22" height="7" rx="2" fill="#666" transform="rotate(-15,156,341)" />
+          <rect x="220" y="302" width="26" height="9" rx="2" fill="#666" transform="rotate(-40,233,306)" />
+          <rect x="222" y="304" width="22" height="5" rx="1" fill="#888" transform="rotate(-40,233,306)" />
+        </g>
+      </svg>
+    </div>
 
-  <!-- ══════════════════════════════════════════════
+    <canvas id="cv-overlay"></canvas>
+
+    <!-- ══════════════════════════════════════════════
        HERO TEXT
   ══════════════════════════════════════════════ -->
-  <div id="hero-content">
-    <div id="hero-text-col">
-      <div class="hero-status">
-        <div class="pulse-dot"></div>
-        <span>// SISTEMA ACTIVO — KUKA KR C4</span>
+    <div id="hero-content">
+      <div id="hero-text-col">
+        <div class="hero-status">
+          <div class="pulse-dot"></div>
+          <span>// SISTEMA ACTIVO — KUKA KR C4</span>
+        </div>
+        <div class="hero-name">CÉSAR<br><span class="accent">RAMÍREZ</span></div>
+        <div class="rule"></div>
+        <div class="hero-title">Ingeniero Mecatrónico</div>
+        <div class="hero-tags">
+          <span class="tag">Robótica</span>
+          <span class="tag">Automatización</span>
+          <span class="tag">Visión Artificial</span>
+          <span class="tag">PLCs Siemens</span>
+        </div>
       </div>
-      <div class="hero-name">CÉSAR<br><span class="accent">RAMÍREZ</span></div>
-      <div class="rule"></div>
-      <div class="hero-title">Ingeniero Mecatrónico</div>
-      <div class="hero-tags">
-        <span class="tag">Robótica</span>
-        <span class="tag">Automatización</span>
-        <span class="tag">Visión Artificial</span>
-        <span class="tag">PLCs Siemens</span>
+      <div class="hero-ctas">
+        <a href="#projects" class="btn-p">Ver Proyectos</a>
+        <a href="#contact" class="btn-o">Contactar</a>
       </div>
     </div>
-    <div class="hero-ctas">
-      <a href="#projects" class="btn-p">Ver Proyectos</a>
-      <a href="#contact" class="btn-o">Contactar</a>
-    </div>
-  </div>
 
-  <div class="corner c-tl"></div>
-  <div class="corner c-tr"></div>
-  <div class="corner c-bl"></div>
-  <div class="corner c-br"></div>
+    <div class="corner c-tl"></div>
+    <div class="corner c-tr"></div>
+    <div class="corner c-bl"></div>
+    <div class="corner c-br"></div>
 
-  <div id="badge">◎ WRITING…</div>
-  <div id="hint">Mueve el mouse al robot · Click/toca para dibujar</div>
+    <div id="badge">◎ WRITING…</div>
+    <div id="hint">Mueve el mouse al robot · Click/toca para dibujar</div>
 
-  <!-- G-CODE PANEL -->
-  <button id="gcode-toggle">G-CODE CNC ▶</button>
+    <!-- G-CODE PANEL -->
+    <button id="gcode-toggle">G-CODE CNC ▶</button>
 
-  <div id="gcode-panel">
-    <header>
-      <span>⚙ G-CODE EXECUTOR</span>
-      <button id="gcode-close">✕</button>
-    </header>
-    <textarea id="gcode-textarea" spellcheck="false" placeholder="; Escribe G-code aquí
+    <div id="gcode-panel">
+      <header>
+        <span>⚙ G-CODE EXECUTOR</span>
+        <button id="gcode-close">✕</button>
+      </header>
+      <textarea id="gcode-textarea" spellcheck="false" placeholder="; Escribe G-code aquí
 ; Ejemplo:
 G0 X0 Y0
 G1 X80 Y0 F200
@@ -1132,741 +1290,766 @@ G1 X80 Y60
 G1 X0 Y60
 G1 X0 Y0
 G2 X40 Y30 I40 J0"></textarea>
-    <div class="gc-btns">
-      <button id="gcode-run">▶ EJECUTAR</button>
-      <button id="gcode-stop">■ STOP</button>
+      <div class="gc-btns">
+        <button id="gcode-run">▶ EJECUTAR</button>
+        <button id="gcode-stop">■ STOP</button>
+      </div>
+      <div id="gcode-status">// listo para ejecutar</div>
     </div>
-    <div id="gcode-status">// listo para ejecutar</div>
-  </div>
 
 
   </div><!-- end kuka-hero-wrapper -->
   <!-- ═══════════ END KUKA HERO ═══════════ -->
 
-    <!-- About Section -->
-    <section class="about" id="about">
-        <div class="container">
+  <!-- About Section -->
+
+  <section class="about" id="about">
+    <!-- Franja de transición del hero -->
+    <div class="about-fade-top"></div>
+    <div class="about-bg-fill">
+      <div class="container">
+        <div class="about-integrated-wrapper">
+
+          <!-- Columna izquierda: foto -->
+          <div class="about-col-photo">
+            <div class="image-frame">
+              <img src="perfil.jpeg" alt="César Javier Ramírez Hormaza - Ingeniero Mecatrónico" class="profile-photo">
+              <div class="frame-corner frame-tl"></div>
+              <div class="frame-corner frame-tr"></div>
+              <div class="frame-corner frame-bl"></div>
+              <div class="frame-corner frame-br"></div>
+            </div>
+          </div>
+
+          <!-- Columna derecha: contenido -->
+          <div class="about-col-content">
             <div class="section-header">
-                <span class="section-tag">01</span>
-                <h2 class="section-title">Sobre Mí</h2>
-                <div class="section-line"></div>
+              <span class="section-tag">01</span>
+              <h2 class="section-title">Sobre Mí</h2>
+              <div class="section-line"></div>
             </div>
-            <div class="about-content">
-                <div class="about-image">
-                    <div class="image-frame">
-                        <img src="perfil.jpeg" alt="César Javier Ramírez Hormaza - Ingeniero Mecatrónico"
-                            class="profile-photo">
-                        <div class="frame-corner frame-tl"></div>
-                        <div class="frame-corner frame-tr"></div>
-                        <div class="frame-corner frame-bl"></div>
-                        <div class="frame-corner frame-br"></div>
-                    </div>
+            <div class="about-text">
+              <h3 class="about-subtitle">Ingeniero Mecatrónico con visión de futuro</h3>
+              <p>
+                Soy un Ingeniero Mecatrónico egresado de la Universidad de Pamplona, con una pasión
+                profunda por la robótica y la automatización. Mi enfoque combina la creatividad
+                con la precisión técnica para desarrollar soluciones que transforman procesos industriales.
+              </p>
+              <p>
+                Soy el creador del <strong>Robot Tatuador 360</strong>, logrando precisiones de ±80 nanómetros,
+                primer sistema robótico de tatuaje con precisión nanométrica en Latinoamérica. Especializado en
+                visión artificial (OpenCV, YOLO), PLCs Siemens y programación de cinemática robótica. Más de 3
+                años asesorando más de 20 proyectos internacionales de automatización con enfoque en manufactura
+                inteligente.
+              </p>
+              <div class="about-highlights">
+                <div class="highlight">
+                  <span class="highlight-icon">🤖</span>
+                  <span>Robótica Avanzada</span>
                 </div>
-                <div class="about-text">
-                    <h3 class="about-subtitle">Ingeniero Mecatrónico con visión de futuro</h3>
-                    <p>
-                        Soy un Ingeniero Mecatrónico egresado de la Universidad de Pamplona, con una pasión
-                        profunda por la robótica y la automatización. Mi enfoque combina la creatividad
-                        con la precisión técnica para desarrollar soluciones que transforman procesos industriales.
-                    </p>
-                    <p>
-                        Soy el creador del <strong>Robot Tatuador 360</strong>, logrando precisiones de ±80 nanómetros,
-                        primer sistema robótico de tatuaje con precisión nanométrica en Latinoamérica. Especializado en
-                        visión artificial (OpenCV, YOLO), PLCs Siemens y programación de cinemática robótica. Más de 3
-                        años asesorando más de 20 proyectos internacionales de automatización con enfoque en manufactura
-                        inteligente.
-                    </p>
-                    <div class="about-highlights">
-                        <div class="highlight">
-                            <span class="highlight-icon">🤖</span>
-                            <span>Robótica Avanzada</span>
-                        </div>
-                        <div class="highlight">
-                            <span class="highlight-icon">👁️</span>
-                            <span>Visión Artificial</span>
-                        </div>
-                        <div class="highlight">
-                            <span class="highlight-icon">⚙️</span>
-                            <span>PLCs Siemens</span>
-                        </div>
-                        <div class="highlight">
-                            <span class="highlight-icon">🐍</span>
-                            <span>Python & C++</span>
-                        </div>
-                    </div>
+                <div class="highlight">
+                  <span class="highlight-icon">👁️</span>
+                  <span>Visión Artificial</span>
                 </div>
+                <div class="highlight">
+                  <span class="highlight-icon">⚙️</span>
+                  <span>PLCs Siemens</span>
+                </div>
+                <div class="highlight">
+                  <span class="highlight-icon">🐍</span>
+                  <span>Python & C++</span>
+                </div>
+              </div>
             </div>
+          </div>
+
         </div>
-    </section>
+      </div>
+    </div>
+  </section>
 
-    <!-- Experience Section -->
-    <section class="experience" id="experience">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-tag">02</span>
-                <h2 class="section-title">Experiencia Profesional</h2>
-                <div class="section-line"></div>
+  <!-- Experience Section -->
+  <section class="experience" id="experience">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">02</span>
+        <h2 class="section-title">Experiencia Profesional</h2>
+        <div class="section-line"></div>
+      </div>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-marker">
+            <div class="marker-dot"></div>
+            <div class="marker-line"></div>
+          </div>
+          <div class="timeline-content">
+            <div class="timeline-header">
+              <h3 class="timeline-title">Asesor Técnico Online</h3>
+              <span class="timeline-company">TusClases</span>
             </div>
-            <div class="timeline">
-                <div class="timeline-item">
-                    <div class="timeline-marker">
-                        <div class="marker-dot"></div>
-                        <div class="marker-line"></div>
-                    </div>
-                    <div class="timeline-content">
-                        <div class="timeline-header">
-                            <h3 class="timeline-title">Asesor Técnico Online</h3>
-                            <span class="timeline-company">TusClases</span>
-                        </div>
-                        <span class="timeline-date">2022 - Presente</span>
-                        <span class="timeline-location">🌍 Internacional / Remoto</span>
-                        <ul class="timeline-list">
-                            <li>Diseño e implementación de robot delta para clasificación y empaque</li>
-                            <li>Implementación de visión artificial con OpenCV y YOLO</li>
-                            <li>Programación de cinemática inversa y control de trayectorias</li>
-                            <li>Desarrollo de interfaces web para monitoreo de sensores</li>
-                            <li>Integración de LLM en procesos industriales</li>
-                            <li>Asesoría en comunicaciones WiFi, Bluetooth y LORA</li>
-                        </ul>
-                        <div class="timeline-tags">
-                            <span class="tag">Python</span>
-                            <span class="tag">OpenCV</span>
-                            <span class="tag">Arduino</span>
-                            <span class="tag">YOLO</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-marker">
-                        <div class="marker-dot"></div>
-                    </div>
-                    <div class="timeline-content">
-                        <div class="timeline-header">
-                            <h3 class="timeline-title">Ingeniero de Desarrollo (Tesista)</h3>
-                            <span class="timeline-company">Pasteles donde Don Pedro</span>
-                        </div>
-                        <span class="timeline-date">2024</span>
-                        <span class="timeline-location">📍 Cúcuta, Colombia</span>
-                        <ul class="timeline-list">
-                            <li>Diseño de soluciones de automatización para procesos de manufactura</li>
-                            <li>Programación de PLC Siemens S7-1200 para control de procesos</li>
-                            <li>Reducción del 25% en tiempos de ciclo mediante optimización</li>
-                            <li>Reducción de riesgo de túnel carpiano en operarios</li>
-                            <li>Mantenimiento preventivo y correctivo de sistemas robóticos</li>
-                        </ul>
-                        <div class="timeline-tags">
-                            <span class="tag">PLC Siemens</span>
-                            <span class="tag">Automatización</span>
-                            <span class="tag">Manufactura</span>
-                        </div>
-                    </div>
-                </div>
+            <span class="timeline-date">2022 - Presente</span>
+            <span class="timeline-location">🌍 Internacional / Remoto</span>
+            <ul class="timeline-list">
+              <li>Diseño e implementación de robot delta para clasificación y empaque</li>
+              <li>Implementación de visión artificial con OpenCV y YOLO</li>
+              <li>Programación de cinemática inversa y control de trayectorias</li>
+              <li>Desarrollo de interfaces web para monitoreo de sensores</li>
+              <li>Integración de LLM en procesos industriales</li>
+              <li>Asesoría en comunicaciones WiFi, Bluetooth y LORA</li>
+            </ul>
+            <div class="timeline-tags">
+              <span class="tag">Python</span>
+              <span class="tag">OpenCV</span>
+              <span class="tag">Arduino</span>
+              <span class="tag">YOLO</span>
             </div>
+          </div>
         </div>
-    </section>
-
-    <!-- Projects Section -->
-    <section class="projects" id="projects">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-tag">03</span>
-                <h2 class="section-title">Proyectos Destacados</h2>
-                <div class="section-line"></div>
+        <div class="timeline-item">
+          <div class="timeline-marker">
+            <div class="marker-dot"></div>
+          </div>
+          <div class="timeline-content">
+            <div class="timeline-header">
+              <h3 class="timeline-title">Ingeniero de Desarrollo (Tesista)</h3>
+              <span class="timeline-company">Pasteles donde Don Pedro</span>
             </div>
-            <div class="projects-grid">
-                <!-- Project 1: Robot Tatuador -->
-                <article class="project-card">
-                    <div class="project-media">
-                        <!-- Canvas para el video vertical de YouTube -->
-                        <div class="project-canvas">
-                            <iframe src="https://www.youtube-nocookie.com/embed/SfXVfhMWj6g" title="Robot Tatuador 360"
-                                frameborder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowfullscreen>
-                            </iframe>
-                        </div>
-                        <div class="project-overlay">
-                            <span class="project-year">2022 - 2025</span>
-                        </div>
-                    </div>
-                    <div class="project-content">
-                        <div class="project-badge">🏆 Primer Puesto - Competencia de Robótica</div>
-
-                        <h3 class="project-title">Robot Tatuador 360</h3>
-                        <div class="project-links">
-                            <a href="https://github.com/cexartattoo" target="_blank" class="project-link">
-                                <svg viewBox="0 0 24 24" fill="currentColor">
-                                    <path
-                                        d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
-                                </svg>
-                                <span>GitHub</span>
-                            </a>
-
-                            <a href="https://www.youtube.com/watch?v=SfXVfhMWj6g" target="_blank" class="project-link">
-                                <svg viewBox="0 0 24 24" fill="currentColor">
-                                    <path
-                                        d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
-                                </svg>
-                                <span>Ver en YouTube</span>
-                            </a>
-
-                        </div>
-                        <p class="project-description">
-                            Robot tatuador único en el mundo con arquitectura CoreXY paralela y capacidad
-                            de tatuar sobre superficies cilíndricas. Sistema completo de escaneo 3D,
-                            planificación de trayectorias y control de profundidad con precisión
-                            submicrométrica de <strong>±80 nanómetros</strong>.
-                        </p>
-                        <div class="project-features">
-                            <div class="feature">
-                                <span class="feature-icon">⚙️</span>
-                                <span>Cinemática CoreXY Paralela</span>
-                            </div>
-                            <div class="feature">
-                                <span class="feature-icon">🎯</span>
-                                <span>Control PID con Precisión ±80nm</span>
-                            </div>
-                            <div class="feature">
-                                <span class="feature-icon">📸</span>
-                                <span>Fotogrametría y Reconstrucción 3D</span>
-                            </div>
-                            <div class="feature">
-                                <span class="feature-icon">🔄</span>
-                                <span>Rotación Continua 360°</span>
-                            </div>
-                            <div class="feature">
-                                <span class="feature-icon">🎚️</span>
-                                <span>Sistema de Reducción para Alta Precisión</span>
-                            </div>
-                            <div class="feature">
-                                <span class="feature-icon">📡</span>
-                                <span>Comunicación WiFi TCP/IP</span>
-                            </div>
-                            <div class="feature">
-                                <span class="feature-icon">🧮</span>
-                                <span>Algoritmos Propios de Trayectorias</span>
-                            </div>
-                            <div class="feature">
-                                <span class="feature-icon">👁️</span>
-                                <span>Previsualización en Tiempo Real</span>
-                            </div>
-                        </div>
-                        <div class="project-tech">
-                            <span class="tech-tag">Python</span>
-                            <span class="tech-tag">C++</span>
-                            <span class="tech-tag">OpenCV</span>
-                            <span class="tech-tag">Raspberry Pi 4</span>
-                            <span class="tech-tag">ESP32</span>
-                            <span class="tech-tag">SolidWorks</span>
-                        </div>
-
-                    </div>
-                </article>
-
-                <!-- Project 2: Robot Delta - Con galería de canvas -->
-                <article class="project-card">
-                    <div class="project-media">
-                        <div class="project-canvas-gallery">
-                            <!-- Canvas 1: Imagen -->
-                            <div class="canvas-item active" data-type="image">
-                                <img src="media/inicios.jpg" alt="Robot Delta - Vista 1">
-                            </div>
-                            <!-- Canvas 2: Otra imagen -->
-                            <div class="canvas-item" data-type="image">
-                                <img src="media/dibujo estructura MDF.jpg" alt="Robot Delta - Vista 2">
-                            </div>
-                            <!-- Canvas 2: Otra imagen -->
-                            <div class="canvas-item" data-type="image">
-                                <img src="media/robot fisico.jpeg" alt="Robot Delta - Vista 3">
-                            </div>
-                            <!-- Canvas 3: Video de YouTube -->
-                            <div class="canvas-item" data-type="youtube">
-                                <iframe data-src="https://www.youtube-nocookie.com/embed/fGaD3QNsEJI"
-                                    title="Robot Delta en acción" frameborder="0"
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                    allowfullscreen>
-                                </iframe>
-                            </div>
-                            <!-- Botones de navegación -->
-                            <button class="canvas-nav prev" aria-label="Anterior">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <polyline points="15 18 9 12 15 6"></polyline>
-                                </svg>
-                            </button>
-                            <button class="canvas-nav next" aria-label="Siguiente">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <polyline points="9 18 15 12 9 6"></polyline>
-                                </svg>
-                            </button>
-                            <!-- Indicadores -->
-                            <div class="canvas-indicators">
-                                <span class="indicator active"></span>
-                                <span class="indicator"></span>
-                                <span class="indicator"></span>
-                                <span class="indicator"></span>
-                            </div>
-                        </div>
-                        <div class="project-overlay">
-                            <span class="project-year">2025</span>
-                        </div>
-                    </div>
-                    <div class="project-content">
-                        <div class="project-badge">👨‍💻🌎 Asesoría Internacional</div>
-                        <h3 class="project-title">Robot Delta Ventosa - Sistema de Clasificación</h3>
-                        <div class="project-links">
-                            <a href="https://github.com/cexartattoo" target="_blank" class="project-link">
-                                <svg viewBox="0 0 24 24" fill="currentColor">
-                                    <path
-                                        d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
-                                </svg>
-                                <span>GitHub</span>
-                            </a>
-
-                            <a href="https://www.youtube.com/watch?v=fGaD3QNsEJI" target="_blank" class="project-link">
-                                <svg viewBox="0 0 24 24" fill="currentColor">
-                                    <path
-                                        d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
-                                </svg>
-                                <span>Ver en YouTube</span>
-                            </a>
-
-                        </div>
-                        <p class="project-description">
-                            Robot delta con sensores angulares de alta resolución y ventosa de efecto Venturi
-                            para clasificar productos en banda transportadora. Sistema de visión artificial
-                            para detección y clasificación automática, con auto-calibración y comunicación
-                            Modbus con PLC.
-                        </p>
-                        <div class="project-features">
-                            <div class="feature">
-                                <span class="feature-icon">🎯</span>
-                                <span>Sensores Angulares Alta Resolución</span>
-                            </div>
-                            <div class="feature">
-                                <span class="feature-icon">💨</span>
-                                <span>Ventosa Efecto Venturi</span>
-                            </div>
-                            <div class="feature">
-                                <span class="feature-icon">📦</span>
-                                <span>Banda Transportadora</span>
-                            </div>
-                            <div class="feature">
-                                <span class="feature-icon">🤖</span>
-                                <span>Clasificación Automática</span>
-                            </div>
-                            <div class="feature">
-                                <span class="feature-icon">🔧</span>
-                                <span>Auto-calibración</span>
-                            </div>
-                            <div class="feature">
-                                <span class="feature-icon">📡</span>
-                                <span>Comunicación Modbus</span>
-                            </div>
-                        </div>
-                        <div class="project-tech">
-                            <span class="tech-tag">Python</span>
-                            <span class="tech-tag">PLC Siemens S7-1200</span>
-                            <span class="tech-tag">OpenCV</span>
-                            <span class="tech-tag">Modbus</span>
-                            <span class="tech-tag">Arduino</span>
-                        </div>
-
-                    </div>
-                </article>
-
-                <!-- Project 3: Router CNC - Con placeholder -->
-                <article class="project-card">
-                    <div class="project-media">
-                        <div class="project-canvas">
-                            <div class="image-placeholder-project">
-                                <span>🔧</span>
-                                <p>Router CNC</p>
-                            </div>
-                        </div>
-                        <div class="project-overlay">
-                            <span class="project-year">En Desarrollo</span>
-                        </div>
-                    </div>
-                    <div class="project-content">
-                        <div class="project-badge wip">🚧 En Desarrollo</div>
-                        <h3 class="project-title">Router CNC Match3 500W</h3>
-                        <p class="project-description">
-                            Router CNC de alta precisión con tecnología Match3 y motor spindle de 500W.
-                            Diseñado para mecanizado de múltiples materiales con control numérico avanzado.
-                        </p>
-                        <div class="project-tech">
-                            <span class="tech-tag">Match3</span>
-                            <span class="tech-tag">CNC</span>
-                            <span class="tech-tag">500W Spindle</span>
-                            <span class="tech-tag">G-Code</span>
-                        </div>
-                    </div>
-                </article>
+            <span class="timeline-date">2024</span>
+            <span class="timeline-location">📍 Cúcuta, Colombia</span>
+            <ul class="timeline-list">
+              <li>Diseño de soluciones de automatización para procesos de manufactura</li>
+              <li>Programación de PLC Siemens S7-1200 para control de procesos</li>
+              <li>Reducción del 25% en tiempos de ciclo mediante optimización</li>
+              <li>Reducción de riesgo de túnel carpiano en operarios</li>
+              <li>Mantenimiento preventivo y correctivo de sistemas robóticos</li>
+            </ul>
+            <div class="timeline-tags">
+              <span class="tag">PLC Siemens</span>
+              <span class="tag">Automatización</span>
+              <span class="tag">Manufactura</span>
             </div>
+          </div>
         </div>
-    </section>
+      </div>
+    </div>
+  </section>
 
-    <!-- Skills Section -->
-    <section class="skills" id="skills">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-tag">04</span>
-                <h2 class="section-title">Habilidades Técnicas</h2>
-                <div class="section-line"></div>
+  <!-- Projects Section -->
+  <section class="projects" id="projects">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">03</span>
+        <h2 class="section-title">Proyectos Destacados</h2>
+        <div class="section-line"></div>
+      </div>
+      <div class="projects-grid">
+        <!-- Project 1: Robot Tatuador -->
+        <article class="project-card">
+          <div class="project-media">
+            <!-- Canvas para el video vertical de YouTube -->
+            <div class="project-canvas">
+              <iframe src="https://www.youtube-nocookie.com/embed/SfXVfhMWj6g" title="Robot Tatuador 360"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen>
+              </iframe>
             </div>
-            <div class="skills-grid">
-                <!-- Programming Languages -->
-                <div class="skill-category">
-                    <div class="category-header">
-                        <span class="category-icon">💻</span>
-                        <h3>Lenguajes de Programación</h3>
-                    </div>
-                    <div class="skill-items">
-                        <div class="skill-item">
-                            <span class="skill-name">Python</span>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-level="90"></div>
-                            </div>
-                            <span class="skill-level">Avanzado</span>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">MATLAB</span>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-level="90"></div>
-                            </div>
-                            <span class="skill-level">Avanzado</span>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">C/C++</span>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-level="65"></div>
-                            </div>
-                            <span class="skill-level">Intermedio</span>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">JavaScript</span>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-level="40"></div>
-                            </div>
-                            <span class="skill-level">Básico</span>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">Ladder Logic / Modbus</span>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-level="40"></div>
-                            </div>
-                            <span class="skill-level">Básico</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- CAD Design -->
-                <div class="skill-category">
-                    <div class="category-header">
-                        <span class="category-icon">📐</span>
-                        <h3>Diseño CAD</h3>
-                    </div>
-                    <div class="skill-items">
-                        <div class="skill-item">
-                            <span class="skill-name">SolidWorks</span>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-level="90"></div>
-                            </div>
-                            <span class="skill-level">Avanzado</span>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">Fusion 360</span>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-level="65"></div>
-                            </div>
-                            <span class="skill-level">Intermedio</span>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">AutoCAD</span>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-level="65"></div>
-                            </div>
-                            <span class="skill-level">Intermedio</span>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">OnShape</span>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-level="65"></div>
-                            </div>
-                            <span class="skill-level">Intermedio</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Robotics -->
-                <div class="skill-category">
-                    <div class="category-header">
-                        <span class="category-icon">🤖</span>
-                        <h3>Robótica y Automatización</h3>
-                    </div>
-                    <div class="skill-items">
-                        <div class="skill-item">
-                            <span class="skill-name">Cinemática y Dinámica</span>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-level="90"></div>
-                            </div>
-                            <span class="skill-level">Avanzado</span>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">ROS</span>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-level="65"></div>
-                            </div>
-                            <span class="skill-level">Intermedio</span>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">PLC Siemens</span>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-level="65"></div>
-                            </div>
-                            <span class="skill-level">Intermedio</span>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">SCADA / HMI</span>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-level="65"></div>
-                            </div>
-                            <span class="skill-level">Intermedio</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Computer Vision -->
-                <div class="skill-category">
-                    <div class="category-header">
-                        <span class="category-icon">👁️</span>
-                        <h3>Visión Artificial</h3>
-                    </div>
-                    <div class="skill-items">
-                        <div class="skill-item">
-                            <span class="skill-name">OpenCV</span>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-level="90"></div>
-                            </div>
-                            <span class="skill-level">Avanzado</span>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">Fotogrametría</span>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-level="90"></div>
-                            </div>
-                            <span class="skill-level">Avanzado</span>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">Machine Learning Visión</span>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-level="90"></div>
-                            </div>
-                            <span class="skill-level">Avanzado</span>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">YOLO</span>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-level="65"></div>
-                            </div>
-                            <span class="skill-level">Intermedio</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Hardware -->
-                <div class="skill-category">
-                    <div class="category-header">
-                        <span class="category-icon">🔌</span>
-                        <h3>Hardware y Electrónica</h3>
-                    </div>
-                    <div class="skill-items">
-                        <div class="skill-item">
-                            <span class="skill-name">Arduino</span>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-level="95"></div>
-                            </div>
-                            <span class="skill-level">Experto</span>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">Raspberry Pi</span>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-level="90"></div>
-                            </div>
-                            <span class="skill-level">Avanzado</span>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">ESP32</span>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-level="90"></div>
-                            </div>
-                            <span class="skill-level">Avanzado</span>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">WiFi / Bluetooth / LORA</span>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-level="85"></div>
-                            </div>
-                            <span class="skill-level">Avanzado</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Tools -->
-                <div class="skill-category">
-                    <div class="category-header">
-                        <span class="category-icon">🛠️</span>
-                        <h3>Herramientas y Manufactura</h3>
-                    </div>
-                    <div class="skill-items">
-                        <div class="skill-item">
-                            <span class="skill-name">Git / GitHub</span>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-level="95"></div>
-                            </div>
-                            <span class="skill-level">Experto</span>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">Linux</span>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-level="90"></div>
-                            </div>
-                            <span class="skill-level">Avanzado</span>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">Impresión 3D / CNC</span>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-level="65"></div>
-                            </div>
-                            <span class="skill-level">Intermedio</span>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">Docker</span>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-level="65"></div>
-                            </div>
-                            <span class="skill-level">Intermedio</span>
-                        </div>
-                    </div>
-                </div>
+            <div class="project-overlay">
+              <span class="project-year">2022 - 2025</span>
             </div>
+          </div>
+          <div class="project-content">
+            <div class="project-badge">🏆 Primer Puesto - Competencia de Robótica</div>
+
+            <h3 class="project-title">Robot Tatuador 360</h3>
+            <div class="project-links">
+              <a href="https://github.com/cexartattoo" target="_blank" class="project-link">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                </svg>
+                <span>GitHub</span>
+              </a>
+
+              <a href="https://www.youtube.com/watch?v=SfXVfhMWj6g" target="_blank" class="project-link">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+                </svg>
+                <span>Ver en YouTube</span>
+              </a>
+
+            </div>
+            <p class="project-description">
+              Robot tatuador único en el mundo con arquitectura CoreXY paralela y capacidad
+              de tatuar sobre superficies cilíndricas. Sistema completo de escaneo 3D,
+              planificación de trayectorias y control de profundidad con precisión
+              submicrométrica de <strong>±80 nanómetros</strong>.
+            </p>
+            <div class="project-features">
+              <div class="feature">
+                <span class="feature-icon">⚙️</span>
+                <span>Cinemática CoreXY Paralela</span>
+              </div>
+              <div class="feature">
+                <span class="feature-icon">🎯</span>
+                <span>Control PID con Precisión ±80nm</span>
+              </div>
+              <div class="feature">
+                <span class="feature-icon">📸</span>
+                <span>Fotogrametría y Reconstrucción 3D</span>
+              </div>
+              <div class="feature">
+                <span class="feature-icon">🔄</span>
+                <span>Rotación Continua 360°</span>
+              </div>
+              <div class="feature">
+                <span class="feature-icon">🎚️</span>
+                <span>Sistema de Reducción para Alta Precisión</span>
+              </div>
+              <div class="feature">
+                <span class="feature-icon">📡</span>
+                <span>Comunicación WiFi TCP/IP</span>
+              </div>
+              <div class="feature">
+                <span class="feature-icon">🧮</span>
+                <span>Algoritmos Propios de Trayectorias</span>
+              </div>
+              <div class="feature">
+                <span class="feature-icon">👁️</span>
+                <span>Previsualización en Tiempo Real</span>
+              </div>
+            </div>
+            <div class="project-tech">
+              <span class="tech-tag">Python</span>
+              <span class="tech-tag">C++</span>
+              <span class="tech-tag">OpenCV</span>
+              <span class="tech-tag">Raspberry Pi 4</span>
+              <span class="tech-tag">ESP32</span>
+              <span class="tech-tag">SolidWorks</span>
+            </div>
+
+          </div>
+        </article>
+
+        <!-- Project 2: Robot Delta - Con galería de canvas -->
+        <article class="project-card">
+          <div class="project-media">
+            <div class="project-canvas-gallery">
+              <!-- Canvas 1: Imagen -->
+              <div class="canvas-item active" data-type="image">
+                <img src="media/inicios.jpg" alt="Robot Delta - Vista 1">
+              </div>
+              <!-- Canvas 2: Otra imagen -->
+              <div class="canvas-item" data-type="image">
+                <img src="media/dibujo estructura MDF.jpg" alt="Robot Delta - Vista 2">
+              </div>
+              <!-- Canvas 2: Otra imagen -->
+              <div class="canvas-item" data-type="image">
+                <img src="media/robot fisico.jpeg" alt="Robot Delta - Vista 3">
+              </div>
+              <!-- Canvas 3: Video de YouTube -->
+              <div class="canvas-item" data-type="youtube">
+                <iframe data-src="https://www.youtube-nocookie.com/embed/fGaD3QNsEJI" title="Robot Delta en acción"
+                  frameborder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowfullscreen>
+                </iframe>
+              </div>
+              <!-- Botones de navegación -->
+              <button class="canvas-nav prev" aria-label="Anterior">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+              </button>
+              <button class="canvas-nav next" aria-label="Siguiente">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+              </button>
+              <!-- Indicadores -->
+              <div class="canvas-indicators">
+                <span class="indicator active"></span>
+                <span class="indicator"></span>
+                <span class="indicator"></span>
+                <span class="indicator"></span>
+              </div>
+            </div>
+            <div class="project-overlay">
+              <span class="project-year">2025</span>
+            </div>
+          </div>
+          <div class="project-content">
+            <div class="project-badge">👨‍💻🌎 Asesoría Internacional</div>
+            <h3 class="project-title">Robot Delta Ventosa - Sistema de Clasificación</h3>
+            <div class="project-links">
+              <a href="https://github.com/cexartattoo" target="_blank" class="project-link">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                </svg>
+                <span>GitHub</span>
+              </a>
+
+              <a href="https://www.youtube.com/watch?v=fGaD3QNsEJI" target="_blank" class="project-link">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+                </svg>
+                <span>Ver en YouTube</span>
+              </a>
+
+            </div>
+            <p class="project-description">
+              Robot delta con sensores angulares de alta resolución y ventosa de efecto Venturi
+              para clasificar productos en banda transportadora. Sistema de visión artificial
+              para detección y clasificación automática, con auto-calibración y comunicación
+              Modbus con PLC.
+            </p>
+            <div class="project-features">
+              <div class="feature">
+                <span class="feature-icon">🎯</span>
+                <span>Sensores Angulares Alta Resolución</span>
+              </div>
+              <div class="feature">
+                <span class="feature-icon">💨</span>
+                <span>Ventosa Efecto Venturi</span>
+              </div>
+              <div class="feature">
+                <span class="feature-icon">📦</span>
+                <span>Banda Transportadora</span>
+              </div>
+              <div class="feature">
+                <span class="feature-icon">🤖</span>
+                <span>Clasificación Automática</span>
+              </div>
+              <div class="feature">
+                <span class="feature-icon">🔧</span>
+                <span>Auto-calibración</span>
+              </div>
+              <div class="feature">
+                <span class="feature-icon">📡</span>
+                <span>Comunicación Modbus</span>
+              </div>
+            </div>
+            <div class="project-tech">
+              <span class="tech-tag">Python</span>
+              <span class="tech-tag">PLC Siemens S7-1200</span>
+              <span class="tech-tag">OpenCV</span>
+              <span class="tech-tag">Modbus</span>
+              <span class="tech-tag">Arduino</span>
+            </div>
+
+          </div>
+        </article>
+
+        <!-- Project 3: Router CNC - Con placeholder -->
+        <article class="project-card">
+          <div class="project-media">
+            <div class="project-canvas">
+              <div class="image-placeholder-project">
+                <span>🔧</span>
+                <p>Router CNC</p>
+              </div>
+            </div>
+            <div class="project-overlay">
+              <span class="project-year">En Desarrollo</span>
+            </div>
+          </div>
+          <div class="project-content">
+            <div class="project-badge wip">🚧 En Desarrollo</div>
+            <h3 class="project-title">Router CNC Match3 500W</h3>
+            <p class="project-description">
+              Router CNC de alta precisión con tecnología Match3 y motor spindle de 500W.
+              Diseñado para mecanizado de múltiples materiales con control numérico avanzado.
+            </p>
+            <div class="project-tech">
+              <span class="tech-tag">Match3</span>
+              <span class="tech-tag">CNC</span>
+              <span class="tech-tag">500W Spindle</span>
+              <span class="tech-tag">G-Code</span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Skills Section -->
+  <section class="skills" id="skills">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">04</span>
+        <h2 class="section-title">Habilidades Técnicas</h2>
+        <div class="section-line"></div>
+      </div>
+      <div class="skills-grid">
+        <!-- Programming Languages -->
+        <div class="skill-category">
+          <div class="category-header">
+            <span class="category-icon">💻</span>
+            <h3>Lenguajes de Programación</h3>
+          </div>
+          <div class="skill-items">
+            <div class="skill-item">
+              <span class="skill-name">Python</span>
+              <div class="skill-bar">
+                <div class="skill-progress" data-level="90"></div>
+              </div>
+              <span class="skill-level">Avanzado</span>
+            </div>
+            <div class="skill-item">
+              <span class="skill-name">MATLAB</span>
+              <div class="skill-bar">
+                <div class="skill-progress" data-level="90"></div>
+              </div>
+              <span class="skill-level">Avanzado</span>
+            </div>
+            <div class="skill-item">
+              <span class="skill-name">C/C++</span>
+              <div class="skill-bar">
+                <div class="skill-progress" data-level="65"></div>
+              </div>
+              <span class="skill-level">Intermedio</span>
+            </div>
+            <div class="skill-item">
+              <span class="skill-name">JavaScript</span>
+              <div class="skill-bar">
+                <div class="skill-progress" data-level="40"></div>
+              </div>
+              <span class="skill-level">Básico</span>
+            </div>
+            <div class="skill-item">
+              <span class="skill-name">Ladder Logic / Modbus</span>
+              <div class="skill-bar">
+                <div class="skill-progress" data-level="40"></div>
+              </div>
+              <span class="skill-level">Básico</span>
+            </div>
+          </div>
         </div>
-    </section>
 
-    <!-- Education Section -->
-    <section class="education" id="education">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-tag">05</span>
-                <h2 class="section-title">Educación</h2>
-                <div class="section-line"></div>
+        <!-- CAD Design -->
+        <div class="skill-category">
+          <div class="category-header">
+            <span class="category-icon">📐</span>
+            <h3>Diseño CAD</h3>
+          </div>
+          <div class="skill-items">
+            <div class="skill-item">
+              <span class="skill-name">SolidWorks</span>
+              <div class="skill-bar">
+                <div class="skill-progress" data-level="90"></div>
+              </div>
+              <span class="skill-level">Avanzado</span>
             </div>
-            <div class="education-grid">
-                <div class="education-card">
-                    <div class="edu-icon">🎓</div>
-                    <div class="edu-content">
-                        <h3>Ingeniería Mecatrónica</h3>
-                        <p class="edu-institution">Universidad de Pamplona</p>
-                        <p class="edu-location">📍 Pamplona, Colombia</p>
-                        <p class="edu-date">2019 - 2024</p>
-                        <div class="edu-highlights">
-                            <span class="edu-badge">GPA: 4.06</span>
-                            <span class="edu-badge gold">Tesis: 5.0 ⭐</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="education-card">
-                    <div class="edu-icon">🔧</div>
-                    <div class="edu-content">
-                        <h3>Mantenimiento de Motores 2 y 4 Tiempos</h3>
-                        <p class="edu-institution">SENA</p>
-                        <p class="edu-location">📍 Chinacota, Colombia</p>
-                        <p class="edu-date">Mayo 2016</p>
-                        <div class="edu-highlights">
-                            <span class="edu-badge">Calificación: 5.0</span>
-                        </div>
-                    </div>
-                </div>
+            <div class="skill-item">
+              <span class="skill-name">Fusion 360</span>
+              <div class="skill-bar">
+                <div class="skill-progress" data-level="65"></div>
+              </div>
+              <span class="skill-level">Intermedio</span>
             </div>
+            <div class="skill-item">
+              <span class="skill-name">AutoCAD</span>
+              <div class="skill-bar">
+                <div class="skill-progress" data-level="65"></div>
+              </div>
+              <span class="skill-level">Intermedio</span>
+            </div>
+            <div class="skill-item">
+              <span class="skill-name">OnShape</span>
+              <div class="skill-bar">
+                <div class="skill-progress" data-level="65"></div>
+              </div>
+              <span class="skill-level">Intermedio</span>
+            </div>
+          </div>
         </div>
-    </section>
 
-    <!-- Contact Section -->
-    <section class="contact" id="contact">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-tag">06</span>
-                <h2 class="section-title">Contacto</h2>
-                <div class="section-line"></div>
+        <!-- Robotics -->
+        <div class="skill-category">
+          <div class="category-header">
+            <span class="category-icon">🤖</span>
+            <h3>Robótica y Automatización</h3>
+          </div>
+          <div class="skill-items">
+            <div class="skill-item">
+              <span class="skill-name">Cinemática y Dinámica</span>
+              <div class="skill-bar">
+                <div class="skill-progress" data-level="90"></div>
+              </div>
+              <span class="skill-level">Avanzado</span>
             </div>
-            <div class="contact-content">
-                <div class="contact-info">
-                    <h3>¿Tienes un proyecto en mente?</h3>
-                    <p>
-                        Estoy disponible para proyectos de robótica, automatización industrial,
-                        visión artificial y desarrollo de software. ¡Hablemos!
-                    </p>
-                    <div class="contact-methods">
-                        <a href="https://wa.me/573219121216" target="_blank" class="contact-card whatsapp">
-                            <div class="contact-icon">
-                                <svg viewBox="0 0 24 24" fill="currentColor">
-                                    <path
-                                        d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
-                                </svg>
-                            </div>
-                            <div class="contact-text">
-                                <span class="contact-label">WhatsApp</span>
-                                <span class="contact-value">+57 321 9121216</span>
-                            </div>
-                        </a>
-                        <a href="/cdn-cgi/l/email-protection#0250636f6b706778616771637068363442656f636b6e2c616d6f" class="contact-card email">
-                            <div class="contact-icon">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path
-                                        d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                                    <polyline points="22,6 12,13 2,6" />
-                                </svg>
-                            </div>
-                            <div class="contact-text">
-                                <span class="contact-label">Email</span>
-                                <span class="contact-value"><span class="__cf_email__" data-cfemail="f6a4979b9f84938c95938597849cc2c0b6919b979f9ad895999b">[email&#160;protected]</span></span>
-                            </div>
-                        </a>
-                        <a href="https://github.com/cexartattoo" target="_blank" class="contact-card github">
-                            <div class="contact-icon">
-                                <svg viewBox="0 0 24 24" fill="currentColor">
-                                    <path
-                                        d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
-                                </svg>
-                            </div>
-                            <div class="contact-text">
-                                <span class="contact-label">GitHub</span>
-                                <span class="contact-value">github.com/cexartattoo</span>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="contact-location">
-                        <span class="location-icon">📍</span>
-                        <span>Bogotá, Colombia</span>
-                    </div>
-                </div>
+            <div class="skill-item">
+              <span class="skill-name">ROS</span>
+              <div class="skill-bar">
+                <div class="skill-progress" data-level="65"></div>
+              </div>
+              <span class="skill-level">Intermedio</span>
             </div>
+            <div class="skill-item">
+              <span class="skill-name">PLC Siemens</span>
+              <div class="skill-bar">
+                <div class="skill-progress" data-level="65"></div>
+              </div>
+              <span class="skill-level">Intermedio</span>
+            </div>
+            <div class="skill-item">
+              <span class="skill-name">SCADA / HMI</span>
+              <div class="skill-bar">
+                <div class="skill-progress" data-level="65"></div>
+              </div>
+              <span class="skill-level">Intermedio</span>
+            </div>
+          </div>
         </div>
-    </section>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <p class="footer-text">
-                    © 2026 César Javier Ramírez Hormaza. Todos los derechos reservados.
-                </p>
-                <p class="footer-tagline">
-                    Diseñado con <span class="heart">❤️</span> y mucha ingeniería
-                </p>
+        <!-- Computer Vision -->
+        <div class="skill-category">
+          <div class="category-header">
+            <span class="category-icon">👁️</span>
+            <h3>Visión Artificial</h3>
+          </div>
+          <div class="skill-items">
+            <div class="skill-item">
+              <span class="skill-name">OpenCV</span>
+              <div class="skill-bar">
+                <div class="skill-progress" data-level="90"></div>
+              </div>
+              <span class="skill-level">Avanzado</span>
             </div>
+            <div class="skill-item">
+              <span class="skill-name">Fotogrametría</span>
+              <div class="skill-bar">
+                <div class="skill-progress" data-level="90"></div>
+              </div>
+              <span class="skill-level">Avanzado</span>
+            </div>
+            <div class="skill-item">
+              <span class="skill-name">Machine Learning Visión</span>
+              <div class="skill-bar">
+                <div class="skill-progress" data-level="90"></div>
+              </div>
+              <span class="skill-level">Avanzado</span>
+            </div>
+            <div class="skill-item">
+              <span class="skill-name">YOLO</span>
+              <div class="skill-bar">
+                <div class="skill-progress" data-level="65"></div>
+              </div>
+              <span class="skill-level">Intermedio</span>
+            </div>
+          </div>
         </div>
-    </footer>
+
+        <!-- Hardware -->
+        <div class="skill-category">
+          <div class="category-header">
+            <span class="category-icon">🔌</span>
+            <h3>Hardware y Electrónica</h3>
+          </div>
+          <div class="skill-items">
+            <div class="skill-item">
+              <span class="skill-name">Arduino</span>
+              <div class="skill-bar">
+                <div class="skill-progress" data-level="95"></div>
+              </div>
+              <span class="skill-level">Experto</span>
+            </div>
+            <div class="skill-item">
+              <span class="skill-name">Raspberry Pi</span>
+              <div class="skill-bar">
+                <div class="skill-progress" data-level="90"></div>
+              </div>
+              <span class="skill-level">Avanzado</span>
+            </div>
+            <div class="skill-item">
+              <span class="skill-name">ESP32</span>
+              <div class="skill-bar">
+                <div class="skill-progress" data-level="90"></div>
+              </div>
+              <span class="skill-level">Avanzado</span>
+            </div>
+            <div class="skill-item">
+              <span class="skill-name">WiFi / Bluetooth / LORA</span>
+              <div class="skill-bar">
+                <div class="skill-progress" data-level="85"></div>
+              </div>
+              <span class="skill-level">Avanzado</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tools -->
+        <div class="skill-category">
+          <div class="category-header">
+            <span class="category-icon">🛠️</span>
+            <h3>Herramientas y Manufactura</h3>
+          </div>
+          <div class="skill-items">
+            <div class="skill-item">
+              <span class="skill-name">Git / GitHub</span>
+              <div class="skill-bar">
+                <div class="skill-progress" data-level="95"></div>
+              </div>
+              <span class="skill-level">Experto</span>
+            </div>
+            <div class="skill-item">
+              <span class="skill-name">Linux</span>
+              <div class="skill-bar">
+                <div class="skill-progress" data-level="90"></div>
+              </div>
+              <span class="skill-level">Avanzado</span>
+            </div>
+            <div class="skill-item">
+              <span class="skill-name">Impresión 3D / CNC</span>
+              <div class="skill-bar">
+                <div class="skill-progress" data-level="65"></div>
+              </div>
+              <span class="skill-level">Intermedio</span>
+            </div>
+            <div class="skill-item">
+              <span class="skill-name">Docker</span>
+              <div class="skill-bar">
+                <div class="skill-progress" data-level="65"></div>
+              </div>
+              <span class="skill-level">Intermedio</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Education Section -->
+  <section class="education" id="education">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">05</span>
+        <h2 class="section-title">Educación</h2>
+        <div class="section-line"></div>
+      </div>
+      <div class="education-grid">
+        <div class="education-card">
+          <div class="edu-icon">🎓</div>
+          <div class="edu-content">
+            <h3>Ingeniería Mecatrónica</h3>
+            <p class="edu-institution">Universidad de Pamplona</p>
+            <p class="edu-location">📍 Pamplona, Colombia</p>
+            <p class="edu-date">2019 - 2024</p>
+            <div class="edu-highlights">
+              <span class="edu-badge">GPA: 4.06</span>
+              <span class="edu-badge gold">Tesis: 5.0 ⭐</span>
+            </div>
+          </div>
+        </div>
+        <div class="education-card">
+          <div class="edu-icon">🔧</div>
+          <div class="edu-content">
+            <h3>Mantenimiento de Motores 2 y 4 Tiempos</h3>
+            <p class="edu-institution">SENA</p>
+            <p class="edu-location">📍 Chinacota, Colombia</p>
+            <p class="edu-date">Mayo 2016</p>
+            <div class="edu-highlights">
+              <span class="edu-badge">Calificación: 5.0</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section class="contact" id="contact">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">06</span>
+        <h2 class="section-title">Contacto</h2>
+        <div class="section-line"></div>
+      </div>
+      <div class="contact-content">
+        <div class="contact-info">
+          <h3>¿Tienes un proyecto en mente?</h3>
+          <p>
+            Estoy disponible para proyectos de robótica, automatización industrial,
+            visión artificial y desarrollo de software. ¡Hablemos!
+          </p>
+          <div class="contact-methods">
+            <a href="https://wa.me/573219121216" target="_blank" class="contact-card whatsapp">
+              <div class="contact-icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                </svg>
+              </div>
+              <div class="contact-text">
+                <span class="contact-label">WhatsApp</span>
+                <span class="contact-value">+57 321 9121216</span>
+              </div>
+            </a>
+            <a href="/cdn-cgi/l/email-protection#0250636f6b706778616771637068363442656f636b6e2c616d6f"
+              class="contact-card email">
+              <div class="contact-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                  <polyline points="22,6 12,13 2,6" />
+                </svg>
+              </div>
+              <div class="contact-text">
+                <span class="contact-label">Email</span>
+                <span class="contact-value"><span class="__cf_email__"
+                    data-cfemail="f6a4979b9f84938c95938597849cc2c0b6919b979f9ad895999b">[email&#160;protected]</span></span>
+              </div>
+            </a>
+            <a href="https://www.linkedin.com/in/cesarramirez-mecatronico" target="_blank" class="contact-card linkedin"
+              style="border-color:rgba(0,119,181,0.3);color:#0077b5;">
+              <div class="contact-icon" style="color:#0077b5;">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                </svg>
+              </div>
+              <div class="contact-text">
+                <span class="contact-label">LinkedIn</span>
+                <span class="contact-value">cesarramirez-mecatronico</span>
+              </div>
+            </a>
+            <a href="https://github.com/cexartattoo" target="_blank" class="contact-card github">
+              <div class="contact-icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                </svg>
+              </div>
+              <div class="contact-text">
+                <span class="contact-label">GitHub</span>
+                <span class="contact-value">github.com/cexartattoo</span>
+              </div>
+            </a>
+          </div>
+          <div class="contact-location">
+            <span class="location-icon">📍</span>
+            <span>Bogotá, Colombia</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <p class="footer-text">
+          © 2026 César Javier Ramírez Hormaza. Todos los derechos reservados.
+        </p>
+        <p class="footer-tagline">
+          Diseñado con <span class="heart">❤️</span> y mucha ingeniería
+        </p>
+      </div>
+    </div>
+  </footer>
 
 
   <script>
@@ -1880,8 +2063,9 @@ G2 X40 Y30 I40 J0"></textarea>
     let W, H;
 
     function resize() {
-      W = cv.width = cvO.width = innerWidth;
-      H = cv.height = cvO.height = innerHeight;
+      const _w = document.getElementById('kuka-hero-wrapper');
+      W = cv.width = cvO.width = _w ? _w.offsetWidth : innerWidth;
+      H = cv.height = cvO.height = _w ? _w.offsetHeight : innerHeight;
       // Solo rebuildar waypoints cuando la fuente ya está cargada.
       // Si se llama antes (ej. primer resize), document.fonts.ready lo hará.
       if (arm && document.fonts.status === 'loaded') arm.waypoints = [];
@@ -1895,18 +2079,21 @@ G2 X40 Y30 I40 J0"></textarea>
     document.addEventListener('mousedown', e => { pointer.down = true; });
     document.addEventListener('mouseup', e => { pointer.down = false; });
 
-    document.addEventListener('touchmove', e => {
+    // Touch: solo dentro del hero para no bloquear scroll del resto
+    const _heroW = document.getElementById('kuka-hero-wrapper');
+    const _touchEl = _heroW || document;
+    _touchEl.addEventListener('touchmove', e => {
       const t = e.touches[0];
       mouse.x = t.clientX; mouse.y = t.clientY;
       e.preventDefault();
     }, { passive: false });
-    document.addEventListener('touchstart', e => {
+    _touchEl.addEventListener('touchstart', e => {
       const t = e.touches[0];
       mouse.x = t.clientX; mouse.y = t.clientY;
       pointer.down = true;
       e.preventDefault();
     }, { passive: false });
-    document.addEventListener('touchend', e => { pointer.down = false; });
+    _touchEl.addEventListener('touchend', e => { pointer.down = false; });
 
     // ── Utilities ─────────────────────────────────
     const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
@@ -1921,7 +2108,7 @@ G2 X40 Y30 I40 J0"></textarea>
     // ── Letter path definitions removed — now using canvas pixel extraction ──
 
     const isMobile = () => W < 600;
-    const isSmall  = () => W < 900;
+    const isSmall = () => W < 900;
 
     // ── Font-pixel path builder ─────────────────────
     // Renders real Orbitron glyphs to an offscreen canvas, extracts the
@@ -1938,13 +2125,13 @@ G2 X40 Y30 I40 J0"></textarea>
 
       const style1 = window.getComputedStyle(nameEl);
       const fontSize = parseFloat(style1.fontSize);
-      const fontDef  = `${style1.fontWeight} ${fontSize}px ${style1.fontFamily}`;
+      const fontDef = `${style1.fontWeight} ${fontSize}px ${style1.fontFamily}`;
 
       // ── Canvas offscreen del mismo tamaño que el DOM rect ──
       // Sin multiplicadores de escala — coordenadas directamente en px de pantalla.
       // SC solo para anti-aliasing en detección de borde, luego se divide.
       const SC = 2;
-      const cW = Math.ceil(domRect.width)  * SC;
+      const cW = Math.ceil(domRect.width) * SC;
       const cH = Math.ceil(domRect.height) * SC;
       const oc = document.createElement('canvas');
       oc.width = cW; oc.height = cH;
@@ -1953,29 +2140,29 @@ G2 X40 Y30 I40 J0"></textarea>
       // Renderizar el texto con la misma fuente y tamaño que el DOM
       ox.fillStyle = '#fff';
       ox.textBaseline = 'top';
-      ox.textAlign    = 'left';
+      ox.textAlign = 'left';
       ox.font = `${style1.fontWeight} ${fontSize * SC}px ${style1.fontFamily}`;
 
       // line-height: .hero-name usa line-height: 0.95
       const lh = fontSize * 0.95 * SC;
-      ox.fillText('CÉSAR',   0, 0);
+      ox.fillText('CÉSAR', 0, 0);
       ox.fillText('RAMÍREZ', 0, lh);
 
       // ── Extracción de borde (edge pixels) ──
-      const img  = ox.getImageData(0, 0, cW, cH).data;
-      const ink  = (x, y) => {
+      const img = ox.getImageData(0, 0, cW, cH).data;
+      const ink = (x, y) => {
         if (x < 0 || x >= cW || y < 0 || y >= cH) return false;
         return img[(y * cW + x) * 4 + 3] > 40;
       };
 
       const SAMP = 3;
-      const pts  = [];
+      const pts = [];
       for (let y = SAMP; y < cH - SAMP; y += SAMP) {
         for (let x = SAMP; x < cW - SAMP; x += SAMP) {
           if (!ink(x, y)) continue;
           // Solo píxeles de borde
           if (!ink(x - SAMP, y) || !ink(x + SAMP, y) ||
-              !ink(x, y - SAMP) || !ink(x, y + SAMP)) {
+            !ink(x, y - SAMP) || !ink(x, y + SAMP)) {
             pts.push([x, y]);
           }
         }
@@ -1985,9 +2172,9 @@ G2 X40 Y30 I40 J0"></textarea>
 
       // ── Greedy nearest-neighbour ──
       const PEN_SQ = (SAMP * 3) ** 2;
-      const CELL   = 14;
-      const cols   = Math.ceil(cW / CELL);
-      const grid   = new Map();
+      const CELL = 14;
+      const cols = Math.ceil(cW / CELL);
+      const grid = new Map();
       pts.forEach((p, i) => {
         const k = Math.floor(p[0] / CELL) + Math.floor(p[1] / CELL) * cols;
         if (!grid.has(k)) grid.set(k, []);
@@ -2035,7 +2222,7 @@ G2 X40 Y30 I40 J0"></textarea>
       // Dividir por SC y sumar la posición DOM — alineación perfecta siempre.
       return out.map(o => ({
         x: domRect.left + o.p[0] / SC,
-        y: domRect.top  + o.p[1] / SC,
+        y: domRect.top + o.p[1] / SC,
         penDown: o.penDown
       }));
     }
@@ -2177,8 +2364,8 @@ G2 X40 Y30 I40 J0"></textarea>
       constructor() {
         // bx/by se calculan correctamente en layout(), pero necesitan
         // valores seguros para el primer frame antes de que layout() corra.
-        this.by = innerHeight * 0.82;
-        this.bx = innerWidth * 0.55;
+        this.by = H * 0.82;
+        this.bx = W * 0.55;
         this.th1 = -Math.PI / 2; this.th2 = 0;
         this.svgScale = this.by / (SVG_BASE_Y - (-400));
         this.linkLen = 36; this.chainN = 20;
@@ -2190,7 +2377,7 @@ G2 X40 Y30 I40 J0"></textarea>
         this.weldT = 0;
         this.idleTmr = 0;
         // eeX/eeY seguros: centro de pantalla — evita NaN en drawWeldingMask primer frame
-        this.eeX = innerWidth * 0.5; this.eeY = innerHeight * 0.5;
+        this.eeX = W * 0.5; this.eeY = H * 0.5;
         this.weldFlicker = 0;
         this.maskAlpha = 0;
         this.gcodeFlicker = 0;
@@ -2222,7 +2409,7 @@ G2 X40 Y30 I40 J0"></textarea>
         // Chain length
         const railW = W * 0.9;
         const maxCarX = W * 0.05 + railW + 80;
-        const anchorX = W * 0.05 -510;
+        const anchorX = W * 0.05 - 510;
         const radius = 50;
         this.chainN = Math.ceil((Math.abs(maxCarX - anchorX) + Math.PI * radius) / this.linkLen);
 
@@ -2230,7 +2417,7 @@ G2 X40 Y30 I40 J0"></textarea>
         // En landscape: libre (el texto está a la izquierda, botones a la derecha)
         // En desktop/móvil: mínimo calculado desde el botón "Ver Proyectos"
         const SVG_CAR_ANCHOR = 178;
-        const offX = (SVG_SH.x -SVG_CAR_ANCHOR) * this.svgScale;
+        const offX = (SVG_SH.x - SVG_CAR_ANCHOR) * this.svgScale;
         const isLandscape = W >= 600 && W < 900 && W > H;
         if (isLandscape) {
           this._bxMin = W * 0.25;
@@ -2243,7 +2430,7 @@ G2 X40 Y30 I40 J0"></textarea>
             this._bxMin = W * 0.25;
           }
         }
-        this._bxMax = W *2 ;
+        this._bxMax = W * 2;
         // Init waypoints first time or after resize
         if (!this.waypoints.length) {
           // bx inicial: tablet/cuadrado arranca más a la derecha para no tapar texto
@@ -2287,7 +2474,7 @@ G2 X40 Y30 I40 J0"></textarea>
 
       ikTo(tx, ty, speed = 0.07) {
         this.layout();
-        const offX = (SVG_SH.x ) * this.svgScale;
+        const offX = (SVG_SH.x) * this.svgScale;
         const bxMin = this._bxMin !== undefined ? this._bxMin : W * 0.25;
         const bxMax = this._bxMax !== undefined ? this._bxMax : W * 1.1;
         // Fórmula unificada en todos los modos: bx = tx + offX
@@ -2699,7 +2886,7 @@ G2 X40 Y30 I40 J0"></textarea>
       }
 
       drawRail(c) {
-        const s  = this.svgScale;
+        const s = this.svgScale;
         const rx = W * 0.05;
         const rw = W * 0.9;
         const ry = this.by;
@@ -2719,12 +2906,12 @@ G2 X40 Y30 I40 J0"></textarea>
 
       drawChain(c) {
         c.save();
-        const s = this.svgScale*1.5;
-        const anchorX = W * 0.05 -510;
-        const carX  = this.bx + Math.round(80 * s);
-        const vOff  = Math.round(35 * s);
-        const vBot  = Math.round(65 * s);
-        const topY  = this.by - vOff, botY = this.by + vBot;
+        const s = this.svgScale * 1.5;
+        const anchorX = W * 0.05 - 510;
+        const carX = this.bx + Math.round(80 * s);
+        const vOff = Math.round(35 * s);
+        const vBot = Math.round(65 * s);
+        const topY = this.by - vOff, botY = this.by + vBot;
         const radius = (botY - topY) / 2, cy = topY + radius;
         const L_geo = this.chainN * this.linkLen;
         let loopX = (carX + anchorX - Math.PI * radius + L_geo) / 2;
@@ -2745,17 +2932,17 @@ G2 X40 Y30 I40 J0"></textarea>
           const pw = Math.max(2, Math.round(4 * s)), pg = Math.max(1, Math.round(3 * s));
           c.fillStyle = '#020810';
           c.fillRect(-pg - pw, -Math.round(6 * s), pw, Math.round(12 * s));
-          c.fillRect(pg,       -Math.round(6 * s), pw, Math.round(12 * s));
+          c.fillRect(pg, -Math.round(6 * s), pw, Math.round(12 * s));
           c.restore();
         }
         c.restore();
       }
 
       drawCabinet(c) {
-        const s  = this.svgScale * 1.4;
+        const s = this.svgScale * 1.4;
         const bW = 210, bH = 150;  // dimensiones de diseño (referencia desktop)
         // Posición en pantalla: esquina inferior derecha, encima del riel
-        const screenX =  10 ;
+        const screenX = 10;
         const screenY = this.by + Math.round(65 * s) - 100;
         c.save();
         c.translate(screenX, screenY);
@@ -2804,7 +2991,7 @@ G2 X40 Y30 I40 J0"></textarea>
         c.fillText('KRC4', -10, 11);
         const ee2 = this.endEffector();
         const modeLabels = { [ST.WRITING]: 'WRITE', [ST.WELDING]: this.weldMode || 'WELD', [ST.FOLLOWING]: 'TRACK', [ST.GCODE]: 'GCODE' };
-        const modeCol   = { [ST.WRITING]: '#ff8833', [ST.WELDING]: '#ffdd00', [ST.FOLLOWING]: '#00ff88', [ST.GCODE]: '#00ccff' };
+        const modeCol = { [ST.WRITING]: '#ff8833', [ST.WELDING]: '#ffdd00', [ST.FOLLOWING]: '#00ff88', [ST.GCODE]: '#00ccff' };
         c.font = '4px "Share Tech Mono", monospace';
         const lines2 = [
           { label: 'A1', val: (this.th1 * 180 / Math.PI).toFixed(0) + '°' },
@@ -3063,10 +3250,10 @@ G2 X40 Y30 I40 J0"></textarea>
         this.positionSVG();
         this.applySVG();
         // Mask covers robot + rail + background
- 
+
         // Cabinet and HUD drawn AFTER mask — always fully readable
         this.drawCabinet(cO);
-        
+
         this.drawWeldingMask(cO);
         this.drawHUD(cO);
       }
@@ -3194,7 +3381,25 @@ G2 X40 Y30 I40 J0"></textarea>
       loop();
     });
   </script>
+  <!-- Smooth scroll para botones del hero y navegación -->
+  <script>
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        const href = this.getAttribute('href');
+        const target = document.querySelector(href);
+        if (target) {
+          e.preventDefault();
+          const navbar = document.getElementById('navbar');
+          const offset = navbar ? navbar.offsetHeight : 70;
+          const top = target.getBoundingClientRect().top + window.scrollY - offset;
+          window.scrollTo({ top, behavior: 'smooth' });
+        }
+      });
+    });
+  </script>
+  <script src="script.js"></script>
+  <script src="projects-gallery.js"></script>
   <script src="effects.js"></script>
-
 </body>
+
 </html>
