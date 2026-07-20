@@ -1365,7 +1365,8 @@
         if (sparks[i].life <= 0) { sparks.splice(i, 1); continue; }
         sparks[i].draw(ctxO);
       }
-      requestAnimationFrame(loop);
+      if (window.__heroVisible === false) { setTimeout(function () { requestAnimationFrame(loop); }, 300); }
+      else { requestAnimationFrame(loop); }
     }
 
     // Wait for Orbitron to be available so buildWaypoints gets real glyph pixels

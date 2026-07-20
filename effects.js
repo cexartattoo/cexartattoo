@@ -239,7 +239,8 @@
                 ctx.shadowBlur = 0;
             }
 
-            requestAnimationFrame(animate);
+            if (window.__heroVisible === false) { setTimeout(function () { requestAnimationFrame(animate); }, 300); }
+            else { requestAnimationFrame(animate); }
         }
 
         animate();
