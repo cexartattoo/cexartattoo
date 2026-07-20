@@ -1620,9 +1620,31 @@ G2 X40 Y30 I40 J0"></textarea>
                 <!-- Project 3: Router CNC - Con placeholder -->
                 <article class="project-card">
                     <div class="project-media">
-                        <div class="project-canvas">
-                            <video src="video/cnc.mp4" autoplay muted loop playsinline
-                                   style="width:100%;height:100%;object-fit:cover;display:block;"></video>
+                        <div class="project-canvas-gallery">
+                            <!-- Router CNC cortando -->
+                            <div class="canvas-item active" data-type="video">
+                                <video src="video/cnc.mp4" autoplay muted loop playsinline title="Router CNC cortando"
+                                       style="width:100%;height:100%;object-fit:cover;display:block;background:#0a0a0f;"></video>
+                            </div>
+                            <!-- Router CNC tallando un engranaje -->
+                            <div class="canvas-item" data-type="video">
+                                <video src="video/cnc-engranaje.mp4" autoplay muted loop playsinline title="Router CNC tallando un engranaje"
+                                       style="width:100%;height:100%;object-fit:cover;display:block;background:#0a0a0f;"></video>
+                            </div>
+                            <button class="canvas-nav prev" aria-label="Anterior">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="15 18 9 12 15 6"></polyline>
+                                </svg>
+                            </button>
+                            <button class="canvas-nav next" aria-label="Siguiente">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="9 18 15 12 9 6"></polyline>
+                                </svg>
+                            </button>
+                            <div class="canvas-indicators">
+                                <span class="indicator active"></span>
+                                <span class="indicator"></span>
+                            </div>
                         </div>
                         <div class="project-overlay">
                             <span class="project-year">En Desarrollo</span>
@@ -1684,9 +1706,43 @@ G2 X40 Y30 I40 J0"></textarea>
                 <!-- Robot Móvil Omnidireccional -->
                 <article class="project-card">
                     <div class="project-media">
-                        <div class="project-canvas">
-                            <video src="video/omnidireccional.mp4" autoplay muted loop playsinline
-                                   style="width:100%;height:100%;object-fit:contain;display:block;background:#0a0a0f;"></video>
+                        <div class="project-canvas-gallery">
+                            <!-- Robot omnidireccional en marcha -->
+                            <div class="canvas-item active" data-type="video">
+                                <video src="video/omnidireccional.mp4" autoplay muted loop playsinline title="Robot omnidireccional en marcha"
+                                       style="width:100%;height:100%;object-fit:contain;display:block;background:#0a0a0f;"></video>
+                            </div>
+                            <!-- Pruebas de movimiento -->
+                            <div class="canvas-item" data-type="video">
+                                <video src="video/omni-pruebas.mp4" autoplay muted loop playsinline title="Pruebas de movimiento"
+                                       style="width:100%;height:100%;object-fit:contain;display:block;background:#0a0a0f;"></video>
+                            </div>
+                            <!-- Control por Bluetooth -->
+                            <div class="canvas-item" data-type="video">
+                                <video src="video/omni-bluetooth.mp4" autoplay muted loop playsinline title="Control por Bluetooth"
+                                       style="width:100%;height:100%;object-fit:contain;display:block;background:#0a0a0f;"></video>
+                            </div>
+                            <!-- Calibraciones de sensores -->
+                            <div class="canvas-item" data-type="video">
+                                <video src="video/omni-calibraciones.mp4" autoplay muted loop playsinline title="Calibraciones de sensores"
+                                       style="width:100%;height:100%;object-fit:contain;display:block;background:#0a0a0f;"></video>
+                            </div>
+                            <button class="canvas-nav prev" aria-label="Anterior">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="15 18 9 12 15 6"></polyline>
+                                </svg>
+                            </button>
+                            <button class="canvas-nav next" aria-label="Siguiente">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="9 18 15 12 9 6"></polyline>
+                                </svg>
+                            </button>
+                            <div class="canvas-indicators">
+                                <span class="indicator active"></span>
+                                <span class="indicator"></span>
+                                <span class="indicator"></span>
+                                <span class="indicator"></span>
+                            </div>
                         </div>
                         <div class="project-overlay"><span class="project-year">2026</span></div>
                     </div>
