@@ -1767,6 +1767,77 @@ G2 X40 Y30 I40 J0"></textarea>
                     </div>
                 </article>
 
+                <!-- Optimizacion de ubicacion de camaras (Bogota) -->
+                <article class="project-card">
+                    <div class="project-media">
+                        <div class="project-canvas-gallery">
+                            <!-- Vista inicial y guía de uso -->
+                            <div class="canvas-item active" data-type="video">
+                                <video src="video/camaras-inicio.mp4" autoplay muted loop playsinline title="Vista inicial y guía de uso"
+                                       style="width:100%;height:100%;object-fit:cover;display:block;background:#0a0a0f;"></video>
+                            </div>
+                            <!-- Evaluación interactiva de escenarios -->
+                            <div class="canvas-item" data-type="video">
+                                <video src="video/camaras-escenarios.mp4" autoplay muted loop playsinline title="Evaluación interactiva de escenarios"
+                                       style="width:100%;height:100%;object-fit:cover;display:block;background:#0a0a0f;"></video>
+                            </div>
+                            <!-- Mapa de resultados con tooltips -->
+                            <div class="canvas-item" data-type="image">
+                                <img src="img/proyectos/camaras-mapa.jpg" alt="Mapa de resultados con tooltips"
+                                     style="width:100%;height:100%;object-fit:cover;display:block;">
+                            </div>
+                            <!-- Red vial y definición de escenarios -->
+                            <div class="canvas-item" data-type="image">
+                                <img src="img/proyectos/camaras-vial.jpg" alt="Red vial y definición de escenarios"
+                                     style="width:100%;height:100%;object-fit:cover;display:block;">
+                            </div>
+                            <!-- Parámetros del algoritmo NSGA-III -->
+                            <div class="canvas-item" data-type="image">
+                                <img src="img/proyectos/camaras-nsga.jpg" alt="Parámetros del algoritmo NSGA-III"
+                                     style="width:100%;height:100%;object-fit:cover;display:block;">
+                            </div>
+                            <button class="canvas-nav prev" aria-label="Anterior">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="15 18 9 12 15 6"></polyline>
+                                </svg>
+                            </button>
+                            <button class="canvas-nav next" aria-label="Siguiente">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="9 18 15 12 9 6"></polyline>
+                                </svg>
+                            </button>
+                            <div class="canvas-indicators">
+                                <span class="indicator active"></span>
+                                <span class="indicator"></span>
+                                <span class="indicator"></span>
+                                <span class="indicator"></span>
+                                <span class="indicator"></span>
+                            </div>
+                        </div>
+                        <div class="project-overlay"><span class="project-year">2026</span></div>
+                    </div>
+                    <div class="project-content">
+                        <div class="project-badge">🎯 Optimización Multiobjetivo · Sector Público</div>
+                        <h3 class="project-title">Optimización de Ubicación de Cámaras de Detección de Infracciones — Bogotá D.C.</h3>
+                        <p class="project-description">
+                            Sistema que determina la <strong>ubicación óptima de cámaras de fotodetección</strong>
+                            en la malla vial de Bogotá, combinando optimización multiobjetivo
+                            (<strong>NSGA-III</strong>) y simulación <strong>Montecarlo</strong> sobre datos reales
+                            de la red vial. Incluye una interfaz web para configurar modelos, evaluar escenarios
+                            de forma interactiva y visualizar resultados en mapa, todo desplegable con Docker.
+                        </p>
+                        <div class="project-tech">
+                            <span class="tech-tag">NSGA-III</span>
+                            <span class="tech-tag">Optimización Multiobjetivo</span>
+                            <span class="tech-tag">Montecarlo</span>
+                            <span class="tech-tag">R</span>
+                            <span class="tech-tag">Python</span>
+                            <span class="tech-tag">Docker</span>
+                            <span class="tech-tag">Análisis de Red Vial</span>
+                        </div>
+                    </div>
+                </article>
+
             </div>
             <!-- Otros proyectos (formato lista, sin imagen) -->
             <div class="projects-list">
